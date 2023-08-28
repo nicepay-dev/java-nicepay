@@ -35,12 +35,19 @@ public class VirtualAccount {
 
     @Getter
     @Setter
-    private Map<String, String> additionalInfo ;
+    private Map<String, String> additionalInfo;
+
+    @Getter
+    @Setter
+    private String inquiryRequestId;
 
 
 
 
-    public VirtualAccount(String partnerServiceId, String customerNo, String virtualAccountNo, String virtualAccountName, String trxId, Map<String, String> totalAmount, Map<String, String> additionalInfo) {
+
+
+    public VirtualAccount(String partnerServiceId, String customerNo, String virtualAccountNo, String virtualAccountName, String trxId, Map<String, String> totalAmount, Map<String, String> additionalInfo
+    ,String inquiryRequestId) {
         this.partnerServiceId = partnerServiceId;
         this.customerNo = customerNo;
         this.virtualAccountNo = virtualAccountNo;
@@ -48,6 +55,7 @@ public class VirtualAccount {
         this.trxId = trxId;
         this.totalAmount = totalAmount;
         this.additionalInfo = additionalInfo;
+        this.inquiryRequestId = inquiryRequestId;
     }
 
     @Override
@@ -60,6 +68,7 @@ public class VirtualAccount {
                 ", trxId='" + trxId + '\'' +
                 ", totalAmount=" + totalAmount +
                 ", additionalInfo=" + additionalInfo +
+                ", inquiryRequestId=" + inquiryRequestId +
                 '}';
     }
 }

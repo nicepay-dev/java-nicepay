@@ -38,7 +38,7 @@ class VirtualAccountTest {
                 .map(token -> responseToken.getAccessToken())
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
         Map<String, String> totalAmount = new HashMap<>();
-        totalAmount.put("value","200000.00");
+        totalAmount.put("value","11000.00");
         totalAmount.put("currency","IDR");
 
         Map<String, String> additionalInfo = new HashMap<>();

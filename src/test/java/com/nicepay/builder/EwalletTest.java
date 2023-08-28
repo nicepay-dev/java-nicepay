@@ -25,7 +25,7 @@ class EwalletTest {
         }
 
         @Test
-        void EwalletPayment() throws IOException {
+        void EwalletPayment() throws IOException, InterruptedException {
                 NICEPayResponse responseToken = (NICEPayResponse) getToken();
                 var accessToken = Optional.ofNullable(responseToken)
                 .map(token -> responseToken.getAccessToken())
@@ -36,7 +36,7 @@ class EwalletTest {
                 amount.put("currency","IDR");
 
                 Map<String,String> additionalInfo = new HashMap<>();
-                additionalInfo.put("mitraCd","DANA");
+                additionalInfo.put("mitraCd","OVOE");
                 additionalInfo.put("goodsNm","Testing Ewallet Snap");
                 additionalInfo.put("billingNm","Bale");
                 additionalInfo.put("billingPhone","089665542347");
@@ -49,7 +49,7 @@ class EwalletTest {
                 Map<String, String> urlParam1 = new HashMap<>();
                 urlParam1.put("url","https://test2.bi.go.id/v1/test");
                 urlParam1.put("type","PAY_NOTIFY");
-                urlParam1.put("isDeeplink","Y");
+                urlParam1.put("isDeeplink"," Y");
                 urlParamList.add(urlParam1);
 
                 Map<String, String> urlParam2 = new HashMap<>();
@@ -60,7 +60,7 @@ class EwalletTest {
 
                 Ewallet ewallet = Ewallet.builder()
                         .partnerReferenceNo("ref202305081205331683522921")
-                        .merchantId("NORMALTEST")
+                        .merchantId("IONPAYTEST")
                         .subMerchantId("")
                         .externalStoreId("")
                         .validUpTo("")

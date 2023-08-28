@@ -18,6 +18,9 @@ public interface PostRequest {
     @POST("nicepay/api/v1.0/transfer-va/create-va")
     Call<NICEPayResponse>createVa(@Body VirtualAccount request);
 
+    @POST("nicepay/api/v1.0/transfer-va/status")
+    Call<NICEPayResponse>checkStatusVa(@Body VirtualAccount request);
+
 
 
 

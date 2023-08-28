@@ -11,7 +11,9 @@ import retrofit2.Invocation;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class ApiClient {
 
@@ -28,22 +30,30 @@ public class ApiClient {
 
     private static OkHttpClient.Builder httpClient
             = new OkHttpClient
-            .Builder();
+            .Builder()
+            .connectTimeout(Duration.ofMillis(10000));
+
+    public static OkHttpClient.Builder httpClientTimeout
+            = new OkHttpClient
+            .Builder()
+            .connectTimeout(1, TimeUnit.MILLISECONDS)    // Set a very low connection timeout
+            .readTimeout(1, TimeUnit.MILLISECONDS)       // Set a very low read timeout
+            .writeTimeout(1, TimeUnit.MILLISECONDS);
 
     private static HttpLoggingInterceptor logging
             = new HttpLoggingInterceptor()
             .setLevel(HttpLoggingInterceptor.Level.BASIC);
 
     public static <S> S createService(Class<S> serviceClass,final String grandType,final String accessToken,String data) {
-                httpClient.interceptors().clear();
-                httpClient.addInterceptor(chain -> {
+            httpClient.interceptors().clear();
+            httpClient.addInterceptor(chain -> {
                     Request original = chain.request();
                     Request.Builder builder1 = null;
-                    print.logInfo("generateVA "+"fullUrl :" +chain.request().url());
+                    print.logInfo("generate "+"fullUrl :" +chain.request().url());
                     String url = chain.request().url().encodedPath().replace("/nicepay","");
                       Optional.ofNullable(grandType)
                             .ifPresentOrElse(value -> print.logInfo("getToken "+"pathUrl :" +url),
-                                    () -> print.logInfo("generateVA "+"pathUrl :" +url)
+                                    () -> print.logInfo("generate "+"pathUrl :" +url)
                             );
 
                     try {
@@ -62,6 +72,38 @@ public class ApiClient {
                 });
                 builder.client(httpClient.build());
                 retrofit = builder.build();
+
+        return retrofit.create(serviceClass);
+    }
+
+    public static <S> S createTimeoutService(Class<S> serviceClass,final String grandType,final String accessToken,String data) {
+        httpClientTimeout.interceptors().clear();
+        httpClientTimeout.addInterceptor(chain -> {
+            Request original = chain.request();
+            Request.Builder builder1 = null;
+            print.logInfo("generate "+"fullUrl :" +chain.request().url());
+            String url = chain.request().url().encodedPath().replace("/nicepay","");
+            Optional.ofNullable(grandType)
+                    .ifPresentOrElse(value -> print.logInfo("getToken "+"pathUrl :" +url),
+                            () -> print.logInfo("generate "+"pathUrl :" +url)
+                    );
+
+            try {
+                builder1 = original.newBuilder()
+                        .headers(getHeaders(grandType,accessToken, data,url));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+//                    Request request = builder1.build();
+            Response response = chain.proceed(builder1.build());
+            String bodyString = response.body().string();
+            MediaType contentType = response.body().contentType();
+            ResponseBody responseBody  = ResponseBody.create(bodyString, contentType);
+            print.logInfoBody("Request Data Timeout" + new GsonBuilder().setPrettyPrinting().create().toJson(original.tag(Invocation.class).arguments().get(0)));
+            return response.newBuilder().body(responseBody).build();
+        });
+        builder.client(httpClientTimeout.build());
+        retrofit = builder.build();
 
         return retrofit.create(serviceClass);
     }

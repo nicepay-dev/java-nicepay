@@ -1,8 +1,10 @@
 package com.nicepay.builder;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nicepay.config.BaseNICEPayResponse;
 import com.nicepay.config.NICEPayResponse;
-import com.nicepay.service.SnapEwalletService;
 import com.nicepay.service.SnapTokenUtilService;
+import com.nicepay.service.SnapVaService;
 import com.nicepay.utils.LoggerPrint;
 import org.junit.jupiter.api.Test;
 
@@ -11,9 +13,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-class EwalletRefund {
+class VirtualAccountCheckStatus<T extends BaseNICEPayResponse> {
 
     private static LoggerPrint print = new LoggerPrint() ;
+    private int retrycount = 0;
 
     @Test
     public Object getToken() throws IOException {
@@ -27,34 +30,39 @@ class EwalletRefund {
     }
 
     @Test
-    void EwalletRefund() throws IOException {
+    void VirtualAccountCheckStatus() throws IOException, InterruptedException {
+
         NICEPayResponse responseToken = (NICEPayResponse) getToken();
         var accessToken = Optional.ofNullable(responseToken)
                 .map(token -> responseToken.getAccessToken())
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
-        Map<String, String> refundAmount = new HashMap<>();
-        refundAmount.put("value","1.00");
-        refundAmount.put("currency","IDR");
+        Map<String, String> totalAmount = new HashMap<>();
+        totalAmount.put("value","11000.00");
+        totalAmount.put("currency","IDR");
 
         Map<String,String> additionalInfo = new HashMap<>();
-        additionalInfo.put("refundType","1");
+        additionalInfo.put("tXidVA","NORMALTEST02202308180921298631");
 
-        Ewallet ewallet = Ewallet.builder()
-                .merchantId("TNICEEW051")
-                .subMerchantId("23489182303312")
-                .originalPartnerReferenceNo("ref202305081205331683522921")
-                .originalReferenceNo("TNICEEW05105202308071019271732")
-                .partnerRefundNo("239850918204981205183")
-                .externalStoreId("239840198240795109")
-                .reason("Customer complain")
+        VirtualAccount virtualaccount = VirtualAccount.builder()
+                .partnerServiceId("")
+                .customerNo("")
+                .virtualAccountNo("8625000002001387")
+                .inquiryRequestId("")
+                .trxId("TESTTrxId")
+                .totalAmount(totalAmount)
                 .additionalInfo(additionalInfo)
-                .refundAmount(refundAmount)
                 .build();
 
-
-        NICEPayResponse Result =
-                SnapEwalletService.callServiceEwalletRefund(ewallet,accessToken);
+        T result = SnapVaService.callServiceVACheckStatus(virtualaccount,accessToken);
+        ObjectMapper mapper = new ObjectMapper();
+        System.out.println("Result = " + mapper.writeValueAsString(result));
 
     }
-}
+
+    }
+
+
+
+
+

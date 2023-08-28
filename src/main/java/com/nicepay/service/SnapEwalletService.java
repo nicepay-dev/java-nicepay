@@ -15,12 +15,14 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 
 public class SnapEwalletService {
 
     private static LoggerPrint print = new LoggerPrint();
 
-    public static <S> S callServiceEwalletPayment(Ewallet data, String accessToken) throws IOException {
+    public static <S> S callServiceEwalletPayment(Ewallet data, String accessToken) throws IOException, InterruptedException {
+
         Gson gson = new Gson();
         PostEwalletRequest request = ApiClient.createService(PostEwalletRequest.class, TokenUtil.builder().build().getGrantType(), accessToken, gson.toJson(data));
         Call<NICEPayResponse> callSync = request.paymentEwallet(data);
@@ -43,7 +45,11 @@ public class SnapEwalletService {
             ObjectMapper mapper = new ObjectMapper();
             jsonObject = JsonParser.parseString(resClient.toString()).getAsJsonObject();
             print.logInfoResponse("Response EwalletPayment :" +jsonObject);
-        } catch (Exception ex) {
+        }catch(SocketTimeoutException e){
+            Thread.sleep(55000);
+            System.out.println(e.getMessage()+" please retry again");
+        }
+        catch (Exception ex) {
             ex.printStackTrace();
         }
         return (S) nicePayResponse;

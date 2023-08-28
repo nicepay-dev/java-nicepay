@@ -5,13 +5,8 @@ import lombok.*;
 
 import java.util.Map;
 
-public class NICEPayResponse {
-    @Getter
-    @Setter
-    private String responseCode;
-    @Getter
-    @Setter
-    private String responseMessage;
+public class NICEPayResponse extends BaseNICEPayResponse {
+
     @Getter
     @Setter
     private String accessToken;
@@ -30,6 +25,60 @@ public class NICEPayResponse {
     @Getter
     @Setter
     private Map<String, String> totalAmount;
+
+    //Virtual Account
+    @Getter
+    @Setter
+    private String partnerServiceId;
+
+    @Getter
+    @Setter
+    private String customerNo;
+
+    @Getter
+    @Setter
+    private String inquiryRequestId;
+
+    @Getter
+    @Setter
+    private String virtualAccountNo;
+
+    @Getter
+    @Setter
+    private String virtualAccountName;
+
+    @Getter
+    @Setter
+    private String trxId;
+
+    @Getter
+    @Setter
+    private String transactionStatusDesc;
+
+    @Getter
+    @Setter
+    private String latestTransactionStatus;
+
+    @Getter
+    @Setter
+    private String bankCd;
+
+    @Getter
+    @Setter
+    private String tXidVA;
+
+    @Getter
+    @Setter
+    private String goodsNm;
+
+    @Getter
+    @Setter
+    private String vacctValidTm;
+
+    @Getter
+    @Setter
+    private String vacctValidDt;
+
 
     //Ewallet
     @Getter
@@ -70,10 +119,6 @@ public class NICEPayResponse {
 
     @Getter
     @Setter
-    private String latestTransactionStatus;
-
-    @Getter
-    @Setter
     private String partnerRefundNo;
 
     @Getter
@@ -98,8 +143,7 @@ public class NICEPayResponse {
 
 
     public NICEPayResponse(String responseCode, String responseMessage, String accessToken,String tokenType,String expiresIn) {
-        this.responseCode = responseCode;
-        this.responseMessage = responseMessage;
+        super(responseCode, responseMessage);
         this.accessToken = accessToken;
         this.tokenType = tokenType;
         this.expiresIn = expiresIn;
@@ -107,22 +151,26 @@ public class NICEPayResponse {
     }
 
     public NICEPayResponse(String responseCode, String responseMessage) {
-        this.responseCode = responseCode;
-        this.responseMessage = responseMessage;
+        super(responseCode, responseMessage);
     }
 
-    //    public NICEPayResponse(String responseCode, String responseMessage) {
-//        this.responseCode = responseCode;
-//        this.responseMessage = responseMessage;
-//    }
-//
-    public NICEPayResponse(String responseCode, String responseMessage, Map<String, Object> virtualAccountData, Map<String, Object> totalAmount, Map<String, String> additionalInfo) {
-        this.responseCode = responseCode;
-        this.responseMessage = responseMessage;
+    //virtual account
+    public NICEPayResponse(String responseCode, String responseMessage, Map<String, Object> virtualAccountData, Map<String, Object> totalAmount, Map<String, String> additionalInfo
+    ,String virtualAccountNo,String virtualAccountName, String trxId,String transactionStatusDesc,String bankCd,String tXidVA,String goodsNm,String vacctValidTm,String vacctValidDt) {
+        super(responseCode, responseMessage);
         this.virtualAccountData = virtualAccountData;
         this.virtualAccountData = totalAmount;
 //        this.totalAmount = totalAmount;
         this.additionalInfo = additionalInfo;
+        this.virtualAccountNo = virtualAccountNo;
+        this.virtualAccountName = virtualAccountName;
+        this.trxId = trxId;
+        this.transactionStatusDesc = transactionStatusDesc;
+        this.bankCd = bankCd;
+        this.tXidVA = tXidVA;
+        this.goodsNm = goodsNm;
+        this.vacctValidTm = vacctValidTm;
+        this.vacctValidDt = vacctValidDt;
 
     }
 
@@ -131,8 +179,7 @@ public class NICEPayResponse {
     public NICEPayResponse (String responseCode, String responseMessage, String partnerReferenceNo, String originalReferenceNo,String webRedirectUrl,String originalPartnerReferenceNo
             ,String refundNo,String partnerRefundNo,String Value,String Currency,String refundTime, String refundType,Map<String, Object> refundAmount,String latestTransactionStatus
             ,Map<String, Object> transAmount, String appRedirectUrl){
-        this.responseCode =responseCode;
-        this.responseMessage = responseMessage;
+        super(responseCode, responseMessage);
         this.partnerReferenceNo = partnerReferenceNo;
         this.originalReferenceNo = originalReferenceNo;
         this.webRedirectUrl = webRedirectUrl;
