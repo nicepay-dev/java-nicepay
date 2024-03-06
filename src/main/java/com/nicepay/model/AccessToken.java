@@ -1,4 +1,4 @@
-package com.nicepay.builder;
+package com.nicepay.model;
 
 
 import lombok.Builder;
@@ -8,7 +8,7 @@ import lombok.Setter;
 import java.util.Map;
 
 @Builder
-public class TokenUtil {
+public class AccessToken {
     @Getter
     @Setter
     private String grantType;
@@ -17,7 +17,7 @@ public class TokenUtil {
     @Setter
     private Map<String, String> additionalInfo ;
 
-    public TokenUtil(String grantType, Map<String, String> additionalInfo) {
+    public AccessToken(String grantType, Map<String, String> additionalInfo) {
         this.grantType = grantType;
         this.additionalInfo = additionalInfo;
     }

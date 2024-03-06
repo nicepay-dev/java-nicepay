@@ -1,6 +1,5 @@
-package com.nicepay.builder;
+package com.nicepay.model;
 
-import com.nicepay.config.NICEPayResponse;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,27 +34,28 @@ public class VirtualAccount {
 
     @Getter
     @Setter
-    private Map<String, String> additionalInfo;
+    private String inquiryRequestId;
 
     @Getter
     @Setter
-    private String inquiryRequestId;
+    private Map<String, Object> additionalInfo;
+
+    @Getter
+    @Setter
+    private String tXidVA;
 
 
 
-
-
-
-    public VirtualAccount(String partnerServiceId, String customerNo, String virtualAccountNo, String virtualAccountName, String trxId, Map<String, String> totalAmount, Map<String, String> additionalInfo
-    ,String inquiryRequestId) {
+    public VirtualAccount(String partnerServiceId, String customerNo, String virtualAccountNo, String virtualAccountName, String trxId, Map<String, String> totalAmount, String inquiryRequestId, Map<String, Object> additionalInfo, String tXidVA) {
         this.partnerServiceId = partnerServiceId;
         this.customerNo = customerNo;
         this.virtualAccountNo = virtualAccountNo;
         this.virtualAccountName = virtualAccountName;
         this.trxId = trxId;
         this.totalAmount = totalAmount;
-        this.additionalInfo = additionalInfo;
         this.inquiryRequestId = inquiryRequestId;
+        this.additionalInfo = additionalInfo;
+        this.tXidVA = tXidVA;
     }
 
     @Override
@@ -68,7 +68,6 @@ public class VirtualAccount {
                 ", trxId='" + trxId + '\'' +
                 ", totalAmount=" + totalAmount +
                 ", additionalInfo=" + additionalInfo +
-                ", inquiryRequestId=" + inquiryRequestId +
                 '}';
     }
 }

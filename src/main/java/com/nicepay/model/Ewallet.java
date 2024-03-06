@@ -1,4 +1,4 @@
-package com.nicepay.builder;
+package com.nicepay.model;
 
 import lombok.Builder;
 import lombok.Getter;

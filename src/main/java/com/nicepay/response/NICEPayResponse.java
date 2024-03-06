@@ -1,4 +1,4 @@
-package com.nicepay.config;
+package com.nicepay.response;
 
 
 import lombok.*;

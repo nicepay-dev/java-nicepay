@@ -1,7 +1,7 @@
-package com.nicepay.retrofit;
+package com.nicepay.api;
 
-import com.nicepay.builder.Payout;
-import com.nicepay.config.NICEPayResponse;
+import com.nicepay.model.Payout;
+import com.nicepay.response.NICEPayResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;

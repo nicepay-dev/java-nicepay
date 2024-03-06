@@ -33,10 +33,10 @@ public class SignatureUtils {
         return hex;
     }
 
-    public static String getSignature(String accessToken,String requestBody,String url,String timeStamp,String staticKey) {
+    public static String getSignature(String httpMethod,String accessToken,String requestBody,String url,String timeStamp,String staticKey) {
         String sign ="";
 
-        String data = "POST:"+url+":"+accessToken+":"+requestBody+":"+timeStamp; //RU4/FMF2KItWkzD9z3vWYSf/RlP9gfoN8rCLQVzpDgAsOu7jwi0sYvzxzO14QtngWAUnwfWP6uD5JGmRanBBXw==
+        String data = httpMethod+":"+url+":"+accessToken+":"+requestBody+":"+timeStamp; //RU4/FMF2KItWkzD9z3vWYSf/RlP9gfoN8rCLQVzpDgAsOu7jwi0sYvzxzO14QtngWAUnwfWP6uD5JGmRanBBXw==
 //		String data = "POST:/api/v1.0/transfer-va/create-va:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJUTklDRVZBMDIzIiwiaXNzIjoiTklDRVBBWSIsIm5hbWUiOiJUTklDRVZBMDIzIiwiZXhwIjoiMjAyMy0wMi0wMVQxNDowNTozOVoifQ==.DMVKpGwypKKZRvX28KkacZdRNWHhr8C4FbrSkuIykjg=:1a2ba59ec7a78d01cddb5468452855778196044efe1e4846a9d0b6303626c27b:2023-02-01T20:50:40+07:00";
         print.logInfo("String Data Sign :"+data);
 

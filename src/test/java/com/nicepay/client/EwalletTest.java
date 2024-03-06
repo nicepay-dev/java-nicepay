@@ -1,8 +1,10 @@
-package com.nicepay.builder;
+package com.nicepay.client;
 
-import com.nicepay.config.NICEPayResponse;
+import com.nicepay.response.NICEPayResponse;
+import com.nicepay.model.AccessToken;
+import com.nicepay.model.Ewallet;
 import com.nicepay.service.SnapEwalletService;
-import com.nicepay.service.SnapTokenUtilService;
+import com.nicepay.service.SnapTokenService;
 import com.nicepay.utils.LoggerPrint;
 import org.junit.jupiter.api.Test;
 
@@ -16,11 +18,11 @@ class EwalletTest {
         @Test
         public Object getToken() throws IOException {
                 Map<String, String> additionalInfo = new HashMap<>();
-                TokenUtil util =  TokenUtil.builder()
+                AccessToken util =  AccessToken.builder()
                         .grantType("client_credentials")
                         .additionalInfo(additionalInfo)
                         .build();
-                return SnapTokenUtilService.callGetToken(util);
+                return SnapTokenService.callGetAccessToken(util);
 
         }
 
