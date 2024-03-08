@@ -1,11 +1,15 @@
 package com.nicepay.model;
 
 import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Builder
+@Getter
+@Setter
 public class Cancel {
 
 //    VA
@@ -78,9 +82,25 @@ public class Cancel {
             return this;
         }
 
-
-
     }
 
-
+    public Cancel(String partnerServiceId, String customerNo, String virtualAccountNo, String trxId, Map<String, Object> additionalInfoMap, String merchantId, String subMerchantId, String originalPartnerReferenceNo, String originalReferenceNo, String serviceCode, String transactionDate, String externalStoreId, Map<String, Object> refundAmount, String partnerRefundNo, String reason, Map<String, Object> totalAmount, Map<String, Object> additionalInfo) {
+        this.partnerServiceId = partnerServiceId;
+        this.customerNo = customerNo;
+        this.virtualAccountNo = virtualAccountNo;
+        this.trxId = trxId;
+        this.additionalInfoMap = additionalInfoMap;
+        this.merchantId = merchantId;
+        this.subMerchantId = subMerchantId;
+        this.originalPartnerReferenceNo = originalPartnerReferenceNo;
+        this.originalReferenceNo = originalReferenceNo;
+        this.serviceCode = serviceCode;
+        this.transactionDate = transactionDate;
+        this.externalStoreId = externalStoreId;
+        this.refundAmount = refundAmount;
+        this.partnerRefundNo = partnerRefundNo;
+        this.reason = reason;
+        this.totalAmount = totalAmount;
+        this.additionalInfo = additionalInfo;
+    }
 }

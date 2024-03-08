@@ -77,8 +77,17 @@ public class Ewallet {
         }
     }
 
-
-
+    public Ewallet(String partnerReferenceNo, String merchantId, String subMerchantId, String externalStoreId, String validUpTo, String pointOfInitiation, Map<String, Object> amount, Map<String, Object> additionalInfo, List<Map<String, String>> urlParam) {
+        this.partnerReferenceNo = partnerReferenceNo;
+        this.merchantId = merchantId;
+        this.subMerchantId = subMerchantId;
+        this.externalStoreId = externalStoreId;
+        this.validUpTo = validUpTo;
+        this.pointOfInitiation = pointOfInitiation;
+        this.amount = amount;
+        this.additionalInfo = additionalInfo;
+        this.urlParam = urlParam;
+    }
 }
 
 

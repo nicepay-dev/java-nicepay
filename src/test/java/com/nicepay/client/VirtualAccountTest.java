@@ -14,8 +14,6 @@ import java.util.*;
 class VirtualAccountTest {
     private static LoggerPrint print = new LoggerPrint();
 
-
-
 // return Token Object
     public Object getToken() throws IOException {
         Map<String, String> additionalInfo = new HashMap<>();
@@ -23,16 +21,11 @@ class VirtualAccountTest {
                 .grantType("client_credentials")
                 .additionalInfo(additionalInfo)
                 .build();
-
        return  SnapTokenService.callGetAccessToken(accessToken);
-
-
     }
-
     @Test
     void vaCreate() throws IOException
     {
-
         NICEPayResponse responseToken = (NICEPayResponse) getToken();
         var accessToken = Optional.ofNullable(responseToken)
                 .map(token -> responseToken.getAccessToken())

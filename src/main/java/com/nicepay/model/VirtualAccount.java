@@ -64,16 +64,4 @@ public class VirtualAccount {
         this.tXidVA = tXidVA;
     }
 
-    @Override
-    public String toString() {
-        return "{" +
-                "partnerServiceId='" + partnerServiceId + '\'' +
-                ", customerNo='" + customerNo + '\'' +
-                ", virtualAccountNo='" + virtualAccountNo + '\'' +
-                ", virtualAccountName='" + virtualAccountName + '\'' +
-                ", trxId='" + trxId + '\'' +
-                ", totalAmount=" + totalAmount +
-                ", additionalInfo=" + additionalInfo +
-                '}';
-    }
 }

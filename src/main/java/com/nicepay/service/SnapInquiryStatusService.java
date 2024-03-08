@@ -19,7 +19,6 @@ import retrofit2.Response;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
-import java.util.Map;
 
 public class SnapInquiryStatusService {
     private static LoggerPrint print = new LoggerPrint();
@@ -33,7 +32,7 @@ public class SnapInquiryStatusService {
         Object resClient = null ;
         JsonObject jsonObject = null;
         PostVaRequest request = ApiUtils.createService(PostVaRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data));
-        Call<NICEPayResponse> callSync =  request.checkStatusVa(data);
+        Call<NICEPayResponse> callSync =  request.inquiryStatusVa(data);
         try {
             response = callSync.execute();
             nicePayResponse = response.body();
@@ -66,7 +65,7 @@ public class SnapInquiryStatusService {
     public static <S> S callServiceEwalletCheckStatus(InquiryStatus data, String accessToken) throws IOException {
         Gson gson = new Gson();
         PostEwalletRequest request = ApiUtils.createService(PostEwalletRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data));
-        Call<NICEPayResponse> callSync = request.checkStatusEwallet(data);
+        Call<NICEPayResponse> callSync = request.inquiryStatusEwallet(data);
         Response<NICEPayResponse> response = null;
         NICEPayResponse nicePayResponse = null;
         ResponseBody errorResponse = null;

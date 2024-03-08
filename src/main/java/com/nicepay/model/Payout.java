@@ -40,19 +40,6 @@ public class Payout {
     @Getter
     @Setter
     private Map<String, Object> amount;
-
-    public static class PayoutBuilder {
-        private Map<String, Object> amount;
-
-        public PayoutBuilder amount(String value, String currency) {
-            Map<String, Object> amountMap = new HashMap<>();
-            amountMap.put("value", value);
-            amountMap.put("currency", currency);
-            this.amount = amountMap;
-            return this;
-        }
-    }
-
     @Getter
     @Setter
     private String partnerReferenceNo;
@@ -100,5 +87,45 @@ public class Payout {
     @Setter
     private String originalReferenceNo;
 
+    public static class PayoutBuilder {
+        private Map<String, Object> amount;
 
+        public PayoutBuilder amount(String value, String currency) {
+            Map<String, Object> amountMap = new HashMap<>();
+            amountMap.put("value", value);
+            amountMap.put("currency", currency);
+            this.amount = amountMap;
+            return this;
+        }
+    }
+
+    public Payout(String merchantId, String msId, String beneficiaryAccountNo, String beneficiaryName, String beneficiaryPhone, String beneficiaryCustomerResidence, String beneficiaryCustomerType, String beneficiaryPostalCode, String payoutMethod, String beneficiaryBankCode, Map<String, Object> amount, String partnerReferenceNo, String reservedDt, String reservedTm, String description, String deliveryName, String deliveryId, String beneficiaryPOE, String beneficiaryDOE, String beneficiaryCoNo, String beneficiaryAddress, String beneficiaryAuthPhoneNumber, String beneficiaryMerCategory, String beneficiaryCoMgmtName, String beneficiaryCoShName, String originalPartnerReferenceNo, String originalReferenceNo) {
+        this.merchantId = merchantId;
+        this.msId = msId;
+        this.beneficiaryAccountNo = beneficiaryAccountNo;
+        this.beneficiaryName = beneficiaryName;
+        this.beneficiaryPhone = beneficiaryPhone;
+        this.beneficiaryCustomerResidence = beneficiaryCustomerResidence;
+        this.beneficiaryCustomerType = beneficiaryCustomerType;
+        this.beneficiaryPostalCode = beneficiaryPostalCode;
+        this.payoutMethod = payoutMethod;
+        this.beneficiaryBankCode = beneficiaryBankCode;
+        this.amount = amount;
+        this.partnerReferenceNo = partnerReferenceNo;
+        this.reservedDt = reservedDt;
+        this.reservedTm = reservedTm;
+        this.description = description;
+        this.deliveryName = deliveryName;
+        this.deliveryId = deliveryId;
+        this.beneficiaryPOE = beneficiaryPOE;
+        this.beneficiaryDOE = beneficiaryDOE;
+        this.beneficiaryCoNo = beneficiaryCoNo;
+        this.beneficiaryAddress = beneficiaryAddress;
+        this.beneficiaryAuthPhoneNumber = beneficiaryAuthPhoneNumber;
+        this.beneficiaryMerCategory = beneficiaryMerCategory;
+        this.beneficiaryCoMgmtName = beneficiaryCoMgmtName;
+        this.beneficiaryCoShName = beneficiaryCoShName;
+        this.originalPartnerReferenceNo = originalPartnerReferenceNo;
+        this.originalReferenceNo = originalReferenceNo;
+    }
 }

@@ -7,11 +7,8 @@ import com.nicepay.response.NICEPayResponse;
 import com.nicepay.model.AccessToken;
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.DELETE;
 import retrofit2.http.HTTP;
 import retrofit2.http.POST;
-
-import java.util.Map;
 
 public interface PostVaRequest {
 
@@ -25,7 +22,7 @@ public interface PostVaRequest {
     Call<NICEPayResponse>createVa(@Body VirtualAccount request);
 
     @POST("nicepay/api/v1.0/transfer-va/status")
-    Call<NICEPayResponse>checkStatusVa(@Body InquiryStatus request);
+    Call<NICEPayResponse> inquiryStatusVa(@Body InquiryStatus request);
 
     @HTTP(method = "DELETE", path ="nicepay/api/v1.0/transfer-va/delete-va", hasBody = true)
     Call<NICEPayResponse>cancelVa(@Body Cancel request);
