@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.util.*;
 
 class EwalletTest {
-
         private static LoggerPrint print = new LoggerPrint() ;
 
         @Test
@@ -33,33 +32,6 @@ class EwalletTest {
                 .map(token -> responseToken.getAccessToken())
                         .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
-                Map<String, String> amount = new HashMap<>();
-                amount.put("value","1.00");
-                amount.put("currency","IDR");
-
-                Map<String,String> additionalInfo = new HashMap<>();
-                additionalInfo.put("mitraCd","OVOE");
-                additionalInfo.put("goodsNm","Testing Ewallet Snap");
-                additionalInfo.put("billingNm","Bale");
-                additionalInfo.put("billingPhone","089665542347");
-                additionalInfo.put("dbProcessUrl","http://ptsv2.com/t/dbProcess/post");
-                additionalInfo.put("callBackUrl","https://www.nicepay.co.id/IONPAY_CLIENT/paymentResult.jsp");
-                additionalInfo.put("msId","data");
-                additionalInfo.put("cartData","{\"count\":\"2\",\"item\":[{\"img_url\":\"http://img.aaa.com/ima1.jpg\",\"goods_name\":\"Item 1 Name\",\"goods_detail\":\"Item 1 Detail\",\"goods_amt\":\"0.00\",\"goods_quantity\":\"1\"},{\"img_url\":\"http://img.aaa.com/ima2.jpg\",\"goods_name\":\"Item 2 Name\",\"goods_detail\":\"Item 2 Detail\",\"goods_amt\":\"1.00\",\"goods_quantity\":\"1\"}]}");
-
-                List<Map<String, String>> urlParamList = new ArrayList<>();
-                Map<String, String> urlParam1 = new HashMap<>();
-                urlParam1.put("url","https://test2.bi.go.id/v1/test");
-                urlParam1.put("type","PAY_NOTIFY");
-                urlParam1.put("isDeeplink"," Y");
-                urlParamList.add(urlParam1);
-
-                Map<String, String> urlParam2 = new HashMap<>();
-                urlParam2.put("url","https://test2.bi.go.id/v1/test");
-                urlParam2.put("type","PAY_RETURN");
-                urlParam2.put("isDeeplink","Y");
-                urlParamList.add(urlParam2);
-
                 Ewallet ewallet = Ewallet.builder()
                         .partnerReferenceNo("ref202305081205331683522921")
                         .merchantId("IONPAYTEST")
@@ -67,12 +39,24 @@ class EwalletTest {
                         .externalStoreId("")
                         .validUpTo("")
                         .pointOfInitiation("Mobile App")
-                        .amount(amount)
-                        .additionalInfo(additionalInfo)
-                        .urlParam(urlParamList)
+                        .amount("1.00","IDR")
+                        .additionalInfo( new HashMap<String, Object>() {
+                                {
+                                        put("mitraCd","OVOE");
+                                        put("goodsNm","Testing Ewallet Snap");
+                                        put("billingNm","Test Ewallet");
+                                        put("billingPhone","089665542347");
+                                        put("dbProcessUrl","http://ptsv2.com/t/dbProcess/post");
+                                        put("callBackUrl","https://www.nicepay.co.id/IONPAY_CLIENT/paymentResult.jsp");
+                                        put("msId","data");
+                                        put("cartData","{\"count\":\"2\",\"item\":[{\"img_url\":\"http://img.aaa.com/ima1.jpg\",\"goods_name\":\"Item 1 Name\",\"goods_detail\":\"Item 1 Detail\",\"goods_amt\":\"0.00\",\"goods_quantity\":\"1\"},{\"img_url\":\"http://img.aaa.com/ima2.jpg\",\"goods_name\":\"Item 2 Name\",\"goods_detail\":\"Item 2 Detail\",\"goods_amt\":\"1.00\",\"goods_quantity\":\"1\"}]}");
+                                }})
+                        .urlParam(new String[][]{
+                                {"https://test2.bi.go.id/v1/test", "PAY_NOTIFY", "Y"},
+                                {"https://test2.bi.go.id/v1/test", "PAY_RETURN", "Y"}
+                                }
+                        )
                         .build();
-
-
                 NICEPayResponse Result =
                         SnapEwalletService.callServiceEwalletPayment(ewallet,accessToken);
 

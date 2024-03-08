@@ -44,12 +44,7 @@ class VirtualAccountTest {
                 .virtualAccountNo("")
                 .virtualAccountName("TESTVaName")
                 .trxId("TESTTrxId")
-                .totalAmount(new HashMap<String, String>() {
-                    {
-                        put("value","11000.00");
-                        put("currency", "IDR");
-                    }
-                })
+                .totalAmount("11000.00","IDR")
                 .additionalInfo( new HashMap<String, Object>() {
                     {
                         put("bankCd","BBBA");
@@ -72,49 +67,6 @@ class VirtualAccountTest {
 
 
     }
-
-
-//    @Test
-//    void VirtualAccountCheckStatus() throws IOException, InterruptedException {
-//
-//        NICEPayResponse responseToken = (NICEPayResponse) getToken();
-//        var accessToken = Optional.ofNullable(responseToken)
-//                .map(token -> responseToken.getAccessToken())
-//                .orElseThrow(() -> new IllegalArgumentException("Token is null"));
-//
-//        Map<String, Object> requestData = new InquiryStatus()
-//                .partnerServiceId("")
-//                .customerNo("")
-//                .virtualAccountNo("8625000002002166")
-//                .inquiryRequestId("dsfsd43")
-//                .totalAmount("11000.00", "IDR")
-//                .trxId("TESTTrxId")
-//                .tXidVA("NORMALTEST02202403041600418638")
-//                .build();
-//
-////        VirtualAccount virtualaccount = VirtualAccount.builder()
-////                .partnerServiceId("")
-////                .customerNo("")
-////                .virtualAccountNo("8625000002002166")
-////                .inquiryRequestId("dsfsd43")
-////                .additionalInfo(new HashMap<String, Object>() {
-////                    {
-//////                        put("totalAmount", totalAmountMap);
-////                        put("totalAmount",  new HashMap<String, Object>() {
-////                            {
-////                                put("value", "11000.00");
-////                                put("currency", "IDR");
-////                            }
-////                        });
-////                        put("trxId", "TESTTrxId");
-////                        put("tXidVA", "NORMALTEST02202403041600418638");
-////                    }
-////                })
-////                .build();
-//
-//        NICEPayResponse result = SnapVaService.callServiceVACheckStatus(requestData,accessToken);
-//
-//    }
 
 }
 

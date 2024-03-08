@@ -37,8 +37,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
         var accessToken = Optional.ofNullable(responseToken)
                 .map(token -> responseToken.getAccessToken())
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
-//
-        Map<String, Object> requestData = new InquiryStatus()
+        InquiryStatus requestData = InquiryStatus.builder()
                 .partnerServiceId("")
                 .customerNo("")
                 .virtualAccountNo("8625000002002166")
@@ -58,7 +57,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
                 .map(token -> responseToken.getAccessToken())
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
-        Map<String, Object> requestData = new InquiryStatus()
+        InquiryStatus requestData = InquiryStatus.builder()
                 .merchantId("NORMALTEST")
                 .subMerchantId("23489182303312")
                 .originalPartnerReferenceNo("ref202305081205331683522921")

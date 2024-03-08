@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.nicepay.model.InquiryStatus;
 import com.nicepay.utils.ApiUtils;
 import com.nicepay.api.PostEwalletRequest;
 import com.nicepay.api.PostVaRequest;
@@ -24,7 +25,7 @@ public class SnapInquiryStatusService {
     private static LoggerPrint print = new LoggerPrint();
     private static int retryCount = 0;
 
-    public static  <S> S callServiceVACheckStatus(Map<String, Object> data, String accessToken) throws IOException, InterruptedException {
+    public static  <S> S callServiceVACheckStatus(InquiryStatus data, String accessToken) throws IOException, InterruptedException {
         Gson gson = new Gson();
         Response<NICEPayResponse> response = null;
         NICEPayResponse nicePayResponse = null;
@@ -62,7 +63,7 @@ public class SnapInquiryStatusService {
         return (S) nicePayResponse;
     }
 
-    public static <S> S callServiceEwalletCheckStatus(Map<String, Object> data, String accessToken) throws IOException {
+    public static <S> S callServiceEwalletCheckStatus(InquiryStatus data, String accessToken) throws IOException {
         Gson gson = new Gson();
         PostEwalletRequest request = ApiUtils.createService(PostEwalletRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data));
         Call<NICEPayResponse> callSync = request.checkStatusEwallet(data);

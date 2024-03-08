@@ -44,13 +44,7 @@ class PayoutTest {
                 .beneficiaryPostalCode("123456")
                 .payoutMethod ("0")
                 .beneficiaryBankCode ("BDIN")
-                .amount(new HashMap<String, Object>() {
-                    {
-                        put("value","11000.00");
-                        put("currency", "IDR");
-                    }
-                })
-
+                .amount("11000.00","IDR")
                 .partnerReferenceNo ("2020102900000000000001")
                 .description ("This is test Request")
                 .deliveryName("Ciki")
@@ -74,7 +68,7 @@ class PayoutTest {
 
         Payout payout = Payout.builder()
                 .merchantId("IONPAYTEST")
-                .originalReferenceNo("IONPAYTEST07202403052104077283")
+                .originalReferenceNo("IONPAYTEST07202403080926575337")
                 .originalPartnerReferenceNo("2020102900000000000001")
                 .build();
 

@@ -1,8 +1,6 @@
 package com.nicepay.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,13 +41,18 @@ public class Payout {
     @Setter
     private Map<String, Object> amount;
 
-    public Payout amount(String value, String currency) {
-        Map<String, Object> amountMap = new HashMap<>();
-        amountMap.put("value", value);
-        amountMap.put("currency", currency);
-        this.amount = amountMap;
-        return this;
+    public static class PayoutBuilder {
+        private Map<String, Object> amount;
+
+        public PayoutBuilder amount(String value, String currency) {
+            Map<String, Object> amountMap = new HashMap<>();
+            amountMap.put("value", value);
+            amountMap.put("currency", currency);
+            this.amount = amountMap;
+            return this;
+        }
     }
+
     @Getter
     @Setter
     private String partnerReferenceNo;
@@ -96,9 +99,6 @@ public class Payout {
     @Getter
     @Setter
     private String originalReferenceNo;
-
-
-
 
 
 }

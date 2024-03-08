@@ -9,6 +9,7 @@ import com.nicepay.api.PostEwalletRequest;
 import com.nicepay.api.PostVaRequest;
 import com.nicepay.exception.NicepayErrorResponse;
 import com.nicepay.model.AccessToken;
+import com.nicepay.model.Cancel;
 import com.nicepay.response.NICEPayResponse;
 import com.nicepay.utils.ApiUtils;
 import com.nicepay.utils.LoggerPrint;
@@ -24,7 +25,7 @@ public class SnapCancelService {
     private static LoggerPrint print = new LoggerPrint();
     private static int retryCount = 0;
 
-    public static  <S> S callServiceVACancel(Map<String, Object> data, String accessToken) throws IOException, InterruptedException {
+    public static  <S> S callServiceVACancel(Cancel data, String accessToken) throws IOException, InterruptedException {
         Gson gson = new Gson();
         Response<NICEPayResponse> response = null;
         NICEPayResponse nicePayResponse = null;
@@ -61,7 +62,7 @@ public class SnapCancelService {
         return (S) nicePayResponse;
     }
 
-    public static <S> S callServiceEwalletCancel(Map<String, Object> data, String accessToken) throws IOException {
+    public static <S> S callServiceEwalletCancel(Cancel data, String accessToken) throws IOException {
         Gson gson = new Gson();
         PostEwalletRequest request = ApiUtils.createService(PostEwalletRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data));
         Call<NICEPayResponse> callSync = request.refundEwallet(data);

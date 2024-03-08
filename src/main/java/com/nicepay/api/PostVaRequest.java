@@ -1,5 +1,6 @@
 package com.nicepay.api;
 
+import com.nicepay.model.Cancel;
 import com.nicepay.model.InquiryStatus;
 import com.nicepay.model.VirtualAccount;
 import com.nicepay.response.NICEPayResponse;
@@ -24,10 +25,10 @@ public interface PostVaRequest {
     Call<NICEPayResponse>createVa(@Body VirtualAccount request);
 
     @POST("nicepay/api/v1.0/transfer-va/status")
-    Call<NICEPayResponse>checkStatusVa(@Body Map<String, Object> request);
+    Call<NICEPayResponse>checkStatusVa(@Body InquiryStatus request);
 
     @HTTP(method = "DELETE", path ="nicepay/api/v1.0/transfer-va/delete-va", hasBody = true)
-    Call<NICEPayResponse>cancelVa(@Body Map<String, Object> request);
+    Call<NICEPayResponse>cancelVa(@Body Cancel request);
 
 
 

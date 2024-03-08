@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Builder
@@ -30,11 +31,7 @@ public class VirtualAccount {
 
     @Getter
     @Setter
-    private Map<String, String> totalAmount;
-
-    @Getter
-    @Setter
-    private String inquiryRequestId;
+    private Map<String, Object> totalAmount;
 
     @Getter
     @Setter
@@ -44,16 +41,25 @@ public class VirtualAccount {
     @Setter
     private String tXidVA;
 
+    public static class VirtualAccountBuilder {
+        private Map<String, Object> totalAmount;
 
+        public VirtualAccountBuilder totalAmount(String value, String currency) {
+            Map<String, Object> amountMap = new HashMap<>();
+            amountMap.put("value", value);
+            amountMap.put("currency", currency);
+            this.totalAmount = amountMap;
+            return this;
+        }
+    }
 
-    public VirtualAccount(String partnerServiceId, String customerNo, String virtualAccountNo, String virtualAccountName, String trxId, Map<String, String> totalAmount, String inquiryRequestId, Map<String, Object> additionalInfo, String tXidVA) {
+    public VirtualAccount(String partnerServiceId, String customerNo, String virtualAccountNo, String virtualAccountName, String trxId, Map<String, Object> totalAmount, Map<String, Object> additionalInfo, String tXidVA) {
         this.partnerServiceId = partnerServiceId;
         this.customerNo = customerNo;
         this.virtualAccountNo = virtualAccountNo;
         this.virtualAccountName = virtualAccountName;
         this.trxId = trxId;
         this.totalAmount = totalAmount;
-        this.inquiryRequestId = inquiryRequestId;
         this.additionalInfo = additionalInfo;
         this.tXidVA = tXidVA;
     }

@@ -41,13 +41,13 @@ class CancelTest<T extends BaseNICEPayResponse> {
                 .map(token -> responseToken.getAccessToken())
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 //
-        LinkedHashMap<String, Object> requestData = new Cancel()
+        Cancel requestData = Cancel.builder()
                 .partnerServiceId("")
                 .customerNo("")
-                .virtualAccountNo("8625000002002170")
+                .virtualAccountNo("8625000002002176")
                 .totalAmount("11000.00", "IDR")
                 .trxId("TESTTrxId")
-                .tXidVA("NORMALTEST02202403061432020351")
+                .tXidVA("NORMALTEST02202403081533064221")
                 .cancelMessage("test cancel")
                 .build();
 
@@ -62,7 +62,7 @@ class CancelTest<T extends BaseNICEPayResponse> {
                 .map(token -> responseToken.getAccessToken())
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
-        Map<String, Object> requestData = new Cancel()
+        Cancel requestData = Cancel.builder()
                 .merchantId("NORMALTEST")
                 .subMerchantId("23489182303312")
                 .originalPartnerReferenceNo("ref202305081205331683522921")

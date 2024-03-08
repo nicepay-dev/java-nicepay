@@ -2,9 +2,11 @@ package com.nicepay.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.nicepay.model.AccessToken;
+import com.nicepay.model.Cancel;
 import com.nicepay.model.Ewallet;
 import com.nicepay.response.NICEPayResponse;
 import com.nicepay.utils.ApiUtils;
@@ -45,7 +47,7 @@ public class SnapEwalletService {
 
             ObjectMapper mapper = new ObjectMapper();
             jsonObject = JsonParser.parseString(resClient.toString()).getAsJsonObject();
-            print.logInfoResponse("Response EwalletPayment :" +jsonObject);
+            print.logInfoResponse("Response EwalletPayment :" +new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject));
         }catch(SocketTimeoutException e){
             Thread.sleep(55000);
             System.out.println(e.getMessage()+" please retry again");
@@ -86,7 +88,7 @@ public class SnapEwalletService {
 //        return (S) nicePayResponse;
 //    }
 
-    public static <S> S callServiceEwalletRefund(Map<String, Object> data, String accessToken) throws IOException {
+    public static <S> S callServiceEwalletRefund(Cancel data, String accessToken) throws IOException {
         Gson gson = new Gson();
         PostEwalletRequest request = ApiUtils.createService(PostEwalletRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data));
         Call<NICEPayResponse> callSync = request.refundEwallet(data);
