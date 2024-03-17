@@ -13,6 +13,7 @@ import com.nicepay.exception.NicepayErrorResponse;
 import com.nicepay.model.AccessToken;
 import com.nicepay.response.NICEPayResponse;
 import com.nicepay.utils.LoggerPrint;
+import com.nicepay.utils.NICEPay;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -24,14 +25,14 @@ public class SnapInquiryStatusService {
     private static LoggerPrint print = new LoggerPrint();
     private static int retryCount = 0;
 
-    public static  <S> S callServiceVACheckStatus(InquiryStatus data, String accessToken) throws IOException, InterruptedException {
+    public static  <S> S callServiceVACheckStatus(InquiryStatus data, String accessToken, NICEPay config) throws IOException, InterruptedException {
         Gson gson = new Gson();
         Response<NICEPayResponse> response = null;
         NICEPayResponse nicePayResponse = null;
         ResponseBody errorResponse = null;
         Object resClient = null ;
         JsonObject jsonObject = null;
-        PostVaRequest request = ApiUtils.createService(PostVaRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data));
+        PostVaRequest request = ApiUtils.createService(PostVaRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data),config);
         Call<NICEPayResponse> callSync =  request.inquiryStatusVa(data);
         try {
             response = callSync.execute();
@@ -62,9 +63,9 @@ public class SnapInquiryStatusService {
         return (S) nicePayResponse;
     }
 
-    public static <S> S callServiceEwalletCheckStatus(InquiryStatus data, String accessToken) throws IOException {
+    public static <S> S callServiceEwalletCheckStatus(InquiryStatus data, String accessToken,NICEPay config) throws IOException {
         Gson gson = new Gson();
-        PostEwalletRequest request = ApiUtils.createService(PostEwalletRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data));
+        PostEwalletRequest request = ApiUtils.createService(PostEwalletRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data),config);
         Call<NICEPayResponse> callSync = request.inquiryStatusEwallet(data);
         Response<NICEPayResponse> response = null;
         NICEPayResponse nicePayResponse = null;

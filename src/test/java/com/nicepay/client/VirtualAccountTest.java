@@ -6,6 +6,8 @@ import com.nicepay.service.SnapTokenService;
 import com.nicepay.utils.LoggerPrint;
 import com.nicepay.response.NICEPayResponse;
 import com.nicepay.service.SnapVaService;
+import com.nicepay.utils.NICEPay;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -13,6 +15,16 @@ import java.util.*;
 
 class VirtualAccountTest {
     private static LoggerPrint print = new LoggerPrint();
+    private static NICEPay config;
+
+    @BeforeAll
+    public  static void setUp() {
+        config =NICEPay.builder()
+                .isProduction(true)
+                .clientSecret("1af9014925cab04606b2e77a7536cb0d5c51353924a966e503953e010234108a")
+                .partnerId("NORMALTEST")
+                .build();
+    }
 
 // return Token Object
     public Object getToken() throws IOException {
@@ -21,7 +33,7 @@ class VirtualAccountTest {
                 .grantType("client_credentials")
                 .additionalInfo(additionalInfo)
                 .build();
-       return  SnapTokenService.callGetAccessToken(accessToken);
+       return  SnapTokenService.callGetAccessToken(accessToken,config);
     }
     @Test
     void vaCreate() throws IOException
@@ -32,7 +44,7 @@ class VirtualAccountTest {
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
         VirtualAccount virtualAccount = VirtualAccount.builder()
-                .partnerServiceId("")
+                .partnerServiceId("1234")
                 .customerNo("")
                 .virtualAccountNo("")
                 .virtualAccountName("TESTVaName")
@@ -55,7 +67,7 @@ class VirtualAccountTest {
                 .build();
 
        NICEPayResponse Result =
-               SnapVaService.callGeneratedVA(virtualAccount,accessToken);
+               SnapVaService.callGeneratedVA(virtualAccount,accessToken,config);
 
 
 

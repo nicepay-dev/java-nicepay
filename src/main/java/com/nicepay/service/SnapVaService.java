@@ -8,6 +8,7 @@ import com.nicepay.utils.ApiUtils;
 import com.nicepay.utils.LoggerPrint;
 import com.nicepay.response.NICEPayResponse;
 import com.nicepay.api.PostVaRequest;
+import com.nicepay.utils.NICEPay;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -16,9 +17,9 @@ import java.io.IOException;
 public class SnapVaService {
     private static LoggerPrint print = new LoggerPrint();
     private static int retryCount = 0;
-    public static  <S> S callGeneratedVA(VirtualAccount data, String accessToken) throws IOException {
+    public static  <S> S callGeneratedVA(VirtualAccount data, String accessToken, NICEPay config) throws IOException {
         Gson gson = new Gson();
-        PostVaRequest request = ApiUtils.createService(PostVaRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data));
+        PostVaRequest request = ApiUtils.createService(PostVaRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data),config);
         Call<NICEPayResponse> callSync =  request.createVa(data);
         Response<NICEPayResponse> response = null;
         NICEPayResponse nicePayResponse = null;

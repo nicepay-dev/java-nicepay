@@ -12,6 +12,7 @@ import com.nicepay.response.NICEPayResponse;
 import com.nicepay.utils.ApiUtils;
 import com.nicepay.api.PostEwalletRequest;
 import com.nicepay.utils.LoggerPrint;
+import com.nicepay.utils.NICEPay;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -24,10 +25,10 @@ public class SnapEwalletService {
 
     private static LoggerPrint print = new LoggerPrint();
 
-    public static <S> S callServiceEwalletPayment(Ewallet data, String accessToken) throws IOException, InterruptedException {
+    public static <S> S callServiceEwalletPayment(Ewallet data, String accessToken, NICEPay config) throws IOException, InterruptedException {
 
         Gson gson = new Gson();
-        PostEwalletRequest request = ApiUtils.createService(PostEwalletRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data));
+        PostEwalletRequest request = ApiUtils.createService(PostEwalletRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data),config);
         Call<NICEPayResponse> callSync = request.paymentEwallet(data);
         Response<NICEPayResponse> response = null;
         NICEPayResponse nicePayResponse = null;
@@ -88,9 +89,9 @@ public class SnapEwalletService {
 //        return (S) nicePayResponse;
 //    }
 
-    public static <S> S callServiceEwalletRefund(Cancel data, String accessToken) throws IOException {
+    public static <S> S callServiceEwalletRefund(Cancel data, String accessToken,NICEPay config) throws IOException {
         Gson gson = new Gson();
-        PostEwalletRequest request = ApiUtils.createService(PostEwalletRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data));
+        PostEwalletRequest request = ApiUtils.createService(PostEwalletRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data),config);
         Call<NICEPayResponse> callSync = request.refundEwallet(data);
         Response<NICEPayResponse> response = null;
         NICEPayResponse nicePayResponse = null;

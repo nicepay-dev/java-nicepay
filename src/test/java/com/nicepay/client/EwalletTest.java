@@ -6,6 +6,8 @@ import com.nicepay.model.Ewallet;
 import com.nicepay.service.SnapEwalletService;
 import com.nicepay.service.SnapTokenService;
 import com.nicepay.utils.LoggerPrint;
+import com.nicepay.utils.NICEPay;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -13,6 +15,18 @@ import java.util.*;
 
 class EwalletTest {
         private static LoggerPrint print = new LoggerPrint() ;
+        private static NICEPay config;
+
+        @BeforeAll
+        public  static void setUp() {
+                config =NICEPay.builder()
+                        .isProduction(false)
+                        .clientSecret("1af9014925cab04606b2e77a7536cb0d5c51353924a966e503953e010234108a")
+                        .partnerId("NORMALTEST")
+                        .build();
+        }
+
+
 
         @Test
         public Object getToken() throws IOException {
@@ -21,7 +35,7 @@ class EwalletTest {
                         .grantType("client_credentials")
                         .additionalInfo(additionalInfo)
                         .build();
-                return SnapTokenService.callGetAccessToken(util);
+                return SnapTokenService.callGetAccessToken(util,config);
 
         }
 
@@ -58,7 +72,7 @@ class EwalletTest {
                         )
                         .build();
                 NICEPayResponse Result =
-                        SnapEwalletService.callServiceEwalletPayment(ewallet,accessToken);
+                        SnapEwalletService.callServiceEwalletPayment(ewallet,accessToken,config);
 
         }
 

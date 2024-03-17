@@ -7,6 +7,7 @@ import com.nicepay.response.NICEPayResponse;
 import com.nicepay.utils.ApiUtils;
 import com.nicepay.api.PostVaRequest;
 import com.nicepay.utils.LoggerPrint;
+import com.nicepay.utils.NICEPay;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -16,8 +17,8 @@ import java.io.IOException;
 public class SnapTokenService {
 
     private static LoggerPrint print = new LoggerPrint();
-    public static  <S> S callGetAccessToken(AccessToken util) throws IOException {
-        PostVaRequest request = ApiUtils.createService(PostVaRequest.class, util.getGrantType(),null,null);
+    public static  <S> S callGetAccessToken(AccessToken util, NICEPay config) throws IOException {
+        PostVaRequest request = ApiUtils.createService(PostVaRequest.class, util.getGrantType(),null,null,config);
         Call<NICEPayResponse> callSync = request.getToken(util);
 //        NICEPayResponse response = callSync.execute().body();
 

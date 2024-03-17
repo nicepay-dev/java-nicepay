@@ -7,6 +7,8 @@ import com.nicepay.response.NICEPayResponse;
 import com.nicepay.service.SnapInquiryStatusService;
 import com.nicepay.service.SnapTokenService;
 import com.nicepay.utils.LoggerPrint;
+import com.nicepay.utils.NICEPay;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -17,6 +19,16 @@ import java.util.Optional;
 class InquiryStatusTest<T extends BaseNICEPayResponse> {
 
     private static LoggerPrint print = new LoggerPrint() ;
+    private static NICEPay config;
+
+    @BeforeAll
+    public  static void setUp() {
+        config =NICEPay.builder()
+                .isProduction(false)
+                .clientSecret("1af9014925cab04606b2e77a7536cb0d5c51353924a966e503953e010234108a")
+                .partnerId("NORMALTEST")
+                .build();
+    }
     private int retrycount = 0;
 
     @Test
@@ -26,7 +38,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
                 .grantType("client_credentials")
                 .additionalInfo(additionalInfo)
                 .build();
-        return SnapTokenService.callGetAccessToken(util);
+        return SnapTokenService.callGetAccessToken(util,config);
 
     }
 
@@ -46,7 +58,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
                 .trxId("TESTTrxId")
                 .tXidVA("NORMALTEST02202403041600418638")
                 .build();
-        NICEPayResponse result = SnapInquiryStatusService.callServiceVACheckStatus(requestData,accessToken);
+        NICEPayResponse result = SnapInquiryStatusService.callServiceVACheckStatus(requestData,accessToken,config);
 
     }
 
@@ -69,7 +81,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
                 .build();
 
         NICEPayResponse Result =
-                SnapInquiryStatusService.callServiceEwalletCheckStatus(requestData,accessToken);
+                SnapInquiryStatusService.callServiceEwalletCheckStatus(requestData,accessToken,config);
 
     }
 

@@ -13,6 +13,7 @@ import com.nicepay.model.Cancel;
 import com.nicepay.response.NICEPayResponse;
 import com.nicepay.utils.ApiUtils;
 import com.nicepay.utils.LoggerPrint;
+import com.nicepay.utils.NICEPay;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -25,14 +26,14 @@ public class SnapCancelService {
     private static LoggerPrint print = new LoggerPrint();
     private static int retryCount = 0;
 
-    public static  <S> S callServiceVACancel(Cancel data, String accessToken) throws IOException, InterruptedException {
+    public static  <S> S callServiceVACancel(Cancel data, String accessToken,NICEPay config) throws IOException, InterruptedException {
         Gson gson = new Gson();
         Response<NICEPayResponse> response = null;
         NICEPayResponse nicePayResponse = null;
         ResponseBody errorResponse = null;
         Object resClient = null ;
         JsonObject jsonObject = null;
-        PostVaRequest request = ApiUtils.createService(PostVaRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data));
+        PostVaRequest request = ApiUtils.createService(PostVaRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data), config);
         Call<NICEPayResponse> callSync =  request.cancelVa(data);
         try {
             response = callSync.execute();
@@ -62,9 +63,9 @@ public class SnapCancelService {
         return (S) nicePayResponse;
     }
 
-    public static <S> S callServiceEwalletCancel(Cancel data, String accessToken) throws IOException {
+    public static <S> S callServiceEwalletCancel(Cancel data, String accessToken,NICEPay config) throws IOException {
         Gson gson = new Gson();
-        PostEwalletRequest request = ApiUtils.createService(PostEwalletRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data));
+        PostEwalletRequest request = ApiUtils.createService(PostEwalletRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data),config);
         Call<NICEPayResponse> callSync = request.refundEwallet(data);
         Response<NICEPayResponse> response = null;
         NICEPayResponse nicePayResponse = null;

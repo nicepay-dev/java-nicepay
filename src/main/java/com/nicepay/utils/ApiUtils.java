@@ -18,6 +18,7 @@ public class ApiUtils {
     private static Retrofit.Builder builder
             = new Retrofit.Builder()
             .baseUrl(NICEPayConstants.getSandboxBaseUrl())
+//            .baseUrl(NICEPay.getSnapUrl) //expected get Url from boolean isProduction
             .addConverterFactory(GsonConverterFactory.create())
             ;
 
@@ -40,7 +41,7 @@ public class ApiUtils {
             = new HttpLoggingInterceptor()
             .setLevel(HttpLoggingInterceptor.Level.BASIC);
 
-    public static <S> S createService(Class<S> serviceClass,final String grandType,final String accessToken,String data) {
+    public static <S> S createService(Class<S> serviceClass,final String grandType,final String accessToken,String data,NICEPay config) {
             httpClient.interceptors().clear();
             httpClient.addInterceptor(chain -> {
                     Request original = chain.request();
@@ -55,7 +56,7 @@ public class ApiUtils {
                     try {
                         String httpMethod = original.method();
                         builder = original.newBuilder()
-                                .headers(getHeaders(httpMethod,grandType,accessToken, data,url));
+                                .headers(getHeaders(httpMethod,grandType,accessToken, data,url,config));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -73,7 +74,41 @@ public class ApiUtils {
         return api.create(serviceClass);
     }
 
-    public static <S> S createTimeoutService(Class<S> serviceClass,final String grandType,final String accessToken,String data) {
+
+    public static <S> S createServiceConfig(Class<S> serviceClass,final String grandType,final String accessToken,String data,NICEPay config) {
+        httpClient.interceptors().clear();
+        httpClient.addInterceptor(chain -> {
+            Request original = chain.request();
+            Request.Builder builder = null;
+            print.logInfo("generate "+"fullUrl :" +chain.request().url());
+            String url = chain.request().url().encodedPath().replace("/nicepay","");
+            Optional.ofNullable(grandType)
+                    .ifPresentOrElse(value -> print.logInfo("getToken "+"pathUrl :" +url),
+                            () -> print.logInfo("generate "+"pathUrl :" +url)
+                    );
+
+            try {
+                String httpMethod = original.method();
+                builder = original.newBuilder()
+                        .headers(getHeaders(httpMethod,grandType,accessToken, data,url,config));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Response response = chain.proceed(builder.build());
+            String bodyString = response.body().string();
+            MediaType contentType = response.body().contentType();
+            ResponseBody responseBody  = ResponseBody.create(bodyString, contentType);
+            print.logInfoBody("Request Data " + new GsonBuilder().setPrettyPrinting().create().toJson(original.tag(Invocation.class).arguments().get(0)));
+
+            return response.newBuilder().body(responseBody).build();
+        });
+        builder.client(httpClient.build());
+        api = builder.build();
+
+        return api.create(serviceClass);
+    }
+
+    public static <S> S createTimeoutService(Class<S> serviceClass,final String grandType,final String accessToken,String data,NICEPay config) {
         httpClientTimeout.interceptors().clear();
         httpClientTimeout.addInterceptor(chain -> {
             Request original = chain.request();
@@ -88,7 +123,7 @@ public class ApiUtils {
             try {
                 String httpMethod = original.method();
                 builder = original.newBuilder()
-                        .headers(getHeaders(httpMethod,grandType,accessToken, data,url));
+                        .headers(getHeaders(httpMethod,grandType,accessToken, data,url,config));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -106,15 +141,18 @@ public class ApiUtils {
     }
 
     //Get Header
-    private static Headers getHeaders(String httpMethod,String grandType,String accessToken,String data,String pathUrl) throws Exception {
+    private static Headers getHeaders(String httpMethod,String grandType,String accessToken,String data,String pathUrl,NICEPay config) throws Exception {
 
         Map<String, String> headersMap = new HashMap<>();
+        print.logInfoHeader("Request Config "+config);
 
-        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+                SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
         String timeStamp = f.format(new Date());
-        String partnerID = NICEPayConstants.getPartnerId();
+
+//        String partnerID = NICEPayConstants.getPartnerId();
+        String partnerID = config.getPartnerId();
         String privateKey = NICEPayConstants.getPrivatekey();
-        String secretKey = NICEPayConstants.getSecretKey();
+        String secretKey = config.getClientSecret();
         Random rand = new Random();
         int random = rand.nextInt(100000000);
         String externalID = "OrdNo" + timeStamp.substring(0, 10).replace("-","") + timeStamp.substring(11,19).replace(":","") + random;

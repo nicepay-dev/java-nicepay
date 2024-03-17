@@ -11,6 +11,7 @@ import com.nicepay.response.NICEPayResponse;
 import com.nicepay.utils.ApiUtils;
 import com.nicepay.api.PostPayoutRequest;
 import com.nicepay.utils.LoggerPrint;
+import com.nicepay.utils.NICEPay;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -19,9 +20,9 @@ import java.io.IOException;
 
 public class SnapPayoutService {
     private static LoggerPrint print = new LoggerPrint();
-    public static  <S> S callServicePayoutRegist(Payout data, String accessToken) throws IOException {
+    public static  <S> S callServicePayoutRegist(Payout data, String accessToken, NICEPay config) throws IOException {
         Gson gson = new Gson();
-        PostPayoutRequest request = ApiUtils.createService(PostPayoutRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data));
+        PostPayoutRequest request = ApiUtils.createService(PostPayoutRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data),config);
         Call<NICEPayResponse> callSync =  request.registPayout(data);
         Response<NICEPayResponse> response = null;
         NICEPayResponse nicePayResponse = null;
@@ -48,9 +49,9 @@ public class SnapPayoutService {
         return (S) nicePayResponse;
     }
 
-    public static  <S> S callServicePayoutApprove(Payout data, String accessToken) throws IOException {
+    public static  <S> S callServicePayoutApprove(Payout data, String accessToken,NICEPay config) throws IOException {
         Gson gson = new Gson();
-        PostPayoutRequest request = ApiUtils.createService(PostPayoutRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data));
+        PostPayoutRequest request = ApiUtils.createService(PostPayoutRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data),config);
         Call<NICEPayResponse> callSync =  request.approvePayout(data);
         Response<NICEPayResponse> response = null;
         NICEPayResponse nicePayResponse = null;

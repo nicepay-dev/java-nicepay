@@ -6,6 +6,8 @@ import com.nicepay.model.Payout;
 import com.nicepay.service.SnapPayoutService;
 import com.nicepay.service.SnapTokenService;
 import com.nicepay.utils.LoggerPrint;
+import com.nicepay.utils.NICEPay;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -15,6 +17,16 @@ import java.util.Optional;
 
 class PayoutTest {
     private static LoggerPrint print = new LoggerPrint();
+    private static NICEPay config;
+
+    @BeforeAll
+    public  static void setUp() {
+        config =NICEPay.builder()
+                .isProduction(false)
+                .clientSecret("1af9014925cab04606b2e77a7536cb0d5c51353924a966e503953e010234108a")
+                .partnerId("NORMALTEST")
+                .build();
+    }
     @Test
     public Object getToken() throws IOException {
         Map<String, String> additionalInfo = new HashMap<>();
@@ -22,7 +34,7 @@ class PayoutTest {
                 .grantType("client_credentials")
                 .additionalInfo(additionalInfo)
                 .build();
-        return  SnapTokenService.callGetAccessToken(token);
+        return  SnapTokenService.callGetAccessToken(token,config);
     }
 
     @Test
@@ -54,7 +66,7 @@ class PayoutTest {
                 .build();
 
         NICEPayResponse Result =
-                SnapPayoutService.callServicePayoutRegist(payout,accessToken);
+                SnapPayoutService.callServicePayoutRegist(payout,accessToken,config);
     }
 
 
@@ -73,7 +85,7 @@ class PayoutTest {
                 .build();
 
         NICEPayResponse Result =
-                SnapPayoutService.callServicePayoutApprove(payout,accessToken);
+                SnapPayoutService.callServicePayoutApprove(payout,accessToken,config);
 
     }
 
