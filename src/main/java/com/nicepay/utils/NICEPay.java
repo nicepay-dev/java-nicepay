@@ -17,20 +17,36 @@ public class NICEPay {
     @Setter
     private boolean isProduction;
 
-    public  String getSnapApiURL() {
+    @Getter
+    @Setter
+    private String externalID;
+    @Getter
+    @Setter
+    private String timestamp;
+    @Getter
+    @Setter
+    private String privateKey;
+
+    public NICEPay(String partnerId, String clientSecret, boolean isProduction, String externalID, String timestamp,String privateKey) {
+        this.partnerId = partnerId;
+        this.clientSecret = clientSecret;
+        this.isProduction = isProduction;
+        this.externalID = externalID;
+        this.timestamp = timestamp;
+        this.privateKey = privateKey;
+    }
+
+    public static class NICEPayBuilder {
+        public String getSnapApiURL() {
         if (isProduction) {
             return NICEPayConstants.getProductionBaseUrl();
         }else{
             return  NICEPayConstants.getSandboxBaseUrl();
         }
+
     }
 
-    public NICEPay(String partnerId, String clientSecret, Boolean isProduction) {
-        this.partnerId = partnerId;
-        this.clientSecret = clientSecret;
-        this.isProduction = isProduction;
     }
-
     @Override
     public String toString() {
         return "NICEPay{" +

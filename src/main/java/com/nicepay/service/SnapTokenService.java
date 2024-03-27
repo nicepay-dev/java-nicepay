@@ -20,7 +20,6 @@ public class SnapTokenService {
     public static  <S> S callGetAccessToken(AccessToken util, NICEPay config) throws IOException {
         PostVaRequest request = ApiUtils.createService(PostVaRequest.class, util.getGrantType(),null,null,config);
         Call<NICEPayResponse> callSync = request.getToken(util);
-//        NICEPayResponse response = callSync.execute().body();
 
         Response<NICEPayResponse> response = null;
         NICEPayResponse nicePayResponse = null;

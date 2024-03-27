@@ -19,7 +19,6 @@ import retrofit2.Response;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
-import java.util.Map;
 
 public class SnapEwalletService {
 
@@ -58,36 +57,6 @@ public class SnapEwalletService {
         }
         return (S) nicePayResponse;
         }
-
-
-//    public static <S> S callServiceEwalletCheckStatus(Map<String, Object> data, String accessToken) throws IOException {
-//        Gson gson = new Gson();
-//        PostEwalletRequest request = ApiUtils.createService(PostEwalletRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data));
-//        Call<NICEPayResponse> callSync = request.checkStatusEwallet(data);
-//        Response<NICEPayResponse> response = null;
-//        NICEPayResponse nicePayResponse = null;
-//        ResponseBody errorResponse = null;
-//        Object resClient = null ;
-//        JsonObject jsonObject = null;
-//        try{
-//            response = callSync.execute();
-//            nicePayResponse = response.body();
-//            errorResponse = response.errorBody();
-//
-//            if (nicePayResponse == null){
-//                resClient = errorResponse.string();
-//            }else {
-//                resClient = gson.toJson(nicePayResponse);
-//            }
-//
-//            ObjectMapper mapper = new ObjectMapper();
-//            jsonObject = JsonParser.parseString(resClient.toString()).getAsJsonObject();
-//            print.logInfoResponse("Response EwalletCheckStatus :" +new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject));
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//        return (S) nicePayResponse;
-//    }
 
     public static <S> S callServiceEwalletRefund(Cancel data, String accessToken,NICEPay config) throws IOException {
         Gson gson = new Gson();

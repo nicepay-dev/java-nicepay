@@ -1,33 +1,33 @@
 package com.nicepay.client;
 
+import com.nicepay.data.DataTest;
 import com.nicepay.response.NICEPayResponse;
 import com.nicepay.model.AccessToken;
 import com.nicepay.model.Ewallet;
 import com.nicepay.service.SnapEwalletService;
 import com.nicepay.service.SnapTokenService;
-import com.nicepay.utils.LoggerPrint;
 import com.nicepay.utils.NICEPay;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.util.*;
 
 class EwalletTest {
-        private static LoggerPrint print = new LoggerPrint() ;
         private static NICEPay config;
+
+        private static DataTest DATA ;
 
         @BeforeAll
         public  static void setUp() {
                 config =NICEPay.builder()
                         .isProduction(false)
-                        .clientSecret("1af9014925cab04606b2e77a7536cb0d5c51353924a966e503953e010234108a")
-                        .partnerId("NORMALTEST")
+                        .clientSecret(DATA.CLIENT_SECRET)
+                        .partnerId(DATA.PARTNER_ID)
+                        .externalID(DATA.EXTERNAL_ID)
+                        .timestamp(DATA.TIMESTAMP)
+                        .privateKey(DATA.PRIVATE_KEY)
                         .build();
         }
-
-
-
         @Test
         public Object getToken() throws IOException {
                 Map<String, String> additionalInfo = new HashMap<>();
@@ -56,7 +56,7 @@ class EwalletTest {
                         .amount("1.00","IDR")
                         .additionalInfo( new HashMap<String, Object>() {
                                 {
-                                        put("mitraCd","OVOE");
+                                        put("mitraCd","DANA");
                                         put("goodsNm","Testing Ewallet Snap");
                                         put("billingNm","Test Ewallet");
                                         put("billingPhone","089665542347");

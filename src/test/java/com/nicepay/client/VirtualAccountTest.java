@@ -1,5 +1,6 @@
 package com.nicepay.client;
 
+import com.nicepay.data.DataTest;
 import com.nicepay.model.AccessToken;
 import com.nicepay.model.VirtualAccount;
 import com.nicepay.service.SnapTokenService;
@@ -16,13 +17,17 @@ import java.util.*;
 class VirtualAccountTest {
     private static LoggerPrint print = new LoggerPrint();
     private static NICEPay config;
+    private static DataTest DATA ;
 
     @BeforeAll
     public  static void setUp() {
         config =NICEPay.builder()
-                .isProduction(true)
-                .clientSecret("1af9014925cab04606b2e77a7536cb0d5c51353924a966e503953e010234108a")
-                .partnerId("NORMALTEST")
+                .isProduction(false)
+                .clientSecret(DATA.CLIENT_SECRET)
+                .partnerId(DATA.PARTNER_ID)
+                .externalID(DATA.EXTERNAL_ID)
+                .timestamp(DATA.TIMESTAMP)
+                .privateKey(DATA.PRIVATE_KEY)
                 .build();
     }
 

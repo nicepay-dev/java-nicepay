@@ -46,7 +46,6 @@ public class SnapInquiryStatusService {
             }
 
             ObjectMapper mapper = new ObjectMapper();
-//            print.logInfoResponse("Response getVA :" +new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject));
             jsonObject = JsonParser.parseString(resClient.toString()).getAsJsonObject();
             print.logInfoResponse("Response CheckStatusVA :" +new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject));
         } catch (SocketTimeoutException e) {

@@ -1,5 +1,6 @@
 package com.nicepay.client;
 
+import com.nicepay.data.DataTest;
 import com.nicepay.model.AccessToken;
 import com.nicepay.model.Cancel;
 import com.nicepay.model.InquiryStatus;
@@ -24,13 +25,17 @@ class CancelTest<T extends BaseNICEPayResponse> {
     private static LoggerPrint print = new LoggerPrint() ;
     private int retrycount = 0;
     private static NICEPay config;
+    private static DataTest DATA ;
 
     @BeforeAll
     public  static void setUp() {
         config =NICEPay.builder()
                 .isProduction(false)
-                .clientSecret("1af9014925cab04606b2e77a7536cb0d5c51353924a966e503953e010234108a")
-                .partnerId("NORMALTEST")
+                .clientSecret(DATA.CLIENT_SECRET)
+                .partnerId(DATA.PARTNER_ID)
+                .externalID(DATA.EXTERNAL_ID)
+                .timestamp(DATA.TIMESTAMP)
+                .privateKey(DATA.PRIVATE_KEY)
                 .build();
     }
 

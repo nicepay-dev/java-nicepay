@@ -1,11 +1,11 @@
 package com.nicepay.client;
 
+import com.nicepay.data.DataTest;
 import com.nicepay.response.NICEPayResponse;
 import com.nicepay.model.AccessToken;
 import com.nicepay.model.Payout;
 import com.nicepay.service.SnapPayoutService;
 import com.nicepay.service.SnapTokenService;
-import com.nicepay.utils.LoggerPrint;
 import com.nicepay.utils.NICEPay;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -16,15 +16,17 @@ import java.util.Map;
 import java.util.Optional;
 
 class PayoutTest {
-    private static LoggerPrint print = new LoggerPrint();
     private static NICEPay config;
-
+    private static DataTest DATA ;
     @BeforeAll
     public  static void setUp() {
         config =NICEPay.builder()
                 .isProduction(false)
-                .clientSecret("1af9014925cab04606b2e77a7536cb0d5c51353924a966e503953e010234108a")
-                .partnerId("NORMALTEST")
+                .clientSecret(DATA.CLIENT_SECRET)
+                .partnerId(DATA.PARTNER_ID)
+                .externalID(DATA.EXTERNAL_ID)
+                .timestamp(DATA.TIMESTAMP)
+                .privateKey(DATA.PRIVATE_KEY)
                 .build();
     }
     @Test
@@ -80,7 +82,7 @@ class PayoutTest {
 
         Payout payout = Payout.builder()
                 .merchantId("IONPAYTEST")
-                .originalReferenceNo("IONPAYTEST07202403080926575337")
+                .originalReferenceNo("IONPAYTEST07202403221436562759")
                 .originalPartnerReferenceNo("2020102900000000000001")
                 .build();
 

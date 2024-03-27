@@ -6,24 +6,22 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Invocation;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class ApiUtils {
 
-//    private static AccessToken util ;
     private static LoggerPrint print = new LoggerPrint();
+
+
     private static Retrofit.Builder builder
             = new Retrofit.Builder()
-            .baseUrl(NICEPayConstants.getSandboxBaseUrl())
-//            .baseUrl(NICEPay.getSnapUrl) //expected get Url from boolean isProduction
+            .baseUrl(NICEPay.builder().getSnapApiURL())
             .addConverterFactory(GsonConverterFactory.create())
             ;
 
-    private static Retrofit api = builder
-            .build();
+    private static Retrofit api ;
 
     private static OkHttpClient.Builder httpClient
             = new OkHttpClient
@@ -69,6 +67,7 @@ public class ApiUtils {
                     return response.newBuilder().body(responseBody).build();
                 });
                 builder.client(httpClient.build());
+                builder.baseUrl(NICEPay.builder().isProduction(config.isProduction()).getSnapApiURL());
                 api = builder.build();
 
         return api.create(serviceClass);
@@ -144,18 +143,11 @@ public class ApiUtils {
     private static Headers getHeaders(String httpMethod,String grandType,String accessToken,String data,String pathUrl,NICEPay config) throws Exception {
 
         Map<String, String> headersMap = new HashMap<>();
-        print.logInfoHeader("Request Config "+config);
-
-                SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
-        String timeStamp = f.format(new Date());
-
-//        String partnerID = NICEPayConstants.getPartnerId();
         String partnerID = config.getPartnerId();
-        String privateKey = NICEPayConstants.getPrivatekey();
+        String privateKey = config.getPrivateKey();
         String secretKey = config.getClientSecret();
-        Random rand = new Random();
-        int random = rand.nextInt(100000000);
-        String externalID = "OrdNo" + timeStamp.substring(0, 10).replace("-","") + timeStamp.substring(11,19).replace(":","") + random;
+        String externalID = config.getExternalID();
+        String timeStamp  = config.getTimestamp();
 
         headersMap.put("Content-Type", "application/json");
         if (grandType != null){
