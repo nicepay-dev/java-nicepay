@@ -141,6 +141,18 @@ public class NICEPayResponse extends BaseNICEPayResponse {
     @Setter
     private Map<String, Object> transAmount;
 
+//    QRIS
+    @Getter
+    @Setter
+    private String qrContent;
+
+    @Getter
+    @Setter
+    private String qrUrl;
+
+    @Getter
+    @Setter
+    private String referenceNo;
 
     public NICEPayResponse(String responseCode, String responseMessage, String accessToken,String tokenType,String expiresIn) {
         super(responseCode, responseMessage);

@@ -1,5 +1,7 @@
 package com.nicepay.api;
 
+import com.nicepay.model.Cancel;
+import com.nicepay.model.InquiryStatus;
 import com.nicepay.model.Payout;
 import com.nicepay.response.NICEPayResponse;
 import retrofit2.Call;
@@ -17,5 +19,15 @@ public interface PostPayoutRequest {
     @POST("nicepay/api/v1.0/transfer/approve")
     Call<NICEPayResponse>approvePayout(@Body Payout request);
 
+    @POST("nicepay/api/v1.0/transfer/inquiry")
+    Call<NICEPayResponse>checkStatusPayout(@Body InquiryStatus request);
 
+    @POST("nicepay/v1.0/api/transfer/cancel")
+    Call<NICEPayResponse>cancelPayout(@Body Cancel request);
+
+    @POST("nicepay/api/v1.0/transfer/balance-inquiry")
+    Call<NICEPayResponse>checkBalancePayout(@Body Payout request);
+
+    @POST("nicepay/v1.0/api/transfer/reject")
+    Call<NICEPayResponse>rejectPayout(@Body Cancel request);
 }

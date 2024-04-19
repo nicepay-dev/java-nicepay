@@ -77,4 +77,33 @@ public class SnapPayoutService {
         }
         return (S) nicePayResponse;
     }
+
+    public static  <S> S callServicePayoutCheckBalance(Payout data, String accessToken,NICEPay config) throws IOException {
+        Gson gson = new Gson();
+        PostPayoutRequest request = ApiUtils.createService(PostPayoutRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data),config);
+        Call<NICEPayResponse> callSync =  request.checkBalancePayout(data);
+        Response<NICEPayResponse> response = null;
+        NICEPayResponse nicePayResponse = null;
+        ResponseBody errorResponse = null;
+        Object resClient = null ;
+        JsonObject jsonObject = null;
+        try {
+            response = callSync.execute();
+            nicePayResponse = response.body();
+            errorResponse = response.errorBody();
+
+            if (nicePayResponse == null){
+                resClient = errorResponse.string();
+            }else{
+                resClient = gson.toJson(nicePayResponse);
+            }
+
+            ObjectMapper mapper = new ObjectMapper();
+            jsonObject = JsonParser.parseString(resClient.toString()).getAsJsonObject();
+            print.logInfoResponse("Response payoutCheckBalance :" +new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return (S) nicePayResponse;
+    }
 }

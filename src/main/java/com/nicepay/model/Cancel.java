@@ -57,6 +57,8 @@ public class Cancel {
             additionalInfoMap.put("tXidVA",additionalInfo);
             additionalInfoMap.put("cancelMessage",additionalInfo);
             additionalInfoMap.put("refundType",additionalInfo);
+            additionalInfoMap.put("cancelType",additionalInfo);
+
             return this;
         }
 

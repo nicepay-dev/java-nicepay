@@ -5,7 +5,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.nicepay.api.PostPayoutRequest;
+import com.nicepay.api.PostQrisRequest;
 import com.nicepay.model.InquiryStatus;
+import com.nicepay.model.Payout;
 import com.nicepay.utils.ApiUtils;
 import com.nicepay.api.PostEwalletRequest;
 import com.nicepay.api.PostVaRequest;
@@ -85,6 +88,64 @@ public class SnapInquiryStatusService {
             ObjectMapper mapper = new ObjectMapper();
             jsonObject = JsonParser.parseString(resClient.toString()).getAsJsonObject();
             print.logInfoResponse("Response EwalletCheckStatus :" +new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return (S) nicePayResponse;
+    }
+
+    public static <S> S callServicePayoutStatus(InquiryStatus data, String accessToken, NICEPay config) throws IOException {
+        Gson gson = new Gson();
+        PostPayoutRequest request = ApiUtils.createService(PostPayoutRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data),config);
+        Call<NICEPayResponse> callSync = request.checkStatusPayout(data);
+        Response<NICEPayResponse> response = null;
+        NICEPayResponse nicePayResponse = null;
+        ResponseBody errorResponse = null;
+        Object resClient = null ;
+        JsonObject jsonObject = null;
+        try{
+            response = callSync.execute();
+            nicePayResponse = response.body();
+            errorResponse = response.errorBody();
+
+            if (nicePayResponse == null){
+                resClient = errorResponse.string();
+            }else {
+                resClient = gson.toJson(nicePayResponse);
+            }
+
+            ObjectMapper mapper = new ObjectMapper();
+            jsonObject = JsonParser.parseString(resClient.toString()).getAsJsonObject();
+            print.logInfoResponse("Response PayoutCheckStatus :" +new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return (S) nicePayResponse;
+    }
+
+    public static <S> S callServiceQrisCheckStatus(InquiryStatus data, String accessToken, NICEPay config) throws IOException {
+        Gson gson = new Gson();
+        PostQrisRequest request = ApiUtils.createService(PostQrisRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data),config);
+        Call<NICEPayResponse> callSync = request.checkStatusQris(data);
+        Response<NICEPayResponse> response = null;
+        NICEPayResponse nicePayResponse = null;
+        ResponseBody errorResponse = null;
+        Object resClient = null ;
+        JsonObject jsonObject = null;
+        try{
+            response = callSync.execute();
+            nicePayResponse = response.body();
+            errorResponse = response.errorBody();
+
+            if (nicePayResponse == null){
+                resClient = errorResponse.string();
+            }else {
+                resClient = gson.toJson(nicePayResponse);
+            }
+
+            ObjectMapper mapper = new ObjectMapper();
+            jsonObject = JsonParser.parseString(resClient.toString()).getAsJsonObject();
+            print.logInfoResponse("Response QrisCheckStatus :" +new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject));
         } catch (Exception ex) {
             ex.printStackTrace();
         }

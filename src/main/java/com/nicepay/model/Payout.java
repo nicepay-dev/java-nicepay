@@ -87,8 +87,13 @@ public class Payout {
     @Setter
     private String originalReferenceNo;
 
+    @Getter
+    @Setter
+    private Map<String, Object> additionalInfo;
+
     public static class PayoutBuilder {
         private Map<String, Object> amount;
+        private Map<String, Object> additionalInfo;
 
         public PayoutBuilder amount(String value, String currency) {
             Map<String, Object> amountMap = new HashMap<>();
@@ -97,9 +102,16 @@ public class Payout {
             this.amount = amountMap;
             return this;
         }
+
+        public PayoutBuilder additionalInfo(String msId){
+            Map<String, Object> additonalInfoMap = new HashMap<>();
+            additonalInfoMap.put("msId", msId);
+            this.additionalInfo = additonalInfoMap;
+            return this;
+        }
     }
 
-    public Payout(String merchantId, String msId, String beneficiaryAccountNo, String beneficiaryName, String beneficiaryPhone, String beneficiaryCustomerResidence, String beneficiaryCustomerType, String beneficiaryPostalCode, String payoutMethod, String beneficiaryBankCode, Map<String, Object> amount, String partnerReferenceNo, String reservedDt, String reservedTm, String description, String deliveryName, String deliveryId, String beneficiaryPOE, String beneficiaryDOE, String beneficiaryCoNo, String beneficiaryAddress, String beneficiaryAuthPhoneNumber, String beneficiaryMerCategory, String beneficiaryCoMgmtName, String beneficiaryCoShName, String originalPartnerReferenceNo, String originalReferenceNo) {
+    public Payout(String merchantId, String msId, String beneficiaryAccountNo, String beneficiaryName, String beneficiaryPhone, String beneficiaryCustomerResidence, String beneficiaryCustomerType, String beneficiaryPostalCode, String payoutMethod, String beneficiaryBankCode, Map<String, Object> amount, String partnerReferenceNo, String reservedDt, String reservedTm, String description, String deliveryName, String deliveryId, String beneficiaryPOE, String beneficiaryDOE, String beneficiaryCoNo, String beneficiaryAddress, String beneficiaryAuthPhoneNumber, String beneficiaryMerCategory, String beneficiaryCoMgmtName, String beneficiaryCoShName, String originalPartnerReferenceNo, String originalReferenceNo, Map<String, Object> additionalInfoMap) {
         this.merchantId = merchantId;
         this.msId = msId;
         this.beneficiaryAccountNo = beneficiaryAccountNo;
@@ -127,5 +139,6 @@ public class Payout {
         this.beneficiaryCoShName = beneficiaryCoShName;
         this.originalPartnerReferenceNo = originalPartnerReferenceNo;
         this.originalReferenceNo = originalReferenceNo;
+        this.additionalInfo = additionalInfoMap;
     }
 }

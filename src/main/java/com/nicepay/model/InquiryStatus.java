@@ -33,6 +33,9 @@ public class InquiryStatus {
     private Map<String, Object> totalAmount ;
     private Map<String, Object> additionalInfoMap;
 
+    //   Payout
+    private String beneficiaryAccountNo;
+
     public static class InquiryStatusBuilder {
         private Map<String, Object> totalAmount;
         private Map<String, Object> additionalInfo;
@@ -75,7 +78,7 @@ public class InquiryStatus {
         }
     }
 
-    public InquiryStatus(String partnerServiceId, String customerNo, String virtualAccountNo, String inquiryRequestId, Map<String, Object> additionalInfo, String merchantId, String subMerchantId, String originalPartnerReferenceNo, String originalReferenceNo, String serviceCode, String transactionDate, String externalStoreId, Map<String, Object> amount, Map<String, Object> totalAmount, Map<String, Object> additionalInfoMap) {
+    public InquiryStatus(String partnerServiceId, String customerNo, String virtualAccountNo, String inquiryRequestId, Map<String, Object> additionalInfo, String merchantId, String subMerchantId, String originalPartnerReferenceNo, String originalReferenceNo, String serviceCode, String transactionDate, String externalStoreId, Map<String, Object> amount, Map<String, Object> totalAmount, Map<String, Object> additionalInfoMap, String beneficiaryAccountNo) {
         this.partnerServiceId = partnerServiceId;
         this.customerNo = customerNo;
         this.virtualAccountNo = virtualAccountNo;
@@ -91,5 +94,6 @@ public class InquiryStatus {
         this.amount = amount;
         this.totalAmount = totalAmount;
         this.additionalInfoMap = additionalInfoMap;
+        this.beneficiaryAccountNo = beneficiaryAccountNo;
     }
 }

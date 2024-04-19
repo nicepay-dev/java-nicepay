@@ -6,6 +6,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.nicepay.api.PostEwalletRequest;
+import com.nicepay.api.PostPayoutRequest;
+import com.nicepay.api.PostQrisRequest;
 import com.nicepay.api.PostVaRequest;
 import com.nicepay.exception.NicepayErrorResponse;
 import com.nicepay.model.AccessToken;
@@ -84,11 +86,98 @@ public class SnapCancelService {
 
             ObjectMapper mapper = new ObjectMapper();
             jsonObject = JsonParser.parseString(resClient.toString()).getAsJsonObject();
-            print.logInfoResponse("Response EwalletCheckStatus :" +new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject));
+            print.logInfoResponse("Response EwalletCancel :" +new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
         return (S) nicePayResponse;
     }
 
+
+    public static <S> S callServicePayoutCancel(Cancel data, String accessToken,NICEPay config) throws IOException {
+        Gson gson = new Gson();
+        PostPayoutRequest request = ApiUtils.createService(PostPayoutRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data),config);
+        Call<NICEPayResponse> callSync = request.cancelPayout(data);
+        Response<NICEPayResponse> response = null;
+        NICEPayResponse nicePayResponse = null;
+        ResponseBody errorResponse = null;
+        Object resClient = null ;
+        JsonObject jsonObject = null;
+        try{
+            response = callSync.execute();
+            nicePayResponse = response.body();
+            errorResponse = response.errorBody();
+
+            if (nicePayResponse == null){
+                resClient = errorResponse.string();
+            }else {
+                resClient = gson.toJson(nicePayResponse);
+            }
+
+            ObjectMapper mapper = new ObjectMapper();
+            jsonObject = JsonParser.parseString(resClient.toString()).getAsJsonObject();
+            print.logInfoResponse("Response PayoutCancel :" +new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return (S) nicePayResponse;
+    }
+
+    public static <S> S callServicePayoutReject(Cancel data, String accessToken,NICEPay config) throws IOException {
+        Gson gson = new Gson();
+        PostPayoutRequest request = ApiUtils.createService(PostPayoutRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data),config);
+        Call<NICEPayResponse> callSync = request.rejectPayout(data);
+        Response<NICEPayResponse> response = null;
+        NICEPayResponse nicePayResponse = null;
+        ResponseBody errorResponse = null;
+        Object resClient = null ;
+        JsonObject jsonObject = null;
+        try{
+            response = callSync.execute();
+            nicePayResponse = response.body();
+            errorResponse = response.errorBody();
+
+            if (nicePayResponse == null){
+                resClient = errorResponse.string();
+            }else {
+                resClient = gson.toJson(nicePayResponse);
+            }
+
+            ObjectMapper mapper = new ObjectMapper();
+            jsonObject = JsonParser.parseString(resClient.toString()).getAsJsonObject();
+            print.logInfoResponse("Response PayoutReject :" +new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return (S) nicePayResponse;
+    }
+
+    public static <S> S callServiceQrisRefund(Cancel data, String accessToken,NICEPay config) throws IOException {
+        Gson gson = new Gson();
+        PostQrisRequest request = ApiUtils.createService(PostQrisRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data),config);
+        Call<NICEPayResponse> callSync = request.refundQris(data);
+        Response<NICEPayResponse> response = null;
+        NICEPayResponse nicePayResponse = null;
+        ResponseBody errorResponse = null;
+        Object resClient = null ;
+        JsonObject jsonObject = null;
+        try{
+            response = callSync.execute();
+            nicePayResponse = response.body();
+            errorResponse = response.errorBody();
+
+            if (nicePayResponse == null){
+                resClient = errorResponse.string();
+            }else {
+                resClient = gson.toJson(nicePayResponse);
+            }
+
+            ObjectMapper mapper = new ObjectMapper();
+            jsonObject = JsonParser.parseString(resClient.toString()).getAsJsonObject();
+            print.logInfoResponse("Response QrisRefund :" +new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return (S) nicePayResponse;
+    }
 }

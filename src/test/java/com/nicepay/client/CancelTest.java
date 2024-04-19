@@ -96,7 +96,69 @@ class CancelTest<T extends BaseNICEPayResponse> {
 
     }
 
+    @Test
+    void payoutReject() throws IOException, InterruptedException {
+        NICEPayResponse responseToken = (NICEPayResponse) getToken();
+        var accessToken = Optional.ofNullable(responseToken)
+                .map(token -> responseToken.getAccessToken())
+                .orElseThrow(() -> new IllegalArgumentException("Token is null"));
+
+        Cancel requestData = Cancel.builder()
+                .merchantId("NORMALTEST")
+                .originalPartnerReferenceNo("ref202305081205331683522921")
+                .originalReferenceNo("NORMALTEST05202308031752031674")
+                .build();
+
+        NICEPayResponse Result =
+                SnapCancelService.callServicePayoutReject(requestData,accessToken,config);
+
     }
+
+    @Test
+    void payoutCancel() throws IOException, InterruptedException {
+        NICEPayResponse responseToken = (NICEPayResponse) getToken();
+        var accessToken = Optional.ofNullable(responseToken)
+                .map(token -> responseToken.getAccessToken())
+                .orElseThrow(() -> new IllegalArgumentException("Token is null"));
+
+        Cancel requestData = Cancel.builder()
+                .merchantId("NORMALTEST")
+                .originalPartnerReferenceNo("ref202305081205331683522921")
+                .originalReferenceNo("NORMALTEST05202308031752031674")
+                .build();
+
+        NICEPayResponse Result =
+                SnapCancelService.callServicePayoutCancel(requestData,accessToken,config);
+
+    }
+
+    @Test
+    void qrisRefund() throws IOException, InterruptedException {
+        NICEPayResponse responseToken = (NICEPayResponse) getToken();
+        var accessToken = Optional.ofNullable(responseToken)
+                .map(token -> responseToken.getAccessToken())
+                .orElseThrow(() -> new IllegalArgumentException("Token is null"));
+
+        Map<String, Object> additionalInfo = new HashMap<>();
+        additionalInfo.put("cancelType", "1");
+
+        Cancel requestData = Cancel.builder()
+                .merchantId("IONPAYTEST")
+                .originalPartnerReferenceNo("2020102900000000000001")
+                .originalReferenceNo("IONPAYTEST08202404180954247527")
+                .partnerRefundNo("2020102900000000000001")
+                .externalStoreId("NICEPAY")
+                .refundAmount("11000.00","IDR")
+                .reason("Refund Trans")
+                .additionalInfo(additionalInfo)
+                .build();
+
+        NICEPayResponse Result =
+                SnapCancelService.callServiceQrisRefund(requestData,accessToken,config);
+
+    }
+
+}
 
 
 
