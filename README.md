@@ -27,7 +27,7 @@ Get your Credentials from [Nicepay Dashboard](https://bo.nicepay.co.id/)
 Initialize Nicepay Config
 
 ```java
-import id.co.utils.nicepay.NICEPay;
+import io.github.utils.nicepay.NICEPay;
 
 NICEPay nicePay = NICEPay.builder()
         .isProduction(false)
@@ -43,9 +43,9 @@ NICEPay nicePay = NICEPay.builder()
 
 ```java
 
-import id.co.model.nicepay.AccessToken;
-import id.co.response.nicepay.NICEPayResponse;
-import id.co.service.nicepay.SnapTokenService;
+import io.github.model.nicepay.AccessToken;
+import io.github.response.nicepay.NICEPayResponse;
+import io.github.service.nicepay.SnapTokenService;
 
 //Your previously initialized config
 //NICEPay nicePay = NICEPay.builder()...build();
@@ -71,9 +71,9 @@ var accessToken = Optional.ofNullable((NICEPayResponse) getToken())
 //var accessToken = ...
 
 
-import id.co.model.nicepay.VirtualAccount;
-import id.co.response.nicepay.NICEPayResponse;
-import id.co.service.nicepay.SnapVaService;
+import io.github.model.nicepay.VirtualAccount;
+import io.github.response.nicepay.NICEPayResponse;
+import io.github.service.nicepay.SnapVaService;
 
 VirtualAccount virtualAccount = VirtualAccount.builder()
         .partnerServiceId("1234")
