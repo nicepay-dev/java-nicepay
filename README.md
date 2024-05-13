@@ -15,7 +15,7 @@ then import the jar manually into your project.
 Add our library as a dependency on your pom.xml
 ```xml
 		<dependency>
-			<groupId>io.github.nicepay</groupId>
+			<groupId>io.github.nicepay-dev</groupId>
 			<artifactId>nicepay-java-client</artifactId>
 			<version>1.0.0</version>
 		</dependency>
@@ -29,7 +29,7 @@ Initialize Nicepay Config
 ```java
 import io.github.utils.nicepay.NICEPay;
 
-NICEPay nicePay = NICEPay.builder()
+NICEPay nicePayConfig = NICEPay.builder()
         .isProduction(false)
         .clientSecret("YOUR_CLIENT_SECRET")
         .partnerId("YOUR_PARTNER_ID")
@@ -48,15 +48,15 @@ import io.github.response.nicepay.NICEPayResponse;
 import io.github.service.nicepay.SnapTokenService;
 
 //Your previously initialized config
-//NICEPay nicePay = NICEPay.builder()...build();
+//NICEPay nicePayConfig = NICEPay.builder()...build();
 Map<String, String> additionalInfo = new HashMap<>();
 AccessToken accessTokenRequest = AccessToken.builder()
         .grantType("client_credentials")
         .additionalInfo(additionalInfo)
         .build();
-NICEPayResponse nicePayResponse = SnapTokenService.callGetAccessToken(accessTokenRequest, config);
+NICEPayResponse nicePayResponse = SnapTokenService.callGetAccessToken(accessTokenRequest, nicePayConfig);
 
-var accessToken = Optional.ofNullable((NICEPayResponse) getToken())
+var accessToken = Optional.ofNullable(nicePayResponse)
         .map(NICEPayResponse::getAccessToken)
         .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 ```
@@ -65,7 +65,7 @@ var accessToken = Optional.ofNullable((NICEPayResponse) getToken())
 
 ```java
 //Your previously initialized config
-//NICEPay nicePay = NICEPay.builder()...build();
+//NICEPay nicePayConfig = NICEPay.builder()...build();
 
 //Previously requested access-token
 //var accessToken = ...
@@ -98,7 +98,7 @@ VirtualAccount virtualAccount = VirtualAccount.builder()
         })
         .build();
 
-NICEPayResponse response = SnapVaService.callGeneratedVA(virtualAccount, accessToken, config);
+NICEPayResponse response = SnapVaService.callGeneratedVA(virtualAccount, accessToken, nicePayConfig);
 String yourVirtualAccountNumber = response.getVirtualAccountNo();
 ```
 ## 3. Other Samples
