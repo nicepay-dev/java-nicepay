@@ -15,7 +15,7 @@ then import the jar manually into your project.
 Add our library as a dependency on your pom.xml
 ```xml
 		<dependency>
-			<groupId>id.co.nicepay</groupId>
+			<groupId>io.github.nicepay</groupId>
 			<artifactId>nicepay-java-client</artifactId>
 			<version>1.0.0</version>
 		</dependency>
