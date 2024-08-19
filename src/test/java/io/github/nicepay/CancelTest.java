@@ -3,12 +3,15 @@ package io.github.nicepay;
 import io.github.nicepay.data.TestingConstants;
 import io.github.nicepay.model.AccessToken;
 import io.github.nicepay.model.Cancel;
-import io.github.nicepay.response.BaseNICEPayResponse;
-import io.github.nicepay.response.NICEPayResponse;
-import io.github.nicepay.service.SnapCancelService;
-import io.github.nicepay.service.SnapTokenService;
+import io.github.nicepay.response.snap.BaseNICEPayResponse;
+import io.github.nicepay.response.snap.NICEPayResponse;
+import io.github.nicepay.response.v2.NICEPayResponseV2;
+import io.github.nicepay.service.snap.SnapCancelService;
+import io.github.nicepay.service.snap.SnapTokenService;
+import io.github.nicepay.service.v2.V2CancelService;
 import io.github.nicepay.utils.LoggerPrint;
 import io.github.nicepay.utils.NICEPay;
+import io.github.nicepay.utils.SHA256Util;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -55,14 +58,38 @@ class CancelTest<T extends BaseNICEPayResponse> {
         Cancel requestData = Cancel.builder()
                 .partnerServiceId("")
                 .customerNo("")
-                .virtualAccountNo("8625000002002176")
-                .totalAmount("11000.00", "IDR")
-                .trxId("TESTTrxId")
-                .tXidVA("NORMALTEST02202403081533064221")
+                .virtualAccountNo("7001400002009191")
+                .totalAmount("10000.00", "IDR")
+                .trxId("TESTREFNO")
+                .tXidVA("NORMALTEST02202408191440205690")
                 .cancelMessage("test cancel")
                 .build();
 
         NICEPayResponse result = SnapCancelService.callServiceVACancel(requestData,accessToken,config);
+
+    }
+
+    // V2 CANCEL VA
+    @Test
+    void CancelVAV2() throws IOException, InterruptedException {
+        Cancel requestCancel = Cancel.builder()
+                .timeStamp(TestingConstants.V2_TIMESTAMP)
+                .tXid("NORMALTEST02202408191446415996")
+                .iMid("NORMALTEST")
+                .payMethod("02")
+                .cancelType("1")
+                .amt("100")
+                .build();
+
+        requestCancel.setAdditionalInfo(null);
+
+        String merchantToken = SHA256Util.encrypt(
+                requestCancel.getTimeStamp() + requestCancel.getIMid() + requestCancel.getTXid()+ requestCancel.getAmt()+
+                        TestingConstants.MERCHANT_KEY);
+
+        requestCancel.setMerchantToken(merchantToken);
+
+        NICEPayResponseV2 result = V2CancelService.callV2CancelVA(requestCancel, config);
 
     }
 

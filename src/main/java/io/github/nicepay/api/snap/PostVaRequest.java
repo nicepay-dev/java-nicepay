@@ -1,9 +1,9 @@
-package io.github.nicepay.api;
+package io.github.nicepay.api.snap;
 
 import io.github.nicepay.model.Cancel;
 import io.github.nicepay.model.InquiryStatus;
 import io.github.nicepay.model.VirtualAccount;
-import io.github.nicepay.response.NICEPayResponse;
+import io.github.nicepay.response.snap.NICEPayResponse;
 import io.github.nicepay.model.AccessToken;
 import retrofit2.Call;
 import retrofit2.http.Body;

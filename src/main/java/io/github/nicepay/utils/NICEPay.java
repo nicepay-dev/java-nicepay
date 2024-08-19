@@ -43,7 +43,6 @@ public class NICEPay {
         }else{
             return  NICEPayConstants.getSandboxBaseUrl();
         }
-
     }
 
     }

@@ -3,11 +3,14 @@ package io.github.nicepay;
 import io.github.nicepay.data.TestingConstants;
 import io.github.nicepay.model.AccessToken;
 import io.github.nicepay.model.VirtualAccount;
-import io.github.nicepay.service.SnapTokenService;
+import io.github.nicepay.response.v2.NICEPayResponseV2;
+import io.github.nicepay.service.snap.SnapTokenService;
+import io.github.nicepay.service.v2.V2VaService;
 import io.github.nicepay.utils.LoggerPrint;
-import io.github.nicepay.response.NICEPayResponse;
-import io.github.nicepay.service.SnapVaService;
+import io.github.nicepay.response.snap.NICEPayResponse;
+import io.github.nicepay.service.snap.SnapVaService;
 import io.github.nicepay.utils.NICEPay;
+import io.github.nicepay.utils.SHA256Util;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -74,5 +77,42 @@ class VirtualAccountTest {
 
     }
 
+    @Test
+    void vaCreateV2() throws IOException
+    {
+        VirtualAccount request = VirtualAccount.builder()
+                .timeStamp(TestingConstants.V2_TIMESTAMP)
+                .iMid(TestingConstants.I_MID)
+                .payMethod("02")
+                .currency("IDR")
+                .bankCd("BMRI")
+                .amt("100")
+                .referenceNo("NICEPAYVA111213")
+                .vacctValidDt("")
+                .vacctValidTm("")
+                .goodsNm("Goods")
+                .billingNm("NICEPAY Testing")
+                .billingPhone("081363681274")
+                .billingEmail("nicepay@example.com")
+                .billingAddr("Jln. Raya Kasablanka Kav.88")
+                .billingCity("South Jakarta")
+                .billingState("DKI Jakarta")
+                .billingPostCd("15119")
+                .billingCountry("Indonesia")
+                .merFixAcctId("")
+                .dbProcessUrl("https://webhook.site/912cbdd8-eb28-4e98-be6a-181b806b8110")
+                .build();
+
+        String merchantToken = SHA256Util.encrypt(
+                        request.getTimeStamp() + request.getIMid() + request.getReferenceNo()+ request.getAmt()+
+                                TestingConstants.MERCHANT_KEY);
+
+        request.setMerchantToken(merchantToken);
+
+        NICEPayResponseV2 response = V2VaService.callV2GenerateVA(request, config);
+        print.logInfoV2("TXID : " + response.getTXid());
+        print.logInfoV2("VA : " + response.getVacctNo());
+
+    }
 }
 

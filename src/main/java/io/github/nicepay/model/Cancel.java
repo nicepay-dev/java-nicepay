@@ -1,15 +1,16 @@
 package io.github.nicepay.model;
+import lombok.*;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Builder
+@Data
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Cancel {
 
 //    VA
@@ -18,6 +19,16 @@ public class Cancel {
     private String virtualAccountNo;
     private String trxId;
     private Map<String, Object> additionalInfoMap ;
+
+// V2 VA
+    private String timeStamp;
+    private String tXid;
+    private String iMid;
+    private String payMethod;
+    private String cancelType;
+    private String amt;
+    private String merchantToken;
+    private String referenceNo;
 
 //    E-Wallet
     private String merchantId;

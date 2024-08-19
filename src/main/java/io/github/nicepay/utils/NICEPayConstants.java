@@ -14,10 +14,4 @@ public class NICEPayConstants {
         return PRODUCTION_BASE_URL;
     }
 
-
-
-
-
-
-
 }

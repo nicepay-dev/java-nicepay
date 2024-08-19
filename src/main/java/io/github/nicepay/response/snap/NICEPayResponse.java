@@ -1,4 +1,4 @@
-package io.github.nicepay.response;
+package io.github.nicepay.response.snap;
 
 
 import lombok.*;

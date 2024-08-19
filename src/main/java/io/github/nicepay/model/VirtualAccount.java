@@ -1,44 +1,45 @@
 package io.github.nicepay.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Builder
+@Data
+@AllArgsConstructor
 public class VirtualAccount {
-    @Getter
-    @Setter
+    //V2
+    private String timeStamp;
+    private String iMid;
+    private String payMethod;
+    private String currency;
+    private String amt;
+    private String referenceNo;
+    private String goodsNm;
+    private String billingNm;
+    private String billingPhone;
+    private String billingEmail;
+    private String billingAddr;
+    private String billingCity;
+    private String billingState;
+    private String billingPostCd;
+    private String billingCountry;
+    private String bankCd;
+    private String vacctValidDt;
+    private String vacctValidTm;
+    private String merFixAcctId;
+    private String dbProcessUrl;
+    private String merchantToken;
+
+    //snap
     private String partnerServiceId;
-
-    @Getter
-    @Setter
     private String customerNo;
-
-    @Getter
-    @Setter
     private String virtualAccountNo;
-
-    @Getter
-    @Setter
     private String virtualAccountName;
-
-    @Getter
-    @Setter
     private String trxId;
-
-    @Getter
-    @Setter
     private Map<String, Object> totalAmount;
-
-    @Getter
-    @Setter
     private Map<String, Object> additionalInfo;
-
-    @Getter
-    @Setter
     private String tXidVA;
 
     public static class VirtualAccountBuilder {
@@ -52,16 +53,4 @@ public class VirtualAccount {
             return this;
         }
     }
-
-    public VirtualAccount(String partnerServiceId, String customerNo, String virtualAccountNo, String virtualAccountName, String trxId, Map<String, Object> totalAmount, Map<String, Object> additionalInfo, String tXidVA) {
-        this.partnerServiceId = partnerServiceId;
-        this.customerNo = customerNo;
-        this.virtualAccountNo = virtualAccountNo;
-        this.virtualAccountName = virtualAccountName;
-        this.trxId = trxId;
-        this.totalAmount = totalAmount;
-        this.additionalInfo = additionalInfo;
-        this.tXidVA = tXidVA;
-    }
-
 }

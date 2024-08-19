@@ -1,6 +1,6 @@
-package io.github.nicepay.service;
+package io.github.nicepay.service.snap;
 
-import io.github.nicepay.api.PostPayoutRequest;
+import io.github.nicepay.api.snap.PostPayoutRequest;
 import io.github.nicepay.model.AccessToken;
 import io.github.nicepay.model.Payout;
 import io.github.nicepay.utils.ApiUtils;
@@ -10,7 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import io.github.nicepay.response.NICEPayResponse;
+import io.github.nicepay.response.snap.NICEPayResponse;
 import io.github.nicepay.utils.LoggerPrint;
 import okhttp3.ResponseBody;
 import retrofit2.Call;

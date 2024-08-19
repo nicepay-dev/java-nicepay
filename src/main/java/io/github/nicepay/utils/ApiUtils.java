@@ -73,7 +73,6 @@ public class ApiUtils {
         return api.create(serviceClass);
     }
 
-
     public static <S> S createServiceConfig(Class<S> serviceClass,final String grandType,final String accessToken,String data,NICEPay config) {
         httpClient.interceptors().clear();
         httpClient.addInterceptor(chain -> {
@@ -172,4 +171,32 @@ public class ApiUtils {
 
     }
 
+    //V2
+    public static <S> S createServiceV2(Class<S> serviceClass, String data, NICEPay config) {
+        httpClient.interceptors().clear();
+        httpClient.addInterceptor(chain -> {
+            Request original = chain.request();
+            Request.Builder builder = null;
+            print.logInfoV2("generate "+"fullUrl :" +chain.request().url());
+
+            try {
+                builder = original.newBuilder();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            Response response = chain.proceed(builder.build());
+            String bodyString = response.body().string();
+            MediaType contentType = response.body().contentType();
+            ResponseBody responseBody  = ResponseBody.create(bodyString, contentType);
+            print.logInfoBodyV2("Request Data " + new GsonBuilder().setPrettyPrinting().create().toJson(original.tag(Invocation.class).arguments().get(0)));
+
+            return response.newBuilder().body(responseBody).build();
+        });
+        builder.client(httpClient.build());
+        builder.baseUrl(NICEPay.builder().isProduction(config.isProduction()).getSnapApiURL());
+        api = builder.build();
+
+        return api.create(serviceClass);
+    }
 }

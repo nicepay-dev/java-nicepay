@@ -1,8 +1,6 @@
 package io.github.nicepay.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,8 +8,9 @@ import java.util.Optional;
 
 
 @Builder
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class InquiryStatus {
 
 //    VA
@@ -20,6 +19,14 @@ public class InquiryStatus {
     private String virtualAccountNo;
     private String inquiryRequestId;
     private Map<String, Object> additionalInfo ;
+
+// V2 VA
+    private String timeStamp;
+    private String tXid;
+    private String iMid;
+    private String referenceNo;
+    private String amt;
+    private String merchantToken;
 
 //    E-Wallet
     private String merchantId;

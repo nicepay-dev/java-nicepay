@@ -1,13 +1,16 @@
 package io.github.nicepay;
 
 import io.github.nicepay.data.TestingConstants;
-import io.github.nicepay.response.BaseNICEPayResponse;
+import io.github.nicepay.response.snap.BaseNICEPayResponse;
 import io.github.nicepay.model.AccessToken;
 import io.github.nicepay.model.InquiryStatus;
-import io.github.nicepay.response.NICEPayResponse;
-import io.github.nicepay.service.SnapInquiryStatusService;
-import io.github.nicepay.service.SnapTokenService;
+import io.github.nicepay.response.snap.NICEPayResponse;
+import io.github.nicepay.response.v2.NICEPayResponseV2;
+import io.github.nicepay.service.snap.SnapInquiryStatusService;
+import io.github.nicepay.service.snap.SnapTokenService;
+import io.github.nicepay.service.v2.V2InquiryStatusService;
 import io.github.nicepay.utils.NICEPay;
+import io.github.nicepay.utils.SHA256Util;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -78,13 +81,37 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
         InquiryStatus requestData = InquiryStatus.builder()
                 .partnerServiceId("")
                 .customerNo("")
-                .virtualAccountNo("8625000002002166")
+                .virtualAccountNo("447792631104334735")
                 .inquiryRequestId("dsfsd43")
                 .totalAmount("11000.00", "IDR")
                 .trxId("TESTTrxId")
-                .tXidVA("NORMALTEST02202403041600418638")
+                .tXidVA("IONPAYTEST02202408191104334735")
                 .build();
         NICEPayResponse result = SnapInquiryStatusService.callServiceVACheckStatus(requestData,accessToken,config);
+
+    }
+
+    //V2
+    @Test
+    void InquiryStatusVAV2() throws IOException, InterruptedException {
+
+        InquiryStatus requestData = InquiryStatus.builder()
+                .timeStamp(TestingConstants.V2_TIMESTAMP)
+                .tXid("NORMALTEST02202408191446415996")
+                .iMid(TestingConstants.I_MID)
+                .referenceNo("NICEPAYVA111213")
+                .amt("100")
+                .build();
+
+        requestData.setAdditionalInfo(null);
+
+        String merchantToken = SHA256Util.encrypt(
+                requestData.getTimeStamp() + requestData.getIMid() + requestData.getReferenceNo()+ requestData.getAmt()+
+                        TestingConstants.MERCHANT_KEY);
+
+        requestData.setMerchantToken(merchantToken);
+
+        NICEPayResponseV2 result = V2InquiryStatusService.callV2InquiryVA(requestData, config);
 
     }
 
