@@ -7,8 +7,11 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.MessageDigest;
+import java.security.PublicKey;
 import java.security.Signature;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.RSAPublicKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
 public class SignatureUtils {
@@ -66,6 +69,31 @@ public class SignatureUtils {
         MessageDigest sh = MessageDigest.getInstance("SHA-256");
         return Hex.encodeHexString(sh.digest(data.getBytes("UTF-8")));
 
+    }
+
+    public static boolean verifySHA256RSA(String stringToSign,String publicKeyString, String signatureString) {
+        boolean isVerified = false;
+        try {
+            byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyString);
+            byte[] signatureBytes  = Base64.getDecoder().decode(signatureString);
+            byte [] stringToSignBytes = stringToSign.getBytes();
+
+            KeyFactory kf = KeyFactory.getInstance("RSA");
+            X509EncodedKeySpec spec = new X509EncodedKeySpec(publicKeyBytes);
+            PublicKey publicKey = kf.generatePublic(spec);
+
+            Signature signature = Signature.getInstance("SHA256withRSA");
+
+            signature.initVerify(publicKey);
+            signature.update(stringToSignBytes);
+
+            isVerified = signature.verify(signatureBytes);
+
+            print.logInfo("Signature is "+ (isVerified ? "valid" : "invalid"));
+        } catch (Exception e) {
+            print.logError("Error Generate Signature = "+e.getMessage());
+        }
+        return isVerified;
     }
 
 }

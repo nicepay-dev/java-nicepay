@@ -17,7 +17,7 @@ Add our library as a dependency on your pom.xml
 		<dependency>
 			<groupId>io.github.nicepay-dev</groupId>
 			<artifactId>nicepay-java-client</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1</version>
 		</dependency>
 ```
 
@@ -61,7 +61,7 @@ var accessToken = Optional.ofNullable(nicePayResponse)
         .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 ```
 
-### 2.2 Request for Payment (i.e. Virtual Account)
+### 2.3 Request for Payment (i.e. Virtual Account)
 
 ```java
 //Your previously initialized config
@@ -101,6 +101,20 @@ VirtualAccount virtualAccount = VirtualAccount.builder()
 NICEPayResponse response = SnapVaService.callGeneratedVA(virtualAccount, accessToken, nicePayConfig);
 String yourVirtualAccountNumber = response.getVirtualAccountNo();
 ```
+
+### 2.4 Verify signature notif 
+
+```java
+import io.github.nicepay.utils.SignatureUtils;
+
+String signatureString = "kfCx0gPk9I4JGQu14H2w0hwZgLg6GPc6n1TxEpjC1TYIWsVMpiUGN4gm7k9amRSwKmEzzErarNIcKIit0+9snITgOg5tefc9+7/K8WVHHTxm44OnRCtOXBvNRWita7XQCDDoMI+fJJLAxRjKg0eURXywFupT8dKaDe8DwIa04ENBfNFOKDp+H+zR3OnMjSnWjke3I6Ppt4qMAUU+HZ+pojWPl5kYMzA08qvKQnplkhMb4TUQ80CP2uJWIsJScna1YlGlr+VRezSxOeJ3wv39hgAREorP7AWYkYPDVAbbqW+lnHtQCufRvQygKSgRT5BWHakZOgnRry/QcrCwuO+q2w==\n";
+String dataString = "KREDUITEST|2024-08-14T10:03:27+07:00";
+String publicKeyString = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAk2OMsu2IJvbRAAgL7hQ5gwuL34tPK0prutIKl4EUXpMcBxwSjy2kX3EX5tW7PN/BoIP0WiO6dMDu/PPiZsmEmWFMYwVFKFdSy1/8y+jkhApip67PcpnrPWGjGL7BHS4VSBdHllKvawNKM8kvZ+xdD0TPyHLhdQG8aw02tZAZz3ldE+cSfruRknWZkiOmJeGHTkoVpRxh60LXfD4dzv2LGJWkKAe+b26IODYQrHBh77Ez2/AICoxSMkXhuAR1/fCQ98aL2d/wqop3YpQ8c8BmUTFdq7SJiWZhNaowS6c/41JJzcIWzZg++IPTHXfoo4BBW6SNTq1fjsKVfuCadx0vjwIDAQAB";
+
+boolean isVerify = SignatureUtils.verifySHA256RSA(dataString, publicKeyString, signatureString);
+System.out.println(isVerify);
+```
+
 ## 3. Other Samples
 If you need samples for other payment methods and APIs, 
 please refer to the test units on our [Repository](https://github.com/nicepay-dev/java-nicepay/tree/main/src/test/java/com/nicepay/client)

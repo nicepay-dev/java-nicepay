@@ -6,7 +6,7 @@
 
 	<groupId>io.github.nicepay-dev</groupId>
 	<artifactId>nicepay-java-client</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>Nicepay Official Java Library</description>
