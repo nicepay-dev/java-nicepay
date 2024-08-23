@@ -1,8 +1,8 @@
 package io.github.nicepay;
 
 import io.github.nicepay.data.TestingConstants;
-import io.github.nicepay.model.AccessToken;
-import io.github.nicepay.response.snap.NICEPayResponse;
+import io.github.nicepay.data.model.AccessToken;
+import io.github.nicepay.data.response.snap.NICEPayResponse;
 import io.github.nicepay.service.snap.SnapTokenService;
 import io.github.nicepay.utils.NICEPay;
 import org.junit.jupiter.api.BeforeAll;

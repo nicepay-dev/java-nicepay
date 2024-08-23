@@ -1,4 +1,4 @@
-package io.github.nicepay.model;
+package io.github.nicepay.data.model;
 
 import lombok.*;
 
@@ -31,6 +31,7 @@ public class VirtualAccount {
     private String merFixAcctId;
     private String dbProcessUrl;
     private String merchantToken;
+
 
     //snap
     private String partnerServiceId;

@@ -1,10 +1,10 @@
 package io.github.nicepay;
 
 import io.github.nicepay.data.TestingConstants;
-import io.github.nicepay.model.AccessToken;
-import io.github.nicepay.model.Qris;
-import io.github.nicepay.response.snap.BaseNICEPayResponse;
-import io.github.nicepay.response.snap.NICEPayResponse;
+import io.github.nicepay.data.model.AccessToken;
+import io.github.nicepay.data.model.Qris;
+import io.github.nicepay.data.response.snap.BaseNICEPayResponse;
+import io.github.nicepay.data.response.snap.NICEPayResponse;
 import io.github.nicepay.service.snap.SnapQrisService;
 import io.github.nicepay.service.snap.SnapTokenService;
 import io.github.nicepay.utils.NICEPay;

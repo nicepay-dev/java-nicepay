@@ -1,4 +1,4 @@
-package io.github.nicepay.response.v2;
+package io.github.nicepay.data.response.snap;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class BaseNICEPayResponseV2 {
-    private String resultCd;
-    private String resultMsg;
+public class BaseNICEPayResponse {
+
+    private String responseCode;
+    private String responseMessage;
+
 }

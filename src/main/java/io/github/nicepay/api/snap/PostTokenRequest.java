@@ -1,7 +1,7 @@
 package io.github.nicepay.api.snap;
 
-import io.github.nicepay.model.AccessToken;
-import io.github.nicepay.response.snap.NICEPayResponse;
+import io.github.nicepay.data.model.AccessToken;
+import io.github.nicepay.data.response.snap.NICEPayResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;

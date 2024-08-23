@@ -1,4 +1,4 @@
-package io.github.nicepay.response.v2;
+package io.github.nicepay.data.response.v2;
 
 import lombok.Builder;
 import lombok.Data;

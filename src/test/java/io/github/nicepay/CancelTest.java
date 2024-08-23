@@ -1,11 +1,11 @@
 package io.github.nicepay;
 
 import io.github.nicepay.data.TestingConstants;
-import io.github.nicepay.model.AccessToken;
-import io.github.nicepay.model.Cancel;
-import io.github.nicepay.response.snap.BaseNICEPayResponse;
-import io.github.nicepay.response.snap.NICEPayResponse;
-import io.github.nicepay.response.v2.NICEPayResponseV2;
+import io.github.nicepay.data.model.AccessToken;
+import io.github.nicepay.data.model.Cancel;
+import io.github.nicepay.data.response.snap.BaseNICEPayResponse;
+import io.github.nicepay.data.response.snap.NICEPayResponse;
+import io.github.nicepay.data.response.v2.NICEPayResponseV2;
 import io.github.nicepay.service.snap.SnapCancelService;
 import io.github.nicepay.service.snap.SnapTokenService;
 import io.github.nicepay.service.v2.V2CancelService;
@@ -61,7 +61,7 @@ class CancelTest<T extends BaseNICEPayResponse> {
                 .virtualAccountNo("7001400002009191")
                 .totalAmount("10000.00", "IDR")
                 .trxId("TESTREFNO")
-                .tXidVA("NORMALTEST02202408191440205690")
+                .tXidVA("IONPAYTEST02202408191440205690")
                 .cancelMessage("test cancel")
                 .build();
 
@@ -74,7 +74,7 @@ class CancelTest<T extends BaseNICEPayResponse> {
     void CancelVAV2() throws IOException, InterruptedException {
         Cancel requestCancel = Cancel.builder()
                 .timeStamp(TestingConstants.V2_TIMESTAMP)
-                .tXid("NORMALTEST02202408191446415996")
+                .tXid("NORMALTEST02202408230923505139")
                 .iMid("NORMALTEST")
                 .payMethod("02")
                 .cancelType("1")
@@ -100,10 +100,10 @@ class CancelTest<T extends BaseNICEPayResponse> {
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
         Cancel requestData = Cancel.builder()
-                .merchantId("NORMALTEST")
+                .merchantId("IONPAYTEST")
                 .subMerchantId("23489182303312")
                 .originalPartnerReferenceNo("ref202305081205331683522921")
-                .originalReferenceNo("NORMALTEST05202308031752031674")
+                .originalReferenceNo("IONPAYTEST05202308031752031674")
                 .partnerRefundNo("ref202305081205331683522921")
                 .refundAmount("1.00", "IDR")
                 .externalStoreId("239840198240795109")
@@ -123,9 +123,9 @@ class CancelTest<T extends BaseNICEPayResponse> {
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
         Cancel requestData = Cancel.builder()
-                .merchantId("NORMALTEST")
+                .merchantId("IONPAYTEST")
                 .originalPartnerReferenceNo("ref202305081205331683522921")
-                .originalReferenceNo("NORMALTEST05202308031752031674")
+                .originalReferenceNo("IONPAYTEST05202308031752031674")
                 .build();
 
         NICEPayResponse Result =
@@ -140,9 +140,9 @@ class CancelTest<T extends BaseNICEPayResponse> {
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
         Cancel requestData = Cancel.builder()
-                .merchantId("NORMALTEST")
+                .merchantId("IONPAYTEST")
                 .originalPartnerReferenceNo("ref202305081205331683522921")
-                .originalReferenceNo("NORMALTEST05202308031752031674")
+                .originalReferenceNo("IONPAYTEST05202308031752031674")
                 .build();
 
         NICEPayResponse Result =

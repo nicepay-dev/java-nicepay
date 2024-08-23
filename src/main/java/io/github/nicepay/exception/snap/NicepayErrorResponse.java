@@ -1,7 +1,7 @@
 package io.github.nicepay.exception.snap;
 
 
-import io.github.nicepay.response.snap.BaseNICEPayResponse;
+import io.github.nicepay.data.response.snap.BaseNICEPayResponse;
 import lombok.ToString;
 
 @ToString

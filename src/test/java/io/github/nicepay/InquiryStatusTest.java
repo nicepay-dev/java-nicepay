@@ -1,11 +1,11 @@
 package io.github.nicepay;
 
 import io.github.nicepay.data.TestingConstants;
-import io.github.nicepay.response.snap.BaseNICEPayResponse;
-import io.github.nicepay.model.AccessToken;
-import io.github.nicepay.model.InquiryStatus;
-import io.github.nicepay.response.snap.NICEPayResponse;
-import io.github.nicepay.response.v2.NICEPayResponseV2;
+import io.github.nicepay.data.response.snap.BaseNICEPayResponse;
+import io.github.nicepay.data.model.AccessToken;
+import io.github.nicepay.data.model.InquiryStatus;
+import io.github.nicepay.data.response.snap.NICEPayResponse;
+import io.github.nicepay.data.response.v2.NICEPayResponseV2;
 import io.github.nicepay.service.snap.SnapInquiryStatusService;
 import io.github.nicepay.service.snap.SnapTokenService;
 import io.github.nicepay.service.v2.V2InquiryStatusService;
@@ -97,7 +97,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
 
         InquiryStatus requestData = InquiryStatus.builder()
                 .timeStamp(TestingConstants.V2_TIMESTAMP)
-                .tXid("NORMALTEST02202408191446415996")
+                .tXid("NORMALTEST02202408230923505139")
                 .iMid(TestingConstants.I_MID)
                 .referenceNo("NICEPAYVA111213")
                 .amt("100")
@@ -126,7 +126,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
                 .merchantId("IONPAYTEST")
                 .subMerchantId("23489182303312")
                 .originalPartnerReferenceNo("ref202305081205331683522921")
-                .originalReferenceNo("NORMALTEST05202308031752031674")
+                .originalReferenceNo("IONPAYTEST05202408221416277395")
                 .serviceCode("54")
                 .transactionDate("2022-04-28T10:13:40+07:00")
                 .externalStoreId("239840198240795109")

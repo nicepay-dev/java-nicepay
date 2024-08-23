@@ -1,13 +1,13 @@
 package io.github.nicepay;
 
 import io.github.nicepay.data.TestingConstants;
-import io.github.nicepay.model.AccessToken;
-import io.github.nicepay.model.VirtualAccount;
-import io.github.nicepay.response.v2.NICEPayResponseV2;
+import io.github.nicepay.data.model.AccessToken;
+import io.github.nicepay.data.model.VirtualAccount;
+import io.github.nicepay.data.response.v2.NICEPayResponseV2;
 import io.github.nicepay.service.snap.SnapTokenService;
 import io.github.nicepay.service.v2.V2VaService;
 import io.github.nicepay.utils.LoggerPrint;
-import io.github.nicepay.response.snap.NICEPayResponse;
+import io.github.nicepay.data.response.snap.NICEPayResponse;
 import io.github.nicepay.service.snap.SnapVaService;
 import io.github.nicepay.utils.NICEPay;
 import io.github.nicepay.utils.SHA256Util;

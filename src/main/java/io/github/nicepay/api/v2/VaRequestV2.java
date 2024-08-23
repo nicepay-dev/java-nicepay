@@ -1,12 +1,11 @@
 package io.github.nicepay.api.v2;
 
-import io.github.nicepay.model.Cancel;
-import io.github.nicepay.model.InquiryStatus;
-import io.github.nicepay.model.VirtualAccount;
-import io.github.nicepay.response.v2.NICEPayResponseV2;
+import io.github.nicepay.data.model.Cancel;
+import io.github.nicepay.data.model.InquiryStatus;
+import io.github.nicepay.data.model.VirtualAccount;
+import io.github.nicepay.data.response.v2.NICEPayResponseV2;
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 
 public interface VaRequestV2 {

@@ -5,14 +5,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import io.github.nicepay.api.snap.PostVaRequest;
 import io.github.nicepay.api.v2.VaRequestV2;
-import io.github.nicepay.exception.snap.NicepayErrorResponse;
-import io.github.nicepay.model.AccessToken;
-import io.github.nicepay.model.InquiryStatus;
-import io.github.nicepay.model.VirtualAccount;
-import io.github.nicepay.response.snap.NICEPayResponse;
-import io.github.nicepay.response.v2.NICEPayResponseV2;
+import io.github.nicepay.data.model.InquiryStatus;
+import io.github.nicepay.data.response.v2.NICEPayResponseV2;
 import io.github.nicepay.utils.ApiUtils;
 import io.github.nicepay.utils.LoggerPrint;
 import io.github.nicepay.utils.NICEPay;
@@ -21,7 +16,6 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 import java.io.IOException;
-import java.net.SocketTimeoutException;
 
 public class V2InquiryStatusService {
 

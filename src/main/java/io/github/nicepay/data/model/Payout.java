@@ -1,4 +1,4 @@
-package io.github.nicepay.model;
+package io.github.nicepay.data.model;
 
 import lombok.*;
 

@@ -1,9 +1,9 @@
 package io.github.nicepay.service.snap;
 
 import io.github.nicepay.api.snap.PostQrisRequest;
-import io.github.nicepay.model.AccessToken;
-import io.github.nicepay.model.Qris;
-import io.github.nicepay.response.snap.NICEPayResponse;
+import io.github.nicepay.data.model.AccessToken;
+import io.github.nicepay.data.model.Qris;
+import io.github.nicepay.data.response.snap.NICEPayResponse;
 import io.github.nicepay.utils.ApiUtils;
 import io.github.nicepay.utils.LoggerPrint;
 import io.github.nicepay.utils.NICEPay;
