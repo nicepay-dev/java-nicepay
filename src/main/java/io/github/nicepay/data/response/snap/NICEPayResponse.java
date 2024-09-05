@@ -1,7 +1,8 @@
 package io.github.nicepay.data.response.snap;
 
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Map;
 

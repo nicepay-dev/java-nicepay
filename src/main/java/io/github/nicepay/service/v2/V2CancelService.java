@@ -1,11 +1,10 @@
 package io.github.nicepay.service.v2;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import io.github.nicepay.api.v2.VaRequestV2;
+import io.github.nicepay.api.v2.RequestV2;
 import io.github.nicepay.data.model.Cancel;
 import io.github.nicepay.data.response.v2.NICEPayResponseV2;
 import io.github.nicepay.utils.ApiUtils;
@@ -20,16 +19,16 @@ import java.io.IOException;
 public class V2CancelService {
 
     private static LoggerPrint print = new LoggerPrint();
-    private static int retryCount = 0;
-    public static  <S> S callV2CancelVA(Cancel data, NICEPay config) throws IOException {
+
+    public static  <S> S callV2CancelTransaction(Cancel data, NICEPay config) throws IOException {
         Gson gson = new Gson();
-        VaRequestV2 request = ApiUtils.createServiceV2(VaRequestV2.class, gson.toJson(data), config);
-        Call<NICEPayResponseV2> callSync = request.cancelVaV2(data);
-        Response<NICEPayResponseV2> response = null;
+        RequestV2 request = ApiUtils.createServiceV2(RequestV2.class, config);
+        Call<NICEPayResponseV2> callSync = request.cancelTransactionV2(data);
+        Response<NICEPayResponseV2> response;
         NICEPayResponseV2 nicePayResponse = null;
-        ResponseBody errorResponse = null;
-        Object resClient = null;
-        JsonObject jsonObject = null;
+        ResponseBody errorResponse;
+        Object resClient;
+        JsonObject jsonObject;
         try {
             response = callSync.execute();
             nicePayResponse = response.body();
@@ -42,7 +41,6 @@ public class V2CancelService {
             }
 
 
-            ObjectMapper mapper = new ObjectMapper();
             jsonObject = JsonParser.parseString(resClient.toString()).getAsJsonObject();
             print.logInfoResponseV2("Response Cancel :" + new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject));
 

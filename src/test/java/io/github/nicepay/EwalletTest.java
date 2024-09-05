@@ -1,16 +1,19 @@
 package io.github.nicepay;
 
 import io.github.nicepay.data.TestingConstants;
-import io.github.nicepay.data.response.snap.NICEPayResponse;
 import io.github.nicepay.data.model.AccessToken;
 import io.github.nicepay.data.model.Ewallet;
+import io.github.nicepay.data.response.snap.NICEPayResponse;
 import io.github.nicepay.service.snap.SnapEwalletService;
 import io.github.nicepay.service.snap.SnapTokenService;
 import io.github.nicepay.utils.NICEPay;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 class EwalletTest {
         private static NICEPay config;

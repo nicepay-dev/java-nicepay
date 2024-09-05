@@ -1,6 +1,6 @@
 package io.github.nicepay.data.model;
-import lombok.*;
 
+import lombok.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +29,15 @@ public class Cancel {
     private String amt;
     private String merchantToken;
     private String referenceNo;
+
+//    V2
+    private String cancelMsg;
+    private String cancelServerIp;
+    private String cancelUserId;
+    private String cancelUserIp;
+    private String cancelUserInfo;
+    private String cancelRetryCnt;
+    private String worker;
 
 //    E-Wallet
     private String merchantId;

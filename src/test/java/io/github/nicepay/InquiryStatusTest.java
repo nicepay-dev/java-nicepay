@@ -1,9 +1,9 @@
 package io.github.nicepay;
 
 import io.github.nicepay.data.TestingConstants;
-import io.github.nicepay.data.response.snap.BaseNICEPayResponse;
 import io.github.nicepay.data.model.AccessToken;
 import io.github.nicepay.data.model.InquiryStatus;
+import io.github.nicepay.data.response.snap.BaseNICEPayResponse;
 import io.github.nicepay.data.response.snap.NICEPayResponse;
 import io.github.nicepay.data.response.v2.NICEPayResponseV2;
 import io.github.nicepay.service.snap.SnapInquiryStatusService;
@@ -17,6 +17,8 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class InquiryStatusTest<T extends BaseNICEPayResponse> {
     private static NICEPay config;
@@ -111,7 +113,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
 
         requestData.setMerchantToken(merchantToken);
 
-        NICEPayResponseV2 result = V2InquiryStatusService.callV2InquiryVA(requestData, config);
+        NICEPayResponseV2 result = V2InquiryStatusService.callV2InquiryStatus(requestData, config);
 
     }
 
@@ -179,6 +181,35 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
 
         NICEPayResponse Result =
                 SnapInquiryStatusService.callServiceQrisCheckStatus(requestData,accessToken,config3);
+
+    }
+
+//    CC V2
+
+    //V2
+    @Test
+    void InquiryStatusCardV2() throws IOException, InterruptedException {
+
+        InquiryStatus requestData = InquiryStatus.builder()
+                .timeStamp(TestingConstants.V2_TIMESTAMP)
+                .tXid("TESTMPGS0501202409041308179030")
+                .iMid(TestingConstants.I_MID_PAC)
+                .referenceNo("ordNo20240904130813")
+                .amt("1000")
+                .build();
+
+        requestData.setAdditionalInfo(null);
+
+        String merchantToken = SHA256Util.encrypt(
+                requestData.getTimeStamp() + requestData.getIMid() + requestData.getReferenceNo()+ requestData.getAmt()+
+                        TestingConstants.MERCHANT_KEY);
+
+        requestData.setMerchantToken(merchantToken);
+
+        NICEPayResponseV2 result = V2InquiryStatusService.callV2InquiryStatus(requestData, config);
+
+//        RESPONSE CODE MUST BE 0000
+        assertEquals("0000", result.getResultCd());
 
     }
 

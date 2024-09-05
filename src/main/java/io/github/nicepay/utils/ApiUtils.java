@@ -1,13 +1,16 @@
 package io.github.nicepay.utils;
 
-import com.google.gson.*;
+import com.google.gson.GsonBuilder;
 import okhttp3.*;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Invocation;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
 import java.time.Duration;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 public class ApiUtils {
@@ -172,7 +175,7 @@ public class ApiUtils {
     }
 
     //V2
-    public static <S> S createServiceV2(Class<S> serviceClass, String data, NICEPay config) {
+    public static <S> S createServiceV2(Class<S> serviceClass, NICEPay config) {
         httpClient.interceptors().clear();
         httpClient.addInterceptor(chain -> {
             Request original = chain.request();

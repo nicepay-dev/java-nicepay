@@ -1,9 +1,9 @@
 package io.github.nicepay;
 
 import io.github.nicepay.data.TestingConstants;
-import io.github.nicepay.data.response.snap.NICEPayResponse;
 import io.github.nicepay.data.model.AccessToken;
 import io.github.nicepay.data.model.Payout;
+import io.github.nicepay.data.response.snap.NICEPayResponse;
 import io.github.nicepay.service.snap.SnapPayoutService;
 import io.github.nicepay.service.snap.SnapTokenService;
 import io.github.nicepay.utils.NICEPay;
