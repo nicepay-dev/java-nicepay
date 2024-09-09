@@ -105,9 +105,7 @@ Sample response :
 
 ```java
 import io.github.nicepay.data.model.Card;
-import io.github.nicepay.data.response.v2.NICEPayCardResponseV2;
 import io.github.nicepay.service.v2.V2CardService;
-import io.github.nicepay.utils.NICEPay;
 import io.github.nicepay.utils.SHA256Util;
 
 Card requestData = Card.builder()
@@ -139,9 +137,11 @@ String merchantToken = SHA256Util.encrypt(
         requestData.getTimeStamp() + iMid + requestData.getReferenceNo() + amount +
                 TestingConstants.MERCHANT_KEY);
 
-        requestData.setMerchantToken(merchantToken);
+        requestData.
 
-NICEPayCardResponseV2 cardRegistResponse = V2CardService.callV2CardRegistration(requestData,config);
+setMerchantToken(merchantToken);
+
+NICEPayCardResponseV2 cardRegistResponse = V2CardService.callV2CardRegistration(requestData, config);
 ```
 
 Sample response : 
@@ -163,35 +163,35 @@ Sample response :
 ```java
 
 import io.github.nicepay.data.model.Card;
-import io.github.nicepay.data.response.v2.NICEPayCardResponseV2;
 import io.github.nicepay.service.v2.V2CardService;
-import io.github.nicepay.utils.NICEPay;
 import io.github.nicepay.utils.SHA256Util;
 
 //      CONSTRUCT REQUEST BODY
-        Card requestData = Card.builder()
-                .timeStamp("20240906004912")
-                .tXid("TESTMPGS0501202409060047287070")
-                .referenceNo("ordNo20240906004727")
-                .cardNo("5123450000000008")
-                .cardExpYymm("2908")
-                .cardCvv("100")
-                .cardHolderNm("NICEPAY TEST")
-                .callBackUrl("https://dev.nicepay.co.id/IONPAY_CLIENT/paymentResult.jsp")
-                .recurringToken("")
-                .preauthToken("")
-                .build();
+Card requestData = Card.builder()
+        .timeStamp("20240906004912")
+        .tXid("TESTMPGS0501202409060047287070")
+        .referenceNo("ordNo20240906004727")
+        .cardNo("5123450000000008")
+        .cardExpYymm("2908")
+        .cardCvv("100")
+        .cardHolderNm("NICEPAY TEST")
+        .callBackUrl("https://dev.nicepay.co.id/IONPAY_CLIENT/paymentResult.jsp")
+        .recurringToken("")
+        .preauthToken("")
+        .build();
 
 //        GENERATE MERCHANT TOKEN USING SHA256 ENCRYPTION
-        String merchantToken = SHA256Util.encrypt(
-                timeStamp + iMid + requestData.getReferenceNo()+ cardRegistResponse.getAmt() +
-                        TestingConstants.MERCHANT_KEY);
+String merchantToken = SHA256Util.encrypt(
+        timeStamp + iMid + requestData.getReferenceNo() + cardRegistResponse.getAmt() +
+                TestingConstants.MERCHANT_KEY);
 
 //        SET MERCHANT TOKEN
-        requestData.setMerchantToken(merchantToken);
+        requestData.
+
+setMerchantToken(merchantToken);
 
 //        CALL CARD PAYMENT REQUEST METHOD
-        String responseHtml = V2CardService.callV2CardPaymentRequest(requestData,config);
+String responseHtml = V2CardService.callV2CardPaymentRequest(requestData, config);
 ```
 
 The responseHtml string will contain the HTML content, which should be rendered and processed on your front-end for the 3DS (3D Secure) flow.
@@ -245,6 +245,17 @@ Here’s an example of the HTML response your front-end should handle. It contai
 	</body>
 
 ```
+
+##### Front-End Integration
+1. When the front-end receives the responseHtml, render it as an HTML page.
+2. The page will automatically post to the 3DS method URL, redirecting the user to a page where they can enter the OTP sent to their registered device.
+3. After completing the 3DS flow, the user is redirected back to your callback URL.
+
+Expected Result :
+
+Once the user completes the 3DS authentication, they will be redirected to your defined callbackUrl, where you can process the result.
+
+
 #### 2.2.2 Common (e.g Inquiry Status)
 
 ```java

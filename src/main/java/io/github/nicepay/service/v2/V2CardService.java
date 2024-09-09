@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.nicepay.api.v2.CardRequestV2;
 import io.github.nicepay.data.model.Card;
-import io.github.nicepay.data.response.v2.NICEPayCardResponseV2;
+import io.github.nicepay.data.response.v2.NICEPayResponseV2;
 import io.github.nicepay.utils.ApiUtils;
 import io.github.nicepay.utils.LoggerPrint;
 import io.github.nicepay.utils.NICEPay;
@@ -28,9 +28,9 @@ public class V2CardService {
 
         Gson gson = new Gson();
         CardRequestV2 request = ApiUtils.createServiceV2(CardRequestV2.class, config);
-        Call<NICEPayCardResponseV2> callSync = request.registerCardV2(data);
-        Response<NICEPayCardResponseV2> response = null;
-        NICEPayCardResponseV2 nicePayResponse = null;
+        Call<NICEPayResponseV2> callSync = request.registerCardV2(data);
+        Response<NICEPayResponseV2> response = null;
+        NICEPayResponseV2 nicePayResponse = null;
         ResponseBody errorResponse = null;
         Object resClient = null;
         JsonObject jsonObject = null;

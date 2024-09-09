@@ -2,7 +2,7 @@ package io.github.nicepay;
 
 import io.github.nicepay.data.TestingConstants;
 import io.github.nicepay.data.model.Card;
-import io.github.nicepay.data.response.v2.NICEPayCardResponseV2;
+import io.github.nicepay.data.response.v2.NICEPayResponseV2;
 import io.github.nicepay.service.v2.V2CardService;
 import io.github.nicepay.utils.NICEPay;
 import io.github.nicepay.utils.SHA256Util;
@@ -71,7 +71,7 @@ class CardTest {
 
         requestData.setMerchantToken(merchantToken);
 
-        NICEPayCardResponseV2 cardRegistResponse = V2CardService.callV2CardRegistration(requestData,config);
+        NICEPayResponseV2 cardRegistResponse = V2CardService.callV2CardRegistration(requestData,config);
 
         assertNotNull(cardRegistResponse.getTXid());
         assertEquals("0000", cardRegistResponse.getResultCd());
@@ -84,7 +84,7 @@ class CardTest {
     {
 
 //        CREATE NEW CARD TRANSACTION
-        NICEPayCardResponseV2 cardRegistResponse = generateCardTransaction();
+        NICEPayResponseV2 cardRegistResponse = generateCardTransaction();
 
 //        START PAYMENT REQUEST
         String timeStamp = TestingConstants.V2_TIMESTAMP;
@@ -120,7 +120,7 @@ class CardTest {
     }
 
 
-    private NICEPayCardResponseV2 generateCardTransaction() throws IOException {
+    private NICEPayResponseV2 generateCardTransaction() throws IOException {
         String timeStamp = TestingConstants.V2_TIMESTAMP;
 
         Card requestData = Card.builder()
