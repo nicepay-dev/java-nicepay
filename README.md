@@ -82,7 +82,7 @@ String yourVirtualAccountNumber = response.getVirtualAccountNo();
 
 ## 3. Other Samples
 If you need samples for other payment methods and APIs, 
-please refer to the test units on our [Repository](https://github.com/nicepay-dev/java-nicepay/tree/main/src/test/java/com/nicepay/client)
+please refer to the test units on our [Repository](https://github.com/nicepay-dev/java-nicepay/tree/main/src/test/java/io/github/nicepay)
 
 ## Notes
 #### Not Designed for Frontend Usage
