@@ -93,5 +93,6 @@ This library is meant to be implemented on your backend server using Java.
 - [NICEPAY Docs](https://docs.nicepay.co.id/)
 - [NICEPAY Dashboard ](https://bo.nicepay.co.id/)
 - [SNAP documentation](https://docs.nicepay.co.id/nicepay-api-snap)
+- [README_V2 For V2 Overview](https://github.com/nicepay-dev/java-nicepay/blob/dev/README_V2.md)
 - Can't find answer you looking for? email to [cs@nicepay.co.id](mailto:cs@nicepay.co.id)
 
