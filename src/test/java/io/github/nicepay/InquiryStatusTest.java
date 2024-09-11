@@ -10,7 +10,6 @@ import io.github.nicepay.service.snap.SnapInquiryStatusService;
 import io.github.nicepay.service.snap.SnapTokenService;
 import io.github.nicepay.service.v2.V2InquiryStatusService;
 import io.github.nicepay.utils.NICEPay;
-import io.github.nicepay.utils.SHA256Util;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -99,19 +98,14 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
 
         InquiryStatus requestData = InquiryStatus.builder()
                 .timeStamp(TestingConstants.V2_TIMESTAMP)
-                .tXid("NORMALTEST02202408230923505139")
+                .tXid("IONPAYTEST02202409101619427123")
                 .iMid(TestingConstants.I_MID)
+                .merchantKey(TestingConstants.MERCHANT_KEY)
                 .referenceNo("NICEPAYVA111213")
                 .amt("100")
-                .build();
+                .buildV2();
 
         requestData.setAdditionalInfo(null);
-
-        String merchantToken = SHA256Util.encrypt(
-                requestData.getTimeStamp() + requestData.getIMid() + requestData.getReferenceNo()+ requestData.getAmt()+
-                        TestingConstants.MERCHANT_KEY);
-
-        requestData.setMerchantToken(merchantToken);
 
         NICEPayResponseV2 result = V2InquiryStatusService.callV2InquiryStatus(requestData, config);
 
@@ -193,18 +187,14 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
         InquiryStatus requestData = InquiryStatus.builder()
                 .timeStamp(TestingConstants.V2_TIMESTAMP)
                 .tXid("TESTMPGS0501202409041308179030")
+                .merchantKey(TestingConstants.MERCHANT_KEY)
                 .iMid(TestingConstants.I_MID_PAC)
                 .referenceNo("ordNo20240904130813")
                 .amt("1000")
-                .build();
+                .buildV2();
 
         requestData.setAdditionalInfo(null);
 
-        String merchantToken = SHA256Util.encrypt(
-                requestData.getTimeStamp() + requestData.getIMid() + requestData.getReferenceNo()+ requestData.getAmt()+
-                        TestingConstants.MERCHANT_KEY);
-
-        requestData.setMerchantToken(merchantToken);
 
         NICEPayResponseV2 result = V2InquiryStatusService.callV2InquiryStatus(requestData, config);
 

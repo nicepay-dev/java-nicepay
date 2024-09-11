@@ -1,5 +1,6 @@
 package io.github.nicepay.data.model;
 
+import io.github.nicepay.utils.SHA256Util;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +23,7 @@ public class InquiryStatus {
     private String inquiryRequestId;
     private Map<String, Object> additionalInfo ;
 
-// V2 VA
+// V2
     private String timeStamp;
     private String tXid;
     private String iMid;
@@ -49,6 +50,33 @@ public class InquiryStatus {
         private Map<String, Object> totalAmount;
         private Map<String, Object> additionalInfo;
         private Map<String, Object> amount;
+
+        //        V2
+        private String merchantKey;
+        public InquiryStatus buildV2(){
+            InquiryStatus inquiryStatus = new InquiryStatus();
+
+            inquiryStatus.timeStamp = this.timeStamp;
+            inquiryStatus.tXid = this.tXid;
+            inquiryStatus.iMid = this.iMid;
+            inquiryStatus.referenceNo = this.referenceNo;
+            inquiryStatus.amt = this.amt;
+
+//            Generate merchant token if merkey not null
+            if (this.merchantKey != null) {
+
+                inquiryStatus.merchantToken = SHA256Util.encrypt(
+                        inquiryStatus.timeStamp + inquiryStatus.iMid + inquiryStatus.referenceNo + inquiryStatus.amt + this.merchantKey
+                );
+
+            }
+            return inquiryStatus;
+        }
+
+        public InquiryStatusBuilder merchantKey(String merchantKey) {
+            this.merchantKey = merchantKey;
+            return this;
+        }
 
         public InquiryStatusBuilder() {
             this.additionalInfo = new HashMap<>();

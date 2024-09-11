@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 class CancelTest<T extends BaseNICEPayResponse> {
 
     private static LoggerPrint print = new LoggerPrint() ;
@@ -75,18 +77,11 @@ class CancelTest<T extends BaseNICEPayResponse> {
                 .timeStamp(TestingConstants.V2_TIMESTAMP)
                 .tXid("NORMALTEST02202408230923505139")
                 .iMid("NORMALTEST")
+                .merchantKey(TestingConstants.MERCHANT_KEY)
                 .payMethod("02")
                 .cancelType("1")
                 .amt("100")
-                .build();
-
-        requestCancel.setAdditionalInfo(null);
-
-        String merchantToken = SHA256Util.encrypt(
-                requestCancel.getTimeStamp() + requestCancel.getIMid() + requestCancel.getTXid()+ requestCancel.getAmt()+
-                        TestingConstants.MERCHANT_KEY);
-
-        requestCancel.setMerchantToken(merchantToken);
+                .buildV2();
 
         NICEPayResponseV2 result = V2CancelService.callV2CancelTransaction(requestCancel, config);
 
@@ -178,27 +173,21 @@ class CancelTest<T extends BaseNICEPayResponse> {
     void cancelPartialCardV2() throws IOException, InterruptedException {
         Cancel requestCancel = Cancel.builder()
                 .timeStamp(TestingConstants.V2_TIMESTAMP)
-                .tXid("TESTMPGS0401202409041114272993")
+                .tXid("TESTMPGS0401202308171238501496")
                 .referenceNo("0rdNo"+TestingConstants.V2_TIMESTAMP) // different reffNo with registered transaction
                 .iMid("TESTMPGS04")
+                .merchantKey(TestingConstants.MERCHANT_KEY)
                 .payMethod("01")
                 .cancelType("2")
-                .amt("1000")
+                .amt("100")
                 .cancelMsg("Cancellation Of Transaction Credit Card")
                 .cancelUserIp("127.0.0.1")
                 .cancelServerIp("127.0.0.1")
                 .cancelUserInfo("")
                 .cancelRetryCnt("")
                 .worker("")
-                .build();
+                .buildV2();
 
-        requestCancel.setAdditionalInfo(null);
-
-        String merchantToken = SHA256Util.encrypt(
-                requestCancel.getTimeStamp() + requestCancel.getIMid() + requestCancel.getTXid() + requestCancel.getAmt()+
-                        TestingConstants.MERCHANT_KEY);
-
-        requestCancel.setMerchantToken(merchantToken);
 
         NICEPayResponseV2 result = V2CancelService.callV2CancelTransaction(requestCancel, config);
 
@@ -210,27 +199,21 @@ class CancelTest<T extends BaseNICEPayResponse> {
     void cancelFullCardV2() throws IOException, InterruptedException {
         Cancel requestCancel = Cancel.builder()
                 .timeStamp(TestingConstants.V2_TIMESTAMP)
-                .tXid("TESTMPGS0401202409041114272993")
+                .tXid("TESTMPGS0401202202170931495193")
                 .referenceNo("0rdNo"+TestingConstants.V2_TIMESTAMP) // different reffNo with registered transaction
                 .iMid("TESTMPGS04")
+                .merchantKey(TestingConstants.MERCHANT_KEY)
                 .payMethod("01")
                 .cancelType("1")
-                .amt("1000")
+                .amt("5000")
                 .cancelMsg("Cancellation Of Transaction Credit Card")
                 .cancelUserIp("127.0.0.1")
                 .cancelServerIp("127.0.0.1")
                 .cancelUserInfo("")
                 .cancelRetryCnt("")
                 .worker("")
-                .build();
+                .buildV2();
 
-        requestCancel.setAdditionalInfo(null);
-
-        String merchantToken = SHA256Util.encrypt(
-                requestCancel.getTimeStamp() + requestCancel.getIMid() + requestCancel.getTXid() + requestCancel.getAmt()+
-                        TestingConstants.MERCHANT_KEY);
-
-        requestCancel.setMerchantToken(merchantToken);
 
         NICEPayResponseV2 result = V2CancelService.callV2CancelTransaction(requestCancel, config);
 

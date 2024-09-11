@@ -40,9 +40,11 @@ class CardTest {
 
         String timeStamp = TestingConstants.V2_TIMESTAMP;
 
+
         Card requestData = Card.builder()
                 .timeStamp(TestingConstants.V2_TIMESTAMP)
                 .iMid(iMid)
+                .merchantKey(TestingConstants.MERCHANT_KEY)
                 .payMethod("01")
                 .currency("IDR")
                 .amt(amount)
@@ -65,12 +67,6 @@ class CardTest {
                 .recurrOpt("")
                 .build();
 
-        String merchantToken = SHA256Util.encrypt(
-                requestData.getTimeStamp() + iMid + requestData.getReferenceNo() + amount +
-                        TestingConstants.MERCHANT_KEY);
-
-        requestData.setMerchantToken(merchantToken);
-
         NICEPayResponseV2 cardRegistResponse = V2CardService.callV2CardRegistration(requestData,config);
 
         assertNotNull(cardRegistResponse.getTXid());
@@ -91,7 +87,10 @@ class CardTest {
         Card requestData = Card.builder()
                 .timeStamp(timeStamp)
                 .tXid(cardRegistResponse.getTXid())
+                .iMid(iMid)
                 .referenceNo(cardRegistResponse.getReferenceNo())
+                .amt(cardRegistResponse.getAmt())
+                .merchantKey(TestingConstants.MERCHANT_KEY)
                 .cardNo("5123450000000008")
                 .cardExpYymm("2908")
                 .cardCvv("100")
@@ -100,12 +99,6 @@ class CardTest {
                 .recurringToken("")
                 .preauthToken("")
                 .build();
-
-        String merchantToken = SHA256Util.encrypt(
-                timeStamp + iMid + requestData.getReferenceNo()+ cardRegistResponse.getAmt() +
-                        TestingConstants.MERCHANT_KEY);
-
-        requestData.setMerchantToken(merchantToken);
 
         String responseHtml = V2CardService.callV2CardPaymentRequest(requestData,config);
 
@@ -130,6 +123,7 @@ class CardTest {
                 .currency("IDR")
                 .amt(amount)
                 .referenceNo("ordNo"+timeStamp)
+                .merchantKey(TestingConstants.MERCHANT_KEY)
                 .goodsNm("Goods")
                 .billingNm("NICEPAY Testing")
                 .billingPhone("081363681274")
@@ -147,12 +141,6 @@ class CardTest {
                 .instmntMon("1")
                 .recurrOpt("")
                 .build();
-
-        String merchantToken = SHA256Util.encrypt(
-                requestData.getTimeStamp() + iMid + requestData.getReferenceNo() + amount +
-                        TestingConstants.MERCHANT_KEY);
-
-        requestData.setMerchantToken(merchantToken);
 
         return V2CardService.callV2CardRegistration(requestData,config);
     }

@@ -10,6 +10,7 @@ import io.github.nicepay.data.response.v2.NICEPayResponseV2;
 import io.github.nicepay.utils.ApiUtils;
 import io.github.nicepay.utils.LoggerPrint;
 import io.github.nicepay.utils.NICEPay;
+import io.github.nicepay.utils.SHA256Util;
 import okhttp3.ResponseBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

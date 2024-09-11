@@ -1,5 +1,6 @@
 package io.github.nicepay.data.model;
 
+import io.github.nicepay.utils.SHA256Util;
 import lombok.*;
 
 import java.util.HashMap;
@@ -13,14 +14,14 @@ import java.util.Map;
 @NoArgsConstructor
 public class Cancel {
 
-//    VA
+    //    VA
     private String partnerServiceId;
     private String customerNo;
     private String virtualAccountNo;
     private String trxId;
-    private Map<String, Object> additionalInfoMap ;
+    private Map<String, Object> additionalInfoMap;
 
-// V2 VA
+    // V2 VA
     private String timeStamp;
     private String tXid;
     private String iMid;
@@ -30,7 +31,7 @@ public class Cancel {
     private String merchantToken;
     private String referenceNo;
 
-//    V2
+    //    V2
     private String cancelMsg;
     private String cancelServerIp;
     private String cancelUserId;
@@ -39,7 +40,7 @@ public class Cancel {
     private String cancelRetryCnt;
     private String worker;
 
-//    E-Wallet
+    //    E-Wallet
     private String merchantId;
     private String subMerchantId;
     private String originalPartnerReferenceNo;
@@ -47,19 +48,58 @@ public class Cancel {
     private String serviceCode;
     private String transactionDate;
     private String externalStoreId;
-    private Map<String, Object> refundAmount ;
+    private Map<String, Object> refundAmount;
 
     //refund
     private String partnerRefundNo;
-    private String reason ;
+    private String reason;
 
-    private Map<String, Object> totalAmount ;
+    private Map<String, Object> totalAmount;
     private Map<String, Object> additionalInfo;
 
     public static class CancelBuilder {
         private Map<String, Object> totalAmount;
         private Map<String, Object> additionalInfo;
 //        private Map<String, Object> amount;
+
+        //        V2
+        private String merchantKey;
+
+        // Custom builder for V2
+        public Cancel buildV2() {
+            Cancel cancel = new Cancel();
+
+            cancel.timeStamp = this.timeStamp;
+            cancel.tXid = this.tXid;
+            cancel.iMid = this.iMid;
+            cancel.referenceNo = this.referenceNo;
+            cancel.amt = this.amt;
+            cancel.payMethod = this.payMethod;
+            cancel.cancelType = this.cancelType;
+
+            cancel.cancelMsg = this.cancelMsg;
+            cancel.cancelServerIp = this.cancelServerIp;
+            cancel.cancelUserId = this.cancelUserId;
+            cancel.cancelUserIp = this.cancelUserIp;
+            cancel.cancelUserInfo = this.cancelUserInfo;
+            cancel.cancelRetryCnt = this.cancelRetryCnt;
+            cancel.worker = this.worker;
+
+//            Generate merchant token if merkey not null
+            if (this.merchantKey != null) {
+
+                cancel.merchantToken = SHA256Util.encrypt(
+                        cancel.timeStamp + cancel.iMid + cancel.tXid + cancel.amt + this.merchantKey
+                );
+            }
+            return cancel;
+        }
+
+        public CancelBuilder merchantKey(String merchantKey) {
+            this.merchantKey = merchantKey;
+            return this;
+        }
+
 
         public CancelBuilder() {
             this.additionalInfo = new HashMap<>();
@@ -72,6 +112,7 @@ public class Cancel {
             additionalInfo.put("totalAmount", totalAmountMap);
             return this;
         }
+
         public CancelBuilder additionalInfo(Map<String, Object> additionalInfoMap) {
             additionalInfoMap.put("totalAmount",additionalInfo);
             additionalInfoMap.put("tXidVA",additionalInfo);
