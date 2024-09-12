@@ -44,6 +44,18 @@
 			<organization>NICEPAY Indonesia</organization>
 			<organizationUrl>https://nicepay.co.id/id/</organizationUrl>
 		</developer>
+		<developer>
+			<name>Harfa Thandila</name>
+			<email>harfa.thandila@nicepay.co.id</email>
+			<organization>NICEPAY Indonesia</organization>
+			<organizationUrl>https://nicepay.co.id/id/</organizationUrl>
+		</developer>
+		<developer>
+			<name>Inka Fazarillah</name>
+			<email>inka.fazarillah@nicepay.co.id</email>
+			<organization>NICEPAY Indonesia</organization>
+			<organizationUrl>https://nicepay.co.id/id/</organizationUrl>
+		</developer>
 	</developers>
 
 	<scm>
