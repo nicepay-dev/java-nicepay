@@ -10,6 +10,7 @@ import io.github.nicepay.data.response.v2.NICEPayResponseV2;
 import io.github.nicepay.utils.ApiUtils;
 import io.github.nicepay.utils.LoggerPrint;
 import io.github.nicepay.utils.NICEPay;
+import io.github.nicepay.utils.SHA256Util;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -23,6 +24,10 @@ public class V2InquiryStatusService {
     public static  <S> S callV2InquiryStatus(InquiryStatus data, NICEPay config) throws IOException {
         Gson gson = new Gson();
         RequestV2 request = ApiUtils.createServiceV2(RequestV2.class, config);
+
+        data.setMerchantToken(SHA256Util.encrypt(data.getMerchantToken()));
+        data.setAdditionalInfo(null);
+
         Call<NICEPayResponseV2> callSync = request.inquiryStatusV2(data);
         Response<NICEPayResponseV2> response;
         NICEPayResponseV2 nicePayResponse = null;

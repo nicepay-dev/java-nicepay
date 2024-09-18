@@ -1,6 +1,5 @@
 package io.github.nicepay.data.model;
 
-import io.github.nicepay.utils.SHA256Util;
 import lombok.*;
 
 import java.util.HashMap;
@@ -63,40 +62,8 @@ public class Cancel {
 //        private Map<String, Object> amount;
 
         //        V2
-        private String merchantKey;
-
-        // Custom builder for V2
-        public Cancel buildV2() {
-            Cancel cancel = new Cancel();
-
-            cancel.timeStamp = this.timeStamp;
-            cancel.tXid = this.tXid;
-            cancel.iMid = this.iMid;
-            cancel.referenceNo = this.referenceNo;
-            cancel.amt = this.amt;
-            cancel.payMethod = this.payMethod;
-            cancel.cancelType = this.cancelType;
-
-            cancel.cancelMsg = this.cancelMsg;
-            cancel.cancelServerIp = this.cancelServerIp;
-            cancel.cancelUserId = this.cancelUserId;
-            cancel.cancelUserIp = this.cancelUserIp;
-            cancel.cancelUserInfo = this.cancelUserInfo;
-            cancel.cancelRetryCnt = this.cancelRetryCnt;
-            cancel.worker = this.worker;
-
-//            Generate merchant token if merkey not null
-            if (this.merchantKey != null) {
-
-                cancel.merchantToken = SHA256Util.encrypt(
-                        cancel.timeStamp + cancel.iMid + cancel.tXid + cancel.amt + this.merchantKey
-                );
-            }
-            return cancel;
-        }
-
-        public CancelBuilder merchantKey(String merchantKey) {
-            this.merchantKey = merchantKey;
+        public CancelBuilder merchantToken(String timeStamp, String imid, String txId, String amount, String merchantKey) {
+            this.merchantToken = timeStamp + imid + txId + amount + merchantKey;
             return this;
         }
 

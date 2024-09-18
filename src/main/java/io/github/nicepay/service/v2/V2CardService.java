@@ -29,6 +29,10 @@ public class V2CardService {
 
         Gson gson = new Gson();
         CardRequestV2 request = ApiUtils.createServiceV2(CardRequestV2.class, config);
+
+//        Update merchant token
+        data.setMerchantToken(SHA256Util.encrypt(data.getMerchantToken()));
+
         Call<NICEPayResponseV2> callSync = request.registerCardV2(data);
         Response<NICEPayResponseV2> response = null;
         NICEPayResponseV2 nicePayResponse = null;
@@ -62,6 +66,10 @@ public class V2CardService {
 
         Gson gson = new Gson();
         CardRequestV2 request = ApiUtils.createServiceV2(CardRequestV2.class, config);
+
+        //        Update merchant token
+        data.setMerchantToken(SHA256Util.encrypt(data.getMerchantToken()));
+
         Call<ResponseBody> callSync = request.requestPaymentCardV2(
                 data.getTimeStamp(),
                 data.getTXid(),

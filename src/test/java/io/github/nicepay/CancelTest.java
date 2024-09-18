@@ -28,6 +28,10 @@ class CancelTest<T extends BaseNICEPayResponse> {
     private static NICEPay config;
     private static TestingConstants DATA ;
 
+    private static String timestamp;
+    private static String amount;
+    private static String reffNo;
+
     @BeforeAll
     public  static void setUp() {
         config =NICEPay.builder()
@@ -38,6 +42,10 @@ class CancelTest<T extends BaseNICEPayResponse> {
                 .timestamp(DATA.TIMESTAMP)
                 .privateKey(DATA.PRIVATE_KEY)
                 .build();
+
+        timestamp = TestingConstants.V2_TIMESTAMP;
+        amount = "1000";
+        reffNo = "0rdNo"+timestamp;
     }
 
     public Object getToken() throws IOException {
@@ -73,15 +81,19 @@ class CancelTest<T extends BaseNICEPayResponse> {
     // V2 CANCEL VA
     @Test
     void CancelVAV2() throws IOException, InterruptedException {
+
+        String txId = "NORMALTEST02201607191659564995";
+
         Cancel requestCancel = Cancel.builder()
-                .timeStamp(TestingConstants.V2_TIMESTAMP)
-                .tXid("NORMALTEST02202408230923505139")
-                .iMid("NORMALTEST")
-                .merchantKey(TestingConstants.MERCHANT_KEY)
+                .timeStamp(timestamp)
+                .tXid(txId)
+                .iMid(TestingConstants.I_MID_NORMALCLOSED)
+                .referenceNo(reffNo)
+                .merchantToken(timestamp, TestingConstants.I_MID_NORMALCLOSED, txId, amount, TestingConstants.MERCHANT_KEY )
                 .payMethod("02")
                 .cancelType("1")
-                .amt("100")
-                .buildV2();
+                .amt(amount)
+                .build();
 
         NICEPayResponseV2 result = V2CancelService.callV2CancelTransaction(requestCancel, config);
 
@@ -171,22 +183,25 @@ class CancelTest<T extends BaseNICEPayResponse> {
 
     @Test
     void cancelPartialCardV2() throws IOException, InterruptedException {
+
+        String txId = "TESTMPGS0401202308171238501496";
+
         Cancel requestCancel = Cancel.builder()
                 .timeStamp(TestingConstants.V2_TIMESTAMP)
-                .tXid("TESTMPGS0401202308171238501496")
-                .referenceNo("0rdNo"+TestingConstants.V2_TIMESTAMP) // different reffNo with registered transaction
-                .iMid("TESTMPGS04")
-                .merchantKey(TestingConstants.MERCHANT_KEY)
+                .tXid(txId)
+                .referenceNo(reffNo) // different reffNo with registered transaction
+                .iMid(TestingConstants.I_MID_INSTLMNT)
+                .merchantToken(timestamp, TestingConstants.I_MID_INSTLMNT, txId, amount, TestingConstants.MERCHANT_KEY)
                 .payMethod("01")
                 .cancelType("2")
-                .amt("100")
+                .amt(amount)
                 .cancelMsg("Cancellation Of Transaction Credit Card")
                 .cancelUserIp("127.0.0.1")
                 .cancelServerIp("127.0.0.1")
                 .cancelUserInfo("")
                 .cancelRetryCnt("")
                 .worker("")
-                .buildV2();
+                .build();
 
 
         NICEPayResponseV2 result = V2CancelService.callV2CancelTransaction(requestCancel, config);
@@ -197,23 +212,25 @@ class CancelTest<T extends BaseNICEPayResponse> {
 
     @Test
     void cancelFullCardV2() throws IOException, InterruptedException {
+
+        String txId = "TESTMPGS0401202409111455005507";
+
         Cancel requestCancel = Cancel.builder()
-                .timeStamp(TestingConstants.V2_TIMESTAMP)
-                .tXid("TESTMPGS0401202202170931495193")
-                .referenceNo("0rdNo"+TestingConstants.V2_TIMESTAMP) // different reffNo with registered transaction
-                .iMid("TESTMPGS04")
-                .merchantKey(TestingConstants.MERCHANT_KEY)
+                .timeStamp(timestamp)
+                .tXid(txId)
+                .referenceNo(reffNo) // different reffNo with registered transaction
+                .merchantToken(timestamp, TestingConstants.I_MID_INSTLMNT,  txId, amount, TestingConstants.MERCHANT_KEY)
+                .iMid(TestingConstants.I_MID_INSTLMNT)
                 .payMethod("01")
                 .cancelType("1")
-                .amt("5000")
+                .amt(amount)
                 .cancelMsg("Cancellation Of Transaction Credit Card")
                 .cancelUserIp("127.0.0.1")
                 .cancelServerIp("127.0.0.1")
                 .cancelUserInfo("")
                 .cancelRetryCnt("")
                 .worker("")
-                .buildV2();
-
+                .build();
 
         NICEPayResponseV2 result = V2CancelService.callV2CancelTransaction(requestCancel, config);
 

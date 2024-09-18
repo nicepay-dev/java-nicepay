@@ -24,6 +24,9 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
     private static TestingConstants DATA ;
     private static NICEPay config2;
     private static NICEPay config3;
+    private static String timestamp;
+    private static String amount;
+
     @BeforeAll
     public  static void setUp() {
         config =NICEPay.builder()
@@ -59,6 +62,10 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
                 .timestamp(DATA.TIMESTAMP)
                 .privateKey(DATA.PRIVATE_KEY)
                 .build();
+
+        timestamp = TestingConstants.TIMESTAMP;
+        amount = "1000";
+
     }
 
     private int retrycount = 0;
@@ -96,16 +103,16 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
     @Test
     void InquiryStatusVAV2() throws IOException, InterruptedException {
 
-        InquiryStatus requestData = InquiryStatus.builder()
-                .timeStamp(TestingConstants.V2_TIMESTAMP)
-                .tXid("IONPAYTEST02202409101619427123")
-                .iMid(TestingConstants.I_MID)
-                .merchantKey(TestingConstants.MERCHANT_KEY)
-                .referenceNo("NICEPAYVA111213")
-                .amt("100")
-                .buildV2();
+        String reffNo = "OrdNo20166153345260";
 
-        requestData.setAdditionalInfo(null);
+        InquiryStatus requestData = InquiryStatus.builder()
+                .timeStamp(timestamp)
+                .tXid("IONPAYTEST02201607261333495161")
+                .iMid(TestingConstants.I_MID)
+                .merchantToken(timestamp, TestingConstants.I_MID, reffNo, amount, TestingConstants.MERCHANT_KEY)
+                .referenceNo(reffNo)
+                .amt(amount)
+                .build();
 
         NICEPayResponseV2 result = V2InquiryStatusService.callV2InquiryStatus(requestData, config);
 
@@ -184,17 +191,21 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
     @Test
     void InquiryStatusCardV2() throws IOException, InterruptedException {
 
+        String timestamp = TestingConstants.V2_TIMESTAMP;
+        String imid = TestingConstants.I_MID_PAC;
+        String merchantKey = TestingConstants.MERCHANT_KEY;
+        String reffNo = "ordNo20240904130813";
+        String amount = "1000";
+
+
         InquiryStatus requestData = InquiryStatus.builder()
-                .timeStamp(TestingConstants.V2_TIMESTAMP)
+                .timeStamp(timestamp)
                 .tXid("TESTMPGS0501202409041308179030")
-                .merchantKey(TestingConstants.MERCHANT_KEY)
-                .iMid(TestingConstants.I_MID_PAC)
-                .referenceNo("ordNo20240904130813")
+                .iMid(imid)
+                .referenceNo(reffNo)
+                .merchantToken(timestamp, imid , reffNo , amount , merchantKey)
                 .amt("1000")
-                .buildV2();
-
-        requestData.setAdditionalInfo(null);
-
+                .build();
 
         NICEPayResponseV2 result = V2InquiryStatusService.callV2InquiryStatus(requestData, config);
 

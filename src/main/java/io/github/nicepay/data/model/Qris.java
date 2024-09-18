@@ -7,30 +7,17 @@ import lombok.Setter;
 import java.util.HashMap;
 import java.util.Map;
 
+@Getter
+@Setter
 @Builder
 public class Qris {
-    @Getter
-    @Setter
+    
+    
     private String partnerReferenceNo;
-
-    @Getter
-    @Setter
     private String merchantId;
-
-    @Getter
-    @Setter
     private String storeId;
-
-    @Getter
-    @Setter
     private String validityPeriod;
-
-    @Getter
-    @Setter
     private Map<String, Object> amount;
-
-    @Getter
-    @Setter
     private Map<String, Object> additionalInfo;
 
     public static class QrisBuilder {

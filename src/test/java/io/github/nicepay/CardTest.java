@@ -22,6 +22,9 @@ class CardTest {
 
     private static String amount;
     private static String iMid;
+    private static String timeStamp;
+    private static String merchantKey;
+    private static String reffNo;
 
     @BeforeAll
     public  static void setUp() {
@@ -32,23 +35,25 @@ class CardTest {
 //        Set up default data
         amount = "1000";
         iMid = TestingConstants.I_MID_PAC;
+        timeStamp = TestingConstants.V2_TIMESTAMP;
+        merchantKey = TestingConstants.MERCHANT_KEY;
+        reffNo = "ordNo"+timeStamp;
+
     }
 
     @Test
     void cardRegistrationRequestTest() throws IOException
     {
 
-        String timeStamp = TestingConstants.V2_TIMESTAMP;
-
+        String reffNo = "ordNo"+timeStamp;
 
         Card requestData = Card.builder()
-                .timeStamp(TestingConstants.V2_TIMESTAMP)
+                .timeStamp(timeStamp)
                 .iMid(iMid)
-                .merchantKey(TestingConstants.MERCHANT_KEY)
                 .payMethod("01")
                 .currency("IDR")
                 .amt(amount)
-                .referenceNo("ordNo"+timeStamp)
+                .referenceNo(reffNo)
                 .goodsNm("Goods")
                 .billingNm("NICEPAY Testing")
                 .billingPhone("081363681274")
@@ -65,6 +70,7 @@ class CardTest {
                 .instmntType("1")
                 .instmntMon("1")
                 .recurrOpt("")
+                .merchantToken(timeStamp, iMid, reffNo, amount, merchantKey )
                 .build();
 
         NICEPayResponseV2 cardRegistResponse = V2CardService.callV2CardRegistration(requestData,config);
@@ -90,7 +96,7 @@ class CardTest {
                 .iMid(iMid)
                 .referenceNo(cardRegistResponse.getReferenceNo())
                 .amt(cardRegistResponse.getAmt())
-                .merchantKey(TestingConstants.MERCHANT_KEY)
+                .merchantToken(timeStamp, iMid, reffNo, amount, merchantKey )
                 .cardNo("5123450000000008")
                 .cardExpYymm("2908")
                 .cardCvv("100")
@@ -114,7 +120,7 @@ class CardTest {
 
 
     private NICEPayResponseV2 generateCardTransaction() throws IOException {
-        String timeStamp = TestingConstants.V2_TIMESTAMP;
+        String reffNo = "ordNo"+timeStamp;
 
         Card requestData = Card.builder()
                 .timeStamp(timeStamp)
@@ -122,8 +128,7 @@ class CardTest {
                 .payMethod("01")
                 .currency("IDR")
                 .amt(amount)
-                .referenceNo("ordNo"+timeStamp)
-                .merchantKey(TestingConstants.MERCHANT_KEY)
+                .referenceNo(reffNo)
                 .goodsNm("Goods")
                 .billingNm("NICEPAY Testing")
                 .billingPhone("081363681274")
@@ -140,6 +145,7 @@ class CardTest {
                 .instmntType("1")
                 .instmntMon("1")
                 .recurrOpt("")
+                .merchantToken(timeStamp, iMid, reffNo, amount, merchantKey )
                 .build();
 
         return V2CardService.callV2CardRegistration(requestData,config);

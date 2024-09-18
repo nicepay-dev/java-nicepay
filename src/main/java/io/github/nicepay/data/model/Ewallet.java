@@ -9,43 +9,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Getter
+@Setter
 @Builder
 public class Ewallet {
 
-    @Getter
-    @Setter
     private String partnerReferenceNo;
-
-    @Getter
-    @Setter
     private String merchantId;
-
-    @Getter
-    @Setter
     private String subMerchantId;
-
-    @Getter
-    @Setter
     private String externalStoreId;
-
-    @Getter
-    @Setter
     private String validUpTo;
-
-    @Getter
-    @Setter
     private String pointOfInitiation;
-
-    @Getter
-    @Setter
     private Map<String, Object> amount;
-
-    @Getter
-    @Setter
     private Map<String, Object> additionalInfo;
-
-    @Getter
-    @Setter
     private List<Map<String, String>> urlParam ;
 
 

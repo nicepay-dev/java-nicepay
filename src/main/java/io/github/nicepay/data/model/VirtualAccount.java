@@ -1,12 +1,12 @@
 package io.github.nicepay.data.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Getter
+@Setter
 @Builder
 @Data
 @AllArgsConstructor
@@ -47,6 +47,11 @@ public class VirtualAccount {
 
     public static class VirtualAccountBuilder {
         private Map<String, Object> totalAmount;
+
+        public VirtualAccountBuilder merchantToken(String timeStamp, String imid, String reffNo, String amount, String merchantKey) {
+            this.merchantToken = timeStamp + imid + reffNo + amount + merchantKey;
+            return this;
+        }
 
         public VirtualAccountBuilder totalAmount(String value, String currency) {
             Map<String, Object> amountMap = new HashMap<>();

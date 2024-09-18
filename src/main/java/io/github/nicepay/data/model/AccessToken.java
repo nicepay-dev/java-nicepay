@@ -7,14 +7,12 @@ import lombok.Setter;
 
 import java.util.Map;
 
+@Getter
+@Setter
 @Builder
 public class AccessToken {
-    @Getter
-    @Setter
-    private String grantType;
 
-    @Getter
-    @Setter
+    private String grantType;
     private Map<String, String> additionalInfo ;
 
     public AccessToken(String grantType, Map<String, String> additionalInfo) {

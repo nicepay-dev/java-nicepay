@@ -22,12 +22,12 @@ public interface PostPayoutRequest {
     @POST("nicepay/api/v1.0/transfer/inquiry")
     Call<NICEPayResponse>checkStatusPayout(@Body InquiryStatus request);
 
-    @POST("nicepay/v1.0/api/transfer/cancel")
+    @POST("nicepay/api/v1.0/transfer/cancel")
     Call<NICEPayResponse>cancelPayout(@Body Cancel request);
 
-    @POST("nicepay/api/v1.0/transfer/balance-inquiry")
+    @POST("nicepay/api/v1.0/balance-inquiry")
     Call<NICEPayResponse>checkBalancePayout(@Body Payout request);
 
-    @POST("nicepay/v1.0/api/transfer/reject")
+    @POST("nicepay/api/v1.0/transfer/reject")
     Call<NICEPayResponse>rejectPayout(@Body Cancel request);
 }

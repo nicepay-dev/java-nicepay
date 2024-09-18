@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.Random;
 
 public final class TestingConstants {
+    public static final String I_MID_NORMALCLOSED = "NORMALTEST";
+
     private TestingConstants() {}
 
     static SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
@@ -22,7 +24,7 @@ public final class TestingConstants {
 //    public static final String MERCHANT_KEY = "33F49GnCMS1mFYlGXisbUDzVf2ATWCl9k3R++d5hDd3Frmuos/XLx8XhXpe+LDYAbpGKZYSwtlyyLOtS/8aD7A==";
     public static final String MERCHANT_KEY = "33F49GnCMS1mFYlGXisbUDzVf2ATWCl9k3R++d5hDd3Frmuos/XLx8XhXpe+LDYAbpGKZYSwtlyyLOtS/8aD7A==";
 
-    public static final String I_MID_INSTLMNT = "TESTMPGS01";
+    public static final String I_MID_INSTLMNT = "TESTMPGS04";
     public static final String I_MID_RECURRING = "TESTMPGS03";
     public static final String I_MID_PAC = "TESTMPGS05";
 }

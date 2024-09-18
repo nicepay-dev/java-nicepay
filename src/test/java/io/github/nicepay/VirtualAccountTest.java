@@ -82,9 +82,12 @@ class VirtualAccountTest {
     @Test
     void vaCreateV2() throws IOException
     {
+        String timeStamp = TestingConstants.V2_TIMESTAMP;
+
         VirtualAccount request = VirtualAccount.builder()
-                .timeStamp(TestingConstants.V2_TIMESTAMP)
+                .timeStamp(timeStamp)
                 .iMid(TestingConstants.I_MID)
+                .merchantToken(timeStamp, TestingConstants.I_MID, "NICEPAYVA111213", "100", TestingConstants.MERCHANT_KEY )
                 .payMethod("02")
                 .currency("IDR")
                 .bankCd("BMRI")
@@ -105,11 +108,6 @@ class VirtualAccountTest {
                 .dbProcessUrl("https://webhook.site/912cbdd8-eb28-4e98-be6a-181b806b8110")
                 .build();
 
-        String merchantToken = SHA256Util.encrypt(
-                        request.getTimeStamp() + request.getIMid() + request.getReferenceNo()+ request.getAmt()+
-                                TestingConstants.MERCHANT_KEY);
-
-        request.setMerchantToken(merchantToken);
 
         NICEPayResponseV2 response = V2VaService.callV2GenerateVA(request, config);
         print.logInfoV2("TXID : " + response.getTXid());
