@@ -45,9 +45,13 @@ import io.github.nicepay.model.VirtualAccount;
 import io.github.response.nicepay.data.response.v2.NICEPayResponseV2;
 import io.github.nicepay.service.v2.V2VaService;
 
+
+String timestamp = "20240919101010";
+
 VirtualAccount request = VirtualAccount.builder()
-        .timeStamp("20240906111111")
+        .timeStamp(timestamp)
         .iMid("IONPAYTEST")
+        .merchantToken(timestamp, TestingConstants.I_MID, "NICEPAYVA111213", "100", TestingConstants.MERCHANT_KEY )
         .payMethod("02")
         .currency("IDR")
         .bankCd("BMRI")
@@ -67,12 +71,6 @@ VirtualAccount request = VirtualAccount.builder()
         .merFixAcctId("")
         .dbProcessUrl("https://webhook.site/912cbdd8-eb28-4e98-be6a-181b806b8110")
         .build();
-
-String merchantToken = SHA256Util.encrypt(
-        request.getTimeStamp() + request.getIMid() + request.getReferenceNo()+ request.getAmt()+
-                TestingConstants.MERCHANT_KEY);
-
-        request.setMerchantToken(merchantToken);
 
 NICEPayResponseV2 response = V2VaService.callV2GenerateVA(request, config);
 ```
@@ -112,6 +110,7 @@ Card requestData = Card.builder()
         .timeStamp("20240906004727") // format yyyyMMddHHmmss
         .iMid("TESTMPGS05")
         .payMethod("01")
+        .merchantToken("20240906004727", "TESTMPGS05", "ordNo20240906004727", "1000", TestingConstants.MERCHANT_KEY )
         .currency("IDR")
         .amt("1000")
         .referenceNo("ordNo20240906004727")
@@ -133,13 +132,6 @@ Card requestData = Card.builder()
         .recurrOpt("")
         .build();
 
-String merchantToken = SHA256Util.encrypt(
-        requestData.getTimeStamp() + iMid + requestData.getReferenceNo() + amount +
-                TestingConstants.MERCHANT_KEY);
-
-        requestData.
-
-setMerchantToken(merchantToken);
 
 NICEPayCardResponseV2 cardRegistResponse = V2CardService.callV2CardRegistration(requestData, config);
 ```
@@ -171,6 +163,7 @@ Card requestData = Card.builder()
         .timeStamp("20240906004912")
         .tXid("TESTMPGS0501202409060047287070")
         .referenceNo("ordNo20240906004727")
+        .merchantToken("20240906004912", "TESTMPGS05", "ordNo20240906004727", "1000", TestingConstants.MERCHANT_KEY )
         .cardNo("5123450000000008")
         .cardExpYymm("2908")
         .cardCvv("100")
@@ -180,15 +173,6 @@ Card requestData = Card.builder()
         .preauthToken("")
         .build();
 
-//        GENERATE MERCHANT TOKEN USING SHA256 ENCRYPTION
-String merchantToken = SHA256Util.encrypt(
-        timeStamp + iMid + requestData.getReferenceNo() + cardRegistResponse.getAmt() +
-                TestingConstants.MERCHANT_KEY);
-
-//        SET MERCHANT TOKEN
-        requestData.
-
-setMerchantToken(merchantToken);
 
 //        CALL CARD PAYMENT REQUEST METHOD
 String responseHtml = V2CardService.callV2CardPaymentRequest(requestData, config);
@@ -265,18 +249,11 @@ InquiryStatus requestData = InquiryStatus.builder()
                 .timeStamp("20240906015226")
                 .tXid("TESTMPGS0501202409041308179030")
                 .iMid("TESTMPGS05")
+                .merchantToken("20240906015226", "TESTMPGS05" , "ordNo20240904130813" , "1000" , TestingConstants.MERCHANT_KEY)
                 .referenceNo("ordNo20240904130813")
                 .amt("1000")
                 .build();
 
-        requestData.setAdditionalInfo(null);
-
-//        GENERATE MERCHANT TOKEN 
-        String merchantToken = SHA256Util.encrypt(
-                requestData.getTimeStamp() + requestData.getIMid() + requestData.getReferenceNo()+ requestData.getAmt()+
-                        TestingConstants.MERCHANT_KEY);
-
-        requestData.setMerchantToken(merchantToken);
 
 //        CALL V2 INQUIRY STATUS SERVICE
         NICEPayResponseV2 result = V2InquiryStatusService.callV2InquiryStatus(requestData, config);
