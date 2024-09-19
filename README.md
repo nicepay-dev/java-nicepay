@@ -32,6 +32,9 @@ import io.github.utils.nicepay.NICEPay;
 
 NICEPay nicePayConfig = NICEPay.builder()
         .isProduction(false)
+        .clientSecret("YOUR_CLIENT_SECRET")
+        .partnerId("YOUR_PARTNER_ID")
+        .privateKey("YOUR_PRIVATE_KEY")
         .externalID("EXTERNAL_ID -> Unique per request")
         .timestamp("TIMESTAMP -> Request timestamp")
         .build();
