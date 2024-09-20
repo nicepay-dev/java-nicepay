@@ -150,14 +150,9 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
 
         InquiryStatus requestData = InquiryStatus.builder()
                 .merchantId("IONPAYTEST")
-//                .subMerchantId("23489182303312")
                 .originalPartnerReferenceNo("2020102900000000000001")
                 .originalReferenceNo("IONPAYTEST07202404080947007680")
                 .beneficiaryAccountNo("5345000060")
-//                .serviceCode("54")
-//                .transactionDate("2022-04-28T10:13:40+07:00")
-//                .externalStoreId("239840198240795109")
-//                .amount("11000.00", "IDR")
                 .build();
 
         NICEPayResponse Result =

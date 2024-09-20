@@ -2,9 +2,13 @@ package io.github.nicepay.data.response.v2;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
 @Builder
+@Getter
+@Setter
 public class NICEPayResponseV2 extends BaseNICEPayResponseV2{
     //base
     private String tXid;

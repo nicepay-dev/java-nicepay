@@ -103,11 +103,12 @@ class PayoutTest {
                 .map(NICEPayResponse::getAccessToken)
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
+        NICEPayResponse responseRegist = registPayout(accessToken);
 
         Payout payout = Payout.builder()
                 .merchantId("IONPAYTEST")
-                .originalReferenceNo("IONPAYTEST07202404080947007680")
-                .originalPartnerReferenceNo("2020102900000000000001")
+                .originalReferenceNo(responseRegist.getOriginalReferenceNo())
+                .originalPartnerReferenceNo(responseRegist.getPartnerReferenceNo())
                 .build();
 
         NICEPayResponse response =
@@ -122,13 +123,39 @@ class PayoutTest {
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
         Payout payout = Payout.builder()
-                .merchantId("IONPAYTEST")
+                .accountNo("IONPAYTEST")
                 .additionalInfo("")
                 .build();
 
         NICEPayResponse response =
                 SnapPayoutService.callServicePayoutCheckBalance(payout,accessToken,config2);
 
+        System.out.println("Response mess :" + response.getResponseMessage() );
+    }
+
+    NICEPayResponse registPayout(String accessToken) throws IOException {
+
+        Payout payout = Payout.builder()
+                .merchantId("IONPAYTEST")
+                .beneficiaryAccountNo("5345000060")
+                .beneficiaryName("IONPAY NETWORKS")
+                .beneficiaryPhone("08123456789")
+                .beneficiaryCustomerResidence("1")
+                .beneficiaryCustomerType("1")
+                .beneficiaryPostalCode("123456")
+                .payoutMethod ("0")
+                .beneficiaryBankCode ("BDIN")
+                .amount("11000.00","IDR")
+                .partnerReferenceNo ("2020102900000000000001")
+                .description ("This is test Request")
+                .deliveryName("Ciki")
+                .deliveryId("1234567890234512")
+                .reservedDt("20240921")
+                .reservedTm("125222")
+                .additionalInfo("")
+                .build();
+
+        return SnapPayoutService.callServicePayoutRegist(payout,accessToken,config);
     }
 
 }

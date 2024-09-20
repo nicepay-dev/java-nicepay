@@ -18,7 +18,7 @@ Add our library as a dependency on your pom.xml
 		<dependency>
 			<groupId>io.github.nicepay-dev</groupId>
 			<artifactId>nicepay-java-client</artifactId>
-			<version>1.0.3</version>
+			<version>1.0.4</version>
 		</dependency>
 ```
 

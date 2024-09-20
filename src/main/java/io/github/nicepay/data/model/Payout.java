@@ -40,6 +40,7 @@ public class Payout {
     private String originalPartnerReferenceNo;
     private String originalReferenceNo;
     private Map<String, Object> additionalInfo;
+    private String accountNo;
 
     public static class PayoutBuilder {
         private Map<String, Object> amount;
@@ -61,7 +62,7 @@ public class Payout {
         }
     }
 
-    public Payout(String merchantId, String msId, String beneficiaryAccountNo, String beneficiaryName, String beneficiaryPhone, String beneficiaryCustomerResidence, String beneficiaryCustomerType, String beneficiaryPostalCode, String payoutMethod, String beneficiaryBankCode, Map<String, Object> amount, String partnerReferenceNo, String reservedDt, String reservedTm, String description, String deliveryName, String deliveryId, String beneficiaryPOE, String beneficiaryDOE, String beneficiaryCoNo, String beneficiaryAddress, String beneficiaryAuthPhoneNumber, String beneficiaryMerCategory, String beneficiaryCoMgmtName, String beneficiaryCoShName, String originalPartnerReferenceNo, String originalReferenceNo, Map<String, Object> additionalInfoMap) {
+    public Payout(String merchantId, String msId, String beneficiaryAccountNo, String beneficiaryName, String beneficiaryPhone, String beneficiaryCustomerResidence, String beneficiaryCustomerType, String beneficiaryPostalCode, String payoutMethod, String beneficiaryBankCode, Map<String, Object> amount, String partnerReferenceNo, String reservedDt, String reservedTm, String description, String deliveryName, String deliveryId, String beneficiaryPOE, String beneficiaryDOE, String beneficiaryCoNo, String beneficiaryAddress, String beneficiaryAuthPhoneNumber, String beneficiaryMerCategory, String beneficiaryCoMgmtName, String beneficiaryCoShName, String originalPartnerReferenceNo, String originalReferenceNo, Map<String, Object> additionalInfo, String accountNo) {
         this.merchantId = merchantId;
         this.msId = msId;
         this.beneficiaryAccountNo = beneficiaryAccountNo;
@@ -89,6 +90,7 @@ public class Payout {
         this.beneficiaryCoShName = beneficiaryCoShName;
         this.originalPartnerReferenceNo = originalPartnerReferenceNo;
         this.originalReferenceNo = originalReferenceNo;
-        this.additionalInfo = additionalInfoMap;
+        this.additionalInfo = additionalInfo;
+        this.accountNo = accountNo;
     }
 }

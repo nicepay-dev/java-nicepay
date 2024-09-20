@@ -34,6 +34,7 @@ public class SnapTokenService {
         }
         if (nicePayResponse == null){
             resClient = errorResponse.string() ;
+            nicePayResponse = new Gson().fromJson(resClient.toString(), NICEPayResponse.class);
         }else{
             resClient = (NICEPayResponse)nicePayResponse;
         }

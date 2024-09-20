@@ -37,6 +37,7 @@ public class SnapQrisService {
 
             if (nicePayResponse == null){
                 resClient = errorResponse.string();
+                nicePayResponse = gson.fromJson(resClient.toString(), NICEPayResponse.class);
             }else{
                 resClient = gson.toJson(nicePayResponse);
             }

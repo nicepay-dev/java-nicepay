@@ -130,8 +130,8 @@ class CancelTest<T extends BaseNICEPayResponse> {
 
         Cancel requestData = Cancel.builder()
                 .merchantId("IONPAYTEST")
-                .originalPartnerReferenceNo("ref202305081205331683522921")
-                .originalReferenceNo("IONPAYTEST05202308031752031674")
+                .originalPartnerReferenceNo("2020102900000000000001")
+                .originalReferenceNo("IONPAYTEST07202409201237043080")
                 .build();
 
         NICEPayResponse Result =
@@ -147,9 +147,11 @@ class CancelTest<T extends BaseNICEPayResponse> {
 
         Cancel requestData = Cancel.builder()
                 .merchantId("IONPAYTEST")
-                .originalPartnerReferenceNo("ref202305081205331683522921")
-                .originalReferenceNo("IONPAYTEST05202308031752031674")
+                .originalPartnerReferenceNo("2020102900000000000001")
+                .originalReferenceNo("IONPAYTEST07202409201254073989")
                 .build();
+
+        requestData.setAdditionalInfo(null);
 
         NICEPayResponse Result =
                 SnapCancelService.callServicePayoutCancel(requestData,accessToken,config);

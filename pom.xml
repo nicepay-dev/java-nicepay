@@ -6,7 +6,7 @@
 
 	<groupId>io.github.nicepay-dev</groupId>
 	<artifactId>nicepay-java-client</artifactId>
-	<version>1.0.3</version> <!-- Add API V2 for Paymethod CC  -->
+	<version>1.0.4</version> <!-- Adjust Snap Error response and Payout param and response  -->
 
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>Nicepay Official Java Library</description>

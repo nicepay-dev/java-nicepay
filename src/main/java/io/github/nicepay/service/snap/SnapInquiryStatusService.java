@@ -43,6 +43,8 @@ public class SnapInquiryStatusService {
 
             if (nicePayResponse == null){
                 resClient = errorResponse.string();
+                nicePayResponse = gson.fromJson(resClient.toString(), NICEPayResponse.class);
+
             }else{
                 resClient = gson.toJson(nicePayResponse);
             }
@@ -80,6 +82,7 @@ public class SnapInquiryStatusService {
 
             if (nicePayResponse == null){
                 resClient = errorResponse.string();
+                nicePayResponse = gson.fromJson(resClient.toString(), NICEPayResponse.class);
             }else {
                 resClient = gson.toJson(nicePayResponse);
             }
@@ -109,6 +112,7 @@ public class SnapInquiryStatusService {
 
             if (nicePayResponse == null){
                 resClient = errorResponse.string();
+                nicePayResponse = gson.fromJson(resClient.toString(), NICEPayResponse.class);
             }else {
                 resClient = gson.toJson(nicePayResponse);
             }
@@ -138,6 +142,8 @@ public class SnapInquiryStatusService {
 
             if (nicePayResponse == null){
                 resClient = errorResponse.string();
+                nicePayResponse = gson.fromJson(resClient.toString(), NICEPayResponse.class);
+
             }else {
                 resClient = gson.toJson(nicePayResponse);
             }

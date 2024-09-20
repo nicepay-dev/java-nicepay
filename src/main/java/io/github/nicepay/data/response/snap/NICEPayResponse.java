@@ -1,161 +1,84 @@
 package io.github.nicepay.data.response.snap;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+
+@Getter
+@Setter
 public class NICEPayResponse extends BaseNICEPayResponse {
 
-    @Getter
-    @Setter
+
     private String accessToken;
-    @Getter
-    @Setter
     private String expiresIn;
-    @Getter
-    @Setter
     private String tokenType;
-    @Getter
-    @Setter
     private Map<String, Object> virtualAccountData;
-    @Getter
-    @Setter
     private Map<String, String> additionalInfo;
-    @Getter
-    @Setter
     private Map<String, String> totalAmount;
 
     //Virtual Account
-    @Getter
-    @Setter
     private String partnerServiceId;
-
-    @Getter
-    @Setter
     private String customerNo;
-
-    @Getter
-    @Setter
     private String inquiryRequestId;
-
-    @Getter
-    @Setter
     private String virtualAccountNo;
-
-    @Getter
-    @Setter
     private String virtualAccountName;
-
-    @Getter
-    @Setter
     private String trxId;
-
-    @Getter
-    @Setter
     private String transactionStatusDesc;
-
-    @Getter
-    @Setter
     private String latestTransactionStatus;
-
-    @Getter
-    @Setter
     private String bankCd;
-
-    @Getter
-    @Setter
     private String tXidVA;
-
-    @Getter
-    @Setter
     private String goodsNm;
-
-    @Getter
-    @Setter
     private String vacctValidTm;
-
-    @Getter
-    @Setter
     private String vacctValidDt;
 
-
     //Ewallet
-    @Getter
-    @Setter
     private Map<String, String> amount;
-
-    @Getter
-    @Setter
     private Map<String, Object> ewalletData;
-
-    @Getter
-    @Setter
     private String partnerReferenceNo;
-
-    @Getter
-    @Setter
     private String originalReferenceNo;
-
-    @Getter
-    @Setter
     private String refundNo;
-
-    @Getter
-    @Setter
     private String Value;
-
-    @Getter
-    @Setter
     private String refundType;
-
-    @Getter
-    @Setter
     private String refundTime;
-
-    @Getter
-    @Setter
     private String Currency;
-
-    @Getter
-    @Setter
     private String partnerRefundNo;
-
-    @Getter
-    @Setter
     private String webRedirectUrl;
-
-    @Getter
-    @Setter
     private String originalPartnerReferenceNo;
-
-    @Getter
-    @Setter
     private String appRedirectUrl;
-
-    @Getter
-    @Setter
     private Map<String, Object> refundAmount;
-
-    @Getter
-    @Setter
     private Map<String, Object> transAmount;
 
 //    QRIS
-    @Getter
-    @Setter
+
     private String qrContent;
-
-    @Getter
-    @Setter
     private String qrUrl;
-
-    @Getter
-    @Setter
     private String referenceNo;
 
-    public NICEPayResponse(String responseCode, String responseMessage, String accessToken,String tokenType,String expiresIn) {
+//    PAYOUT
+    private String accountNo;
+    private String beneficiaryaccountNo;
+    private String beneficiaryBankCode;
+    private String beneficiaryName;
+    private String payoutMethod;
+    private String beneficiaryAccountNo;
+    private String transactionStatus;
+    private ArrayList<ObjectAccountInfo> accountInfos;
+    private String beneficiaryCustomerResidence;
+    private String beneficiaryCustomerType;
+
+
+    public NICEPayResponse(String responseCode, String responseMessage, String accessToken, String tokenType, String expiresIn) {
         super(responseCode, responseMessage);
         this.accessToken = accessToken;
         this.tokenType = tokenType;
@@ -169,7 +92,7 @@ public class NICEPayResponse extends BaseNICEPayResponse {
 
     //virtual account
     public NICEPayResponse(String responseCode, String responseMessage, Map<String, Object> virtualAccountData, Map<String, Object> totalAmount, Map<String, String> additionalInfo
-    ,String virtualAccountNo,String virtualAccountName, String trxId,String transactionStatusDesc,String bankCd,String tXidVA,String goodsNm,String vacctValidTm,String vacctValidDt) {
+            , String virtualAccountNo, String virtualAccountName, String trxId, String transactionStatusDesc, String bankCd, String tXidVA, String goodsNm, String vacctValidTm, String vacctValidDt) {
         super(responseCode, responseMessage);
         this.virtualAccountData = virtualAccountData;
         this.virtualAccountData = totalAmount;
@@ -189,9 +112,9 @@ public class NICEPayResponse extends BaseNICEPayResponse {
 
 
     //Ewallet
-    public NICEPayResponse (String responseCode, String responseMessage, String partnerReferenceNo, String originalReferenceNo,String webRedirectUrl,String originalPartnerReferenceNo
-            ,String refundNo,String partnerRefundNo,String Value,String Currency,String refundTime, String refundType,Map<String, Object> refundAmount,String latestTransactionStatus
-            ,Map<String, Object> transAmount, String appRedirectUrl){
+    public NICEPayResponse(String responseCode, String responseMessage, String partnerReferenceNo, String originalReferenceNo, String webRedirectUrl, String originalPartnerReferenceNo
+            , String refundNo, String partnerRefundNo, String Value, String Currency, String refundTime, String refundType, Map<String, Object> refundAmount, String latestTransactionStatus
+            , Map<String, Object> transAmount, String appRedirectUrl) {
         super(responseCode, responseMessage);
         this.partnerReferenceNo = partnerReferenceNo;
         this.originalReferenceNo = originalReferenceNo;
@@ -208,6 +131,22 @@ public class NICEPayResponse extends BaseNICEPayResponse {
         this.transAmount = transAmount;
         this.appRedirectUrl = appRedirectUrl;
 
+    }
+
+//    Payout
+
+    public NICEPayResponse(String responseCode, String responseMessage, String accountNo, String beneficiaryaccountNo, String beneficiaryBankCode, String beneficiaryName, String payoutMethod, String beneficiaryAccountNo, String transactionStatus, ArrayList<ObjectAccountInfo> accountInfos, String beneficiaryCustomerResidence, String beneficiaryCustomerType) {
+        super(responseCode, responseMessage);
+        this.accountNo = accountNo;
+        this.beneficiaryaccountNo = beneficiaryaccountNo;
+        this.beneficiaryBankCode = beneficiaryBankCode;
+        this.beneficiaryName = beneficiaryName;
+        this.payoutMethod = payoutMethod;
+        this.beneficiaryAccountNo = beneficiaryAccountNo;
+        this.transactionStatus = transactionStatus;
+        this.accountInfos = accountInfos;
+        this.beneficiaryCustomerResidence = beneficiaryCustomerResidence;
+        this.beneficiaryCustomerType = beneficiaryCustomerType;
     }
 
 

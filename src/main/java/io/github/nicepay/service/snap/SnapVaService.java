@@ -21,37 +21,37 @@ import java.io.IOException;
 public class SnapVaService {
     private static LoggerPrint print = new LoggerPrint();
     private static int retryCount = 0;
-    public static  <S> S callGeneratedVA(VirtualAccount data, String accessToken, NICEPay config) throws IOException {
+
+    public static <S> S callGeneratedVA(VirtualAccount data, String accessToken, NICEPay config) throws IOException {
         Gson gson = new Gson();
-        PostVaRequest request = ApiUtils.createService(PostVaRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data),config);
-        Call<NICEPayResponse> callSync =  request.createVa(data);
+        PostVaRequest request = ApiUtils.createService(PostVaRequest.class, AccessToken.builder().build().getGrantType(), accessToken, gson.toJson(data), config);
+        Call<NICEPayResponse> callSync = request.createVa(data);
         Response<NICEPayResponse> response = null;
         NICEPayResponse nicePayResponse = null;
         ResponseBody errorResponse = null;
-        Object resClient = null ;
+        Object resClient = null;
         JsonObject jsonObject = null;
         try {
             response = callSync.execute();
             nicePayResponse = response.body();
             errorResponse = response.errorBody();
 
-            if (nicePayResponse == null){
-            resClient = errorResponse.string();
-        }else{
-            resClient = gson.toJson(nicePayResponse);
-        }
+            if (nicePayResponse == null) {
+                resClient = errorResponse.string();
+                nicePayResponse = gson.fromJson(resClient.toString(), NICEPayResponse.class);
+            } else {
+                resClient = gson.toJson(nicePayResponse);
+            }
 
 
             ObjectMapper mapper = new ObjectMapper();
-             jsonObject = JsonParser.parseString(resClient.toString()).getAsJsonObject();
-            print.logInfoResponse("Response getVA :" +new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject));
+            jsonObject = JsonParser.parseString(resClient.toString()).getAsJsonObject();
+            print.logInfoResponse("Response getVA :" + new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
         return (S) nicePayResponse;
     }
-
-
 
 
 }
