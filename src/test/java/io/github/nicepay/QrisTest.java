@@ -49,7 +49,7 @@ class QrisTest <T extends BaseNICEPayResponse> {
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
         Qris qris = Qris.builder()
-                .merchantId("IONPAYTEST")
+                .merchantId(TestingConstants.I_MID)
                 .storeId("NICEPAY")
                 .amount("11000.00","IDR")
                 .partnerReferenceNo ("2020102900000000000001")

@@ -73,7 +73,7 @@ class PayoutTest {
 
 
         Payout payout = Payout.builder()
-                .merchantId("IONPAYTEST")
+                .merchantId(TestingConstants.I_MID)
                 .beneficiaryAccountNo("5345000060")
                 .beneficiaryName("IONPAY NETWORKS")
                 .beneficiaryPhone("08123456789")
@@ -106,7 +106,7 @@ class PayoutTest {
         NICEPayResponse responseRegist = registPayout(accessToken);
 
         Payout payout = Payout.builder()
-                .merchantId("IONPAYTEST")
+                .merchantId(TestingConstants.I_MID)
                 .originalReferenceNo(responseRegist.getOriginalReferenceNo())
                 .originalPartnerReferenceNo(responseRegist.getPartnerReferenceNo())
                 .build();
@@ -123,7 +123,7 @@ class PayoutTest {
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
         Payout payout = Payout.builder()
-                .accountNo("IONPAYTEST")
+                .accountNo(TestingConstants.I_MID)
                 .additionalInfo("")
                 .build();
 
@@ -136,7 +136,7 @@ class PayoutTest {
     NICEPayResponse registPayout(String accessToken) throws IOException {
 
         Payout payout = Payout.builder()
-                .merchantId("IONPAYTEST")
+                .merchantId(TestingConstants.I_MID)
                 .beneficiaryAccountNo("5345000060")
                 .beneficiaryName("IONPAY NETWORKS")
                 .beneficiaryPhone("08123456789")

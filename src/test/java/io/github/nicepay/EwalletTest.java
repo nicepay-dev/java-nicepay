@@ -50,7 +50,7 @@ class EwalletTest {
 
                 Ewallet ewallet = Ewallet.builder()
                         .partnerReferenceNo("ref202305081205331683522921")
-                        .merchantId("IONPAYTEST")
+                        .merchantId(TestingConstants.I_MID)
                         .subMerchantId("")
                         .externalStoreId("")
                         .validUpTo("")

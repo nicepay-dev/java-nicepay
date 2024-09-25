@@ -126,7 +126,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
         InquiryStatus requestData = InquiryStatus.builder()
-                .merchantId("IONPAYTEST")
+                .merchantId(TestingConstants.I_MID)
                 .subMerchantId("23489182303312")
                 .originalPartnerReferenceNo("ref202305081205331683522921")
                 .originalReferenceNo("IONPAYTEST05202408221416277395")
@@ -149,7 +149,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
         InquiryStatus requestData = InquiryStatus.builder()
-                .merchantId("IONPAYTEST")
+                .merchantId(TestingConstants.I_MID)
                 .originalPartnerReferenceNo("2020102900000000000001")
                 .originalReferenceNo("IONPAYTEST07202404080947007680")
                 .beneficiaryAccountNo("5345000060")
@@ -168,7 +168,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
         InquiryStatus requestData = InquiryStatus.builder()
-                .merchantId("IONPAYTEST")
+                .merchantId(TestingConstants.I_MID)
                 .originalPartnerReferenceNo("2020102900000000000001")
                 .originalReferenceNo("IONPAYTEST08202404180954247527")
                 .externalStoreId("NICEPAY")
