@@ -106,7 +106,7 @@ class CancelTest<T extends BaseNICEPayResponse> {
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
         Cancel requestData = Cancel.builder()
-                .merchantId("IONPAYTEST")
+                .merchantId(TestingConstants.I_MID)
                 .subMerchantId("23489182303312")
                 .originalPartnerReferenceNo("ref202305081205331683522921")
                 .originalReferenceNo("IONPAYTEST05202308031752031674")
@@ -129,7 +129,7 @@ class CancelTest<T extends BaseNICEPayResponse> {
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
         Cancel requestData = Cancel.builder()
-                .merchantId("IONPAYTEST")
+                .merchantId(TestingConstants.I_MID)
                 .originalPartnerReferenceNo("2020102900000000000001")
                 .originalReferenceNo("IONPAYTEST07202409201237043080")
                 .build();
@@ -146,7 +146,7 @@ class CancelTest<T extends BaseNICEPayResponse> {
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
         Cancel requestData = Cancel.builder()
-                .merchantId("IONPAYTEST")
+                .merchantId(TestingConstants.I_MID)
                 .originalPartnerReferenceNo("2020102900000000000001")
                 .originalReferenceNo("IONPAYTEST07202409201254073989")
                 .build();
@@ -168,7 +168,7 @@ class CancelTest<T extends BaseNICEPayResponse> {
         additionalInfo.put("cancelType", "1");
 
         Cancel requestData = Cancel.builder()
-                .merchantId("IONPAYTEST")
+                .merchantId(TestingConstants.I_MID)
                 .originalPartnerReferenceNo("2020102900000000000001")
                 .originalReferenceNo("IONPAYTEST08202404180954247527")
                 .partnerRefundNo("2020102900000000000001")
