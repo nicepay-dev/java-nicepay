@@ -55,10 +55,26 @@ public class Card {
     private String recurringToken;
     private String preauthToken;
 
+//    V1
+    private String description;
+    private String deliveryNm;
+    private String deliveryPhone;
+    private String deliveryEmail;
+    private String deliveryAddr;
+    private String deliveryCity;
+    private String deliveryState;
+    private String deliveryPostCd;
+    private String deliveryCountry;
+
     public static class CardBuilder {
 
         public CardBuilder merchantToken(String timeStamp, String imid, String reffNo, String amount, String merchantKey) {
             this.merchantToken = timeStamp + imid + reffNo + amount + merchantKey;
+            return this;
+        }
+
+        public CardBuilder merchantTokenV1( String imid, String reffNo, String amount, String merchantKey) {
+            this.merchantToken = imid + reffNo + amount + merchantKey;
             return this;
         }
     }

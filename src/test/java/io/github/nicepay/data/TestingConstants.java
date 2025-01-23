@@ -27,4 +27,9 @@ public final class TestingConstants {
     public static final String I_MID_INSTLMNT = "";
     public static final String I_MID_RECURRING = "";
     public static final String I_MID_PAC = "";
+
+    public static final String I_MID_QRIS = "";
+    public static final String QRIS_CLIENT_SECRET = "";
+    public static final String QRIS_STORE_ID = "";
 }
+

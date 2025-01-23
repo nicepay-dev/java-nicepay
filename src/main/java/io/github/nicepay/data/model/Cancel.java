@@ -81,12 +81,7 @@ public class Cancel {
         }
 
         public CancelBuilder additionalInfo(Map<String, Object> additionalInfoMap) {
-            additionalInfoMap.put("totalAmount",additionalInfo);
-            additionalInfoMap.put("tXidVA",additionalInfo);
-            additionalInfoMap.put("cancelMessage",additionalInfo);
-            additionalInfoMap.put("refundType",additionalInfo);
-            additionalInfoMap.put("cancelType",additionalInfo);
-
+            additionalInfo.putAll(additionalInfoMap);
             return this;
         }
 

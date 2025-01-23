@@ -1,7 +1,11 @@
 package io.github.nicepay.data.response.snap;
 
 
-import io.github.nicepay.data.response.snap.nested.ObjectAccountInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -143,28 +147,4 @@ public class NICEPayResponse extends BaseNICEPayResponse {
         this.beneficiaryCustomerType = beneficiaryCustomerType;
     }
 
-
-//
-
-//
-//    @Override
-//    public String toString() {
-//       if(accessToken == null){
-//           return "{" +
-//                   "responseCode='" + responseCode + '\'' +
-//                   ", responseMessage='" + responseMessage + '\'' +
-//                   ", virtualAccountData=" + virtualAccountData +
-//                   ", additionalInfo=" + additionalInfo +
-//                   ", totalAmount=" + totalAmount +
-//                   '}';
-//       }else{
-//           return "{" +
-//                   "responseCode='" + responseCode + '\'' +
-//                   ", responseMessage='" + responseMessage + '\'' +
-//                   ", accessToken='" + accessToken + '\'' +
-//                   ", expiresIn='" + expiresIn + '\'' +
-//                   ", tokenType='" + tokenType + '\'' +
-//                   '}';
-//       }
-//    }
 }

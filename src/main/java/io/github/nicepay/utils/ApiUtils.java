@@ -1,5 +1,6 @@
 package io.github.nicepay.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.GsonBuilder;
 import okhttp3.*;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -10,6 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -17,10 +19,11 @@ public class ApiUtils {
 
     private static LoggerPrint print = new LoggerPrint();
 
+    private static ObjectMapper mapper = new ObjectMapper();
 
     private static Retrofit.Builder builder
             = new Retrofit.Builder()
-            .baseUrl(NICEPay.builder().getSnapApiURL())
+            .baseUrl(NICEPay.builder().getNICEPayBaseUrl())
             .addConverterFactory(GsonConverterFactory.create())
             ;
 
@@ -70,7 +73,7 @@ public class ApiUtils {
                     return response.newBuilder().body(responseBody).build();
                 });
                 builder.client(httpClient.build());
-                builder.baseUrl(NICEPay.builder().isProduction(config.isProduction()).getSnapApiURL());
+                builder.baseUrl(NICEPay.builder().isProduction(config.isProduction()).getNICEPayBaseUrl());
                 api = builder.build();
 
         return api.create(serviceClass);
@@ -192,14 +195,67 @@ public class ApiUtils {
             String bodyString = response.body().string();
             MediaType contentType = response.body().contentType();
             ResponseBody responseBody  = ResponseBody.create(bodyString, contentType);
-            print.logInfoBodyV2("Request Data " + new GsonBuilder().setPrettyPrinting().create().toJson(original.tag(Invocation.class).arguments().get(0)));
+            print.logInfoBodyV2("Request Data " + new GsonBuilder().setPrettyPrinting().create().toJson(Objects.requireNonNull(original.tag(Invocation.class)).arguments()));
 
             return response.newBuilder().body(responseBody).build();
         });
         builder.client(httpClient.build());
-        builder.baseUrl(NICEPay.builder().isProduction(config.isProduction()).getSnapApiURL());
+        builder.baseUrl(NICEPay.builder().isProduction(config.isProduction()).getNICEPayBaseUrl());
         api = builder.build();
 
         return api.create(serviceClass);
     }
+
+    //V2
+    public static <S> S createServiceV1(Class<S> serviceClass, NICEPay config) {
+        httpClient.interceptors().clear();
+        httpClient.addInterceptor(chain -> {
+            Request original = chain.request();
+            Request.Builder builder = null;
+            print.logInfoV1("generate "+"fullUrl :" +chain.request().url());
+
+            try {
+                builder = original.newBuilder();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            Response response = chain.proceed(builder.build());
+            String bodyString = response.body().string();
+            MediaType contentType = response.body().contentType();
+            ResponseBody responseBody  = ResponseBody.create(bodyString, contentType);
+            print.logInfoBodyV1("Request Data " + new GsonBuilder().setPrettyPrinting().create().toJson(original.tag(Invocation.class).arguments().get(0)));
+
+            return response.newBuilder().body(responseBody).build();
+        });
+
+        builder.client(httpClient.build());
+        builder.baseUrl(NICEPay.builder().isProduction(config.isProduction()).getNICEPayBaseUrl());
+        api = builder.build();
+
+        return api.create(serviceClass);
+    }
+
+    public static <T> T getApiMessageObject(String message, T object) throws Exception {
+        try {
+            // Determine where the JSON payload starts
+            int jsonStartIndex = message.indexOf("{");
+            if (jsonStartIndex == -1) {
+                throw new IllegalArgumentException("Invalid message format: JSON payload not found.");
+            }
+
+            int messageLen = Integer.parseInt(message.substring(0, jsonStartIndex));
+            if (messageLen <= 0) {
+                throw new IllegalArgumentException("Invalid message length.");
+            }
+
+            String jsonPayload = message.substring(jsonStartIndex);
+            Map<String, Object> parsedMap = mapper.readValue(jsonPayload, Map.class);
+
+            return mapper.convertValue(parsedMap, (Class<T>) object.getClass());
+        } catch (Exception e) {
+            throw new Exception("Failed to parse API message: " + e.getMessage(), e);
+        }
+    }
+
 }
