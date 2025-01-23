@@ -1,11 +1,8 @@
 package io.github.nicepay.data.response.snap;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import lombok.Builder;
+
+import io.github.nicepay.data.response.snap.nested.ObjectAccountInfo;
 import lombok.Getter;
 import lombok.Setter;
 
