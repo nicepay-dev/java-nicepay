@@ -37,7 +37,7 @@ public class NICEPay {
     }
 
     public static class NICEPayBuilder {
-        public String getSnapApiURL() {
+        public String getNICEPayBaseUrl() {
         if (isProduction) {
             return NICEPayConstants.getProductionBaseUrl();
         }else{

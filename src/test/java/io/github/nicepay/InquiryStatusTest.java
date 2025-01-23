@@ -1,13 +1,18 @@
 package io.github.nicepay;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.google.gson.Gson;
 import io.github.nicepay.data.TestingConstants;
 import io.github.nicepay.data.model.AccessToken;
 import io.github.nicepay.data.model.InquiryStatus;
 import io.github.nicepay.data.response.snap.BaseNICEPayResponse;
 import io.github.nicepay.data.response.snap.NICEPayResponse;
+import io.github.nicepay.data.response.v1.NICEPayResponseV1;
 import io.github.nicepay.data.response.v2.NICEPayResponseV2;
 import io.github.nicepay.service.snap.SnapInquiryStatusService;
 import io.github.nicepay.service.snap.SnapTokenService;
+import io.github.nicepay.service.v1.V1CardService;
 import io.github.nicepay.service.v2.V2InquiryStatusService;
 import io.github.nicepay.utils.NICEPay;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,6 +22,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static io.github.nicepay.data.TestingConstants.V2_TIMESTAMP;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class InquiryStatusTest<T extends BaseNICEPayResponse> {
@@ -106,10 +112,10 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
         String reffNo = "OrdNo20166153345260";
 
         InquiryStatus requestData = InquiryStatus.builder()
-                .timeStamp(timestamp)
+                .timeStamp(V2_TIMESTAMP)
                 .tXid("IONPAYTEST02201607261333495161")
                 .iMid(TestingConstants.I_MID)
-                .merchantToken(timestamp, TestingConstants.I_MID, reffNo, amount, TestingConstants.MERCHANT_KEY)
+                .merchantToken(V2_TIMESTAMP, TestingConstants.I_MID, reffNo, amount, TestingConstants.MERCHANT_KEY)
                 .referenceNo(reffNo)
                 .amt(amount)
                 .build();
@@ -186,7 +192,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
     @Test
     void InquiryStatusCardV2() throws IOException, InterruptedException {
 
-        String timestamp = TestingConstants.V2_TIMESTAMP;
+        String timestamp = V2_TIMESTAMP;
         String imid = TestingConstants.I_MID_PAC;
         String merchantKey = TestingConstants.MERCHANT_KEY;
         String reffNo = "ordNo20240904130813";
@@ -203,6 +209,32 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
                 .build();
 
         NICEPayResponseV2 result = V2InquiryStatusService.callV2InquiryStatus(requestData, config);
+
+//        RESPONSE CODE MUST BE 0000
+        assertEquals("0000", result.getResultCd());
+
+    }
+
+
+    @Test
+    void InquiryStatusCardV1() throws IOException, InterruptedException {
+
+        String timestamp = V2_TIMESTAMP;
+        String imid = TestingConstants.I_MID_PAC;
+        String merchantKey = TestingConstants.MERCHANT_KEY;
+        String reffNo = "ordNo20240904130813";
+        String amount = "1000";
+
+
+        InquiryStatus requestData = InquiryStatus.builder()
+                .tXid("TESTMPGS0501202409041308179030")
+                .iMid(imid)
+                .referenceNo(reffNo)
+                .merchantTokenV1(imid , reffNo , amount , merchantKey)
+                .amt("1000")
+                .build();
+
+        NICEPayResponseV1 result = V1CardService.callInquiryStatus(requestData, config);
 
 //        RESPONSE CODE MUST BE 0000
         assertEquals("0000", result.getResultCd());

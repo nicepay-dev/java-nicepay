@@ -61,6 +61,11 @@ public class InquiryStatus {
           return this;
         }
 
+        public InquiryStatusBuilder merchantTokenV1(String imid, String reffNo, String amount, String merchantKey) {
+            this.merchantToken = imid + reffNo + amount + merchantKey;
+            return this;
+        }
+
         public InquiryStatusBuilder totalAmount(String value, String currency) {
             Map<String, Object> totalAmountMap = new HashMap<>();
             totalAmountMap.put("value", value);

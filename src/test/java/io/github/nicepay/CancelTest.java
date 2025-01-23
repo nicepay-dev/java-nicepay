@@ -11,7 +11,6 @@ import io.github.nicepay.service.snap.SnapTokenService;
 import io.github.nicepay.service.v2.V2CancelService;
 import io.github.nicepay.utils.LoggerPrint;
 import io.github.nicepay.utils.NICEPay;
-import io.github.nicepay.utils.SHA256Util;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -20,12 +19,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static io.github.nicepay.data.TestingConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CancelTest<T extends BaseNICEPayResponse> {
 
     private static LoggerPrint print = new LoggerPrint() ;
     private static NICEPay config;
+    private static NICEPay configQR;
+
     private static TestingConstants DATA ;
 
     private static String timestamp;
@@ -36,11 +38,20 @@ class CancelTest<T extends BaseNICEPayResponse> {
     public  static void setUp() {
         config =NICEPay.builder()
                 .isProduction(false)
-                .clientSecret(DATA.CLIENT_SECRET)
-                .partnerId(DATA.PARTNER_ID)
+                .clientSecret(CLIENT_SECRET)
+                .partnerId(I_MID)
                 .externalID(DATA.EXTERNAL_ID)
                 .timestamp(DATA.TIMESTAMP)
-                .privateKey(DATA.PRIVATE_KEY)
+                .privateKey(PRIVATE_KEY)
+                .build();
+
+        configQR =NICEPay.builder()
+                .isProduction(false)
+                .clientSecret(QRIS_CLIENT_SECRET)
+                .partnerId(I_MID_QRIS)
+                .externalID(EXTERNAL_ID)
+                .timestamp(TIMESTAMP)
+                .privateKey(PRIVATE_KEY)
                 .build();
 
         timestamp = TestingConstants.V2_TIMESTAMP;
@@ -49,6 +60,16 @@ class CancelTest<T extends BaseNICEPayResponse> {
     }
 
     public Object getToken() throws IOException {
+        Map<String, String> additionalInfo = new HashMap<>();
+        AccessToken util =  AccessToken.builder()
+                .grantType("client_credentials")
+                .additionalInfo(additionalInfo)
+                .build();
+        return SnapTokenService.callGetAccessToken(util,config);
+
+    }
+
+    public Object getToken(NICEPay config) throws IOException {
         Map<String, String> additionalInfo = new HashMap<>();
         AccessToken util =  AccessToken.builder()
                 .grantType("client_credentials")
@@ -82,7 +103,7 @@ class CancelTest<T extends BaseNICEPayResponse> {
     @Test
     void CancelVAV2() throws IOException, InterruptedException {
 
-        String txId = "NORMALTEST02201607191659564995";
+        String txId = "";
 
         Cancel requestCancel = Cancel.builder()
                 .timeStamp(timestamp)
@@ -106,7 +127,7 @@ class CancelTest<T extends BaseNICEPayResponse> {
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
         Cancel requestData = Cancel.builder()
-                .merchantId(TestingConstants.I_MID)
+                .merchantId(I_MID)
                 .subMerchantId("23489182303312")
                 .originalPartnerReferenceNo("ref202305081205331683522921")
                 .originalReferenceNo("IONPAYTEST05202308031752031674")
@@ -146,7 +167,7 @@ class CancelTest<T extends BaseNICEPayResponse> {
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
         Cancel requestData = Cancel.builder()
-                .merchantId(TestingConstants.I_MID)
+                .merchantId(I_MID)
                 .originalPartnerReferenceNo("2020102900000000000001")
                 .originalReferenceNo("IONPAYTEST07202409201254073989")
                 .build();
@@ -160,7 +181,7 @@ class CancelTest<T extends BaseNICEPayResponse> {
 
     @Test
     void qrisRefund() throws IOException, InterruptedException {
-        var accessToken = Optional.ofNullable((NICEPayResponse) getToken())
+        var accessToken = Optional.ofNullable((NICEPayResponse) getToken(config))
                 .map(NICEPayResponse::getAccessToken)
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
@@ -168,12 +189,12 @@ class CancelTest<T extends BaseNICEPayResponse> {
         additionalInfo.put("cancelType", "1");
 
         Cancel requestData = Cancel.builder()
-                .merchantId(TestingConstants.I_MID)
-                .originalPartnerReferenceNo("2020102900000000000001")
-                .originalReferenceNo("IONPAYTEST08202404180954247527")
-                .partnerRefundNo("2020102900000000000001")
+                .merchantId(I_MID)
+                .originalPartnerReferenceNo("Ref20250116095220043469000314")
+                .originalReferenceNo("IONPAYTEST08202501160952205551")
+                .partnerRefundNo("refundQr"+V2_TIMESTAMP)
                 .externalStoreId("NICEPAY")
-                .refundAmount("11000.00","IDR")
+                .refundAmount("1000.00","IDR")
                 .reason("Refund Trans")
                 .additionalInfo(additionalInfo)
                 .build();

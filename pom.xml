@@ -6,7 +6,7 @@
 
 	<groupId>io.github.nicepay-dev</groupId>
 	<artifactId>nicepay-java-client</artifactId>
-	<version>1.0.4</version> <!-- Adjust Snap Error response and Payout param and response  -->
+	<version>1.0.5</version> <!-- Add V1 Card Regist and inquiry status  -->
 
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>Nicepay Official Java Library</description>
