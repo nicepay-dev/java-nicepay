@@ -1,11 +1,11 @@
-# Virtual Account Services
+# Credit Card V1 Redirect Services
 
-A list of all methods in the `SnapVaService`. Click on the method name to view detailed information about that method.
+A list of all methods in the `V1CardService`. Click on the method name to view detailed information about that method.
 
-| Methods                                                 | Description                         |
-|:--------------------------------------------------------|:------------------------------------|
-| [callCardRedirectRegistration](#1-callCardRedirectRegistration)                   | Generated VA Number to NICEPAY API  |
-| [callInquiryStatus](#2-callInquiryStatus) | Confirmation Transaction Status API |
+| Methods                                                                  | Description                         |
+|:-------------------------------------------------------------------------|:------------------------------------|
+| [callCardRedirectRegistration](#1-callCardRedirectRegistration)          | Generated VA Number to NICEPAY API  |
+| [callInquiryStatus](#2-callInquiryStatus)                                | Confirmation Transaction Status API |
 
 ### **1. callCardRedirectRegistration**
 
@@ -80,12 +80,12 @@ SAMPLE RESPONSE
 **1.3 Sample Parameter Response**
 **1.4 Example Usage Code Snippet**
 
-| Methods                                             | Description                                       |
-|:----------------------------------------------------|:--------------------------------------------------|
-| [setUp()](#141-setUp)                               | Setup Credentials Method                          |
-| [registerCCRedirectV1()](#142-registerCCRedirectV1) | Generated Virtual Account Method                  |
-| [redirectPaymentURL()](#143-redirectPaymentURL)     | Confirm Virtual Account Transaction Status Method |
-| [inquiryStatus()](#2-callInquiryStatus)                    | Cancel Virtual Account Transaction Method         |
+| Methods                                             | Description                         |
+|:----------------------------------------------------|:------------------------------------|
+| [setUp()](#141-setUp)                               | Setup Credentials Method            |
+| [registerCCRedirectV1()](#142-registerCCRedirectV1) | Register Credit Card Transaction    |
+| [redirectPaymentURL()](#143-redirectPaymentURL)     | Redirect to CC Nicepay payment page |
+| [inquiryStatus()](#2-callInquiryStatus)                    | Inquiry card transaction status     |
 
 
 ### **1.4.1 setUp**
