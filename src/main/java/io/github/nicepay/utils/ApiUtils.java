@@ -23,7 +23,6 @@ public class ApiUtils {
 
     private static Retrofit.Builder builder
             = new Retrofit.Builder()
-            .baseUrl(NICEPay.builder().getNICEPayBaseUrl())
             .addConverterFactory(GsonConverterFactory.create())
             ;
 
@@ -73,7 +72,7 @@ public class ApiUtils {
                     return response.newBuilder().body(responseBody).build();
                 });
                 builder.client(httpClient.build());
-                builder.baseUrl(NICEPay.builder().isProduction(config.isProduction()).getNICEPayBaseUrl());
+                builder.baseUrl(config.getNICEPayBaseUrl());
                 api = builder.build();
 
         return api.create(serviceClass);
@@ -200,7 +199,7 @@ public class ApiUtils {
             return response.newBuilder().body(responseBody).build();
         });
         builder.client(httpClient.build());
-        builder.baseUrl(NICEPay.builder().isProduction(config.isProduction()).getNICEPayBaseUrl());
+        builder.baseUrl(config.getNICEPayBaseUrl());
         api = builder.build();
 
         return api.create(serviceClass);
@@ -230,7 +229,7 @@ public class ApiUtils {
         });
 
         builder.client(httpClient.build());
-        builder.baseUrl(NICEPay.builder().isProduction(config.isProduction()).getNICEPayBaseUrl());
+        builder.baseUrl(config.getNICEPayBaseUrl());
         api = builder.build();
 
         return api.create(serviceClass);

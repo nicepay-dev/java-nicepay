@@ -19,9 +19,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static io.github.nicepay.data.TestingConstants.*;
+
 class VirtualAccountTest {
     private static LoggerPrint print = new LoggerPrint();
     private static NICEPay config;
+    private static NICEPay configCloud;
     private static TestingConstants DATA ;
 
     @BeforeAll
@@ -29,7 +32,17 @@ class VirtualAccountTest {
         config =NICEPay.builder()
                 .isProduction(false)
                 .clientSecret(DATA.CLIENT_SECRET)
-                .partnerId(DATA.PARTNER_ID)
+                .partnerId(PARTNER_ID)
+                .externalID(DATA.EXTERNAL_ID)
+                .timestamp(DATA.TIMESTAMP)
+                .privateKey(DATA.PRIVATE_KEY)
+                .build();
+
+        configCloud =NICEPay.builder()
+                .isProduction(false)
+                .isCloudServer(true)
+                .clientSecret(DATA.CLIENT_SECRET)
+                .partnerId(PARTNER_ID)
                 .externalID(DATA.EXTERNAL_ID)
                 .timestamp(DATA.TIMESTAMP)
                 .privateKey(DATA.PRIVATE_KEY)
@@ -43,8 +56,9 @@ class VirtualAccountTest {
                 .grantType("client_credentials")
                 .additionalInfo(additionalInfo)
                 .build();
-       return  SnapTokenService.callGetAccessToken(accessToken,config);
+       return  SnapTokenService.callGetAccessToken(accessToken,configCloud);
     }
+
     @Test
     void vaCreate() throws IOException
     {
@@ -61,7 +75,7 @@ class VirtualAccountTest {
                 .totalAmount("11000.00","IDR")
                 .additionalInfo( new HashMap<String, Object>() {
                     {
-                        put("bankCd","BBBA");
+                        put("bankCd","BRIN");
                         put("goodsNm", "TESTGoodsNm");
                         put("dbProcessUrl", "https://merchant.com/test");
                         put("vacctValidDt", "");
@@ -76,6 +90,43 @@ class VirtualAccountTest {
                 .build();
 
        NICEPayResponse response = SnapVaService.callGeneratedVA(virtualAccount,accessToken,config);
+
+    }
+
+    @Test
+    void vaCreateCloud() throws IOException
+    {
+        var accessToken = Optional.ofNullable((NICEPayResponse) getToken())
+                .map(NICEPayResponse::getAccessToken)
+                .orElseThrow(() -> new IllegalArgumentException("Token is null"));
+
+        configCloud.setPrivateKey(CLOUD_PRIVATE_KEY);
+        configCloud.setClientSecret(CLOUD_CLIENT_SECRET);
+
+        VirtualAccount virtualAccount = VirtualAccount.builder()
+                .partnerServiceId("1234")
+                .customerNo("")
+                .virtualAccountNo("")
+                .virtualAccountName("TESTVaName")
+                .trxId("ordNo"+V2_TIMESTAMP)
+                .totalAmount("11000.00","IDR")
+                .additionalInfo( new HashMap<String, Object>() {
+                    {
+                        put("bankCd","BMRI");
+                        put("goodsNm", "TESTGoodsNm");
+                        put("dbProcessUrl", "https://merchant.com/test");
+                        put("vacctValidDt", "");
+                        put("vacctValidTm", "");
+                        put("msId", "");
+                        put("msFee", "");
+                        put("msFeeType", "");
+                        put("mbFee", "");
+                        put("mbFeeType", "");
+                    }
+                })
+                .build();
+
+        NICEPayResponse response = SnapVaService.callGeneratedVA(virtualAccount,accessToken,configCloud);
 
     }
 

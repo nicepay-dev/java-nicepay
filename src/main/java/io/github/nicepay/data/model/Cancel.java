@@ -39,6 +39,12 @@ public class Cancel {
     private String cancelRetryCnt;
     private String worker;
 
+//    V1
+    private String fee;
+    private String vat;
+    private String noTaxAmt;
+    private String cancelReferenceNo;
+
     //    E-Wallet
     private String merchantId;
     private String subMerchantId;
@@ -64,6 +70,12 @@ public class Cancel {
         //        V2
         public CancelBuilder merchantToken(String timeStamp, String imid, String txId, String amount, String merchantKey) {
             this.merchantToken = timeStamp + imid + txId + amount + merchantKey;
+            return this;
+        }
+
+        //        V1
+        public CancelBuilder merchantTokenV1( String imid, String txId, String amount, String merchantKey) {
+            this.merchantToken = imid + txId + amount + merchantKey;
             return this;
         }
 

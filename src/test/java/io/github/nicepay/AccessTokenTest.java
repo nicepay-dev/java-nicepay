@@ -14,6 +14,7 @@ import java.util.Map;
 
 class AccessTokenTest {
     private static NICEPay config;
+    private static NICEPay configCloud;
     private static TestingConstants DATA;
 
 
@@ -23,6 +24,16 @@ class AccessTokenTest {
                 .isProduction(false)
                 .clientSecret(DATA.CLIENT_SECRET)
                 .partnerId(DATA.PARTNER_ID)
+                .externalID(DATA.EXTERNAL_ID)
+                .timestamp(DATA.TIMESTAMP)
+                .privateKey(DATA.PRIVATE_KEY)
+                .build();
+
+        configCloud =NICEPay.builder()
+                .isProduction(false)
+                .isCloudServer(true)
+                .clientSecret(DATA.CLOUD_CLIENT_SECRET)
+                .partnerId(DATA.I_MID)
                 .externalID(DATA.EXTERNAL_ID)
                 .timestamp(DATA.TIMESTAMP)
                 .privateKey(DATA.PRIVATE_KEY)
@@ -39,4 +50,17 @@ class AccessTokenTest {
                 .build();
         NICEPayResponse result = SnapTokenService.callGetAccessToken(accessToken,config);
     }
+
+    @Test
+    void getCallTokenCloud() throws IOException
+    {
+        Map<String, String> additionalInfo = new HashMap<>();
+        AccessToken accessToken = AccessToken.builder()
+                .grantType("client_credentials")
+                .additionalInfo(additionalInfo)
+                .build();
+        NICEPayResponse result = SnapTokenService.callGetAccessToken(accessToken,configCloud);
+    }
+
+
 }

@@ -19,5 +19,9 @@ public interface RequestV1 {
     @POST("/nicepay/api/onePassStatus.do")
     Call<NICEPayResponseV1> inquiryStatus(@FieldMap Map<String, String> fields);
 
+    @FormUrlEncoded
+    @POST("/nicepay/api/onePassAllCancel.do")
+    Call<NICEPayResponseV1> cancelTransaction(@FieldMap Map<String, String> fields);
+
 
 }
