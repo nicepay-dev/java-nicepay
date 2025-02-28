@@ -4,48 +4,44 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-
+@Getter
+@Setter
 @Builder
 public class NICEPay {
-    @Getter
-    @Setter
+
     private String partnerId;
-    @Getter
-    @Setter
+
     private String clientSecret;
-    @Getter
-    @Setter
+
     private boolean isProduction;
 
-    @Getter
-    @Setter
+    private boolean isCloudServer;
+
     private String externalID;
-    @Getter
-    @Setter
+
     private String timestamp;
-    @Getter
-    @Setter
+
     private String privateKey;
 
-    public NICEPay(String partnerId, String clientSecret, boolean isProduction, String externalID, String timestamp,String privateKey) {
+    public NICEPay(String partnerId, String clientSecret, boolean isProduction, boolean isCloudServer, String externalID, String timestamp, String privateKey) {
         this.partnerId = partnerId;
         this.clientSecret = clientSecret;
         this.isProduction = isProduction;
+        this.isCloudServer = isCloudServer;
         this.externalID = externalID;
         this.timestamp = timestamp;
         this.privateKey = privateKey;
     }
 
-    public static class NICEPayBuilder {
-        public String getNICEPayBaseUrl() {
+    public String getNICEPayBaseUrl() {
+
         if (isProduction) {
-            return NICEPayConstants.getProductionBaseUrl();
-        }else{
-            return  NICEPayConstants.getSandboxBaseUrl();
+            return NICEPayConstants.getProductionBaseUrl(isCloudServer);
+        } else {
+            return NICEPayConstants.getSandboxBaseUrl(isCloudServer);
         }
     }
 
-    }
     @Override
     public String toString() {
         return "NICEPay{" +

@@ -22,11 +22,12 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static io.github.nicepay.data.TestingConstants.V2_TIMESTAMP;
+import static io.github.nicepay.data.TestingConstants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class InquiryStatusTest<T extends BaseNICEPayResponse> {
     private static NICEPay config;
+    private static NICEPay configCloud;
     private static TestingConstants DATA ;
     private static NICEPay config2;
     private static NICEPay config3;
@@ -37,11 +38,22 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
     public  static void setUp() {
         config =NICEPay.builder()
                 .isProduction(false)
-                .clientSecret(DATA.CLIENT_SECRET)
-                .partnerId(DATA.PARTNER_ID)
-                .externalID(DATA.EXTERNAL_ID)
-                .timestamp(DATA.TIMESTAMP)
-                .privateKey(DATA.PRIVATE_KEY)
+                .isCloudServer(false)
+                .clientSecret(TestingConstants.CLOUD_CLIENT_SECRET)
+                .partnerId(I_MID)
+                .externalID(TestingConstants.EXTERNAL_ID)
+                .timestamp(TIMESTAMP)
+                .privateKey(TestingConstants.PRIVATE_KEY)
+                .build();
+
+        configCloud =NICEPay.builder()
+                .isProduction(false)
+                .isCloudServer(true)
+                .clientSecret(TestingConstants.CLIENT_SECRET)
+                .partnerId(TestingConstants.PARTNER_ID)
+                .externalID(TestingConstants.EXTERNAL_ID)
+                .timestamp(TIMESTAMP)
+                .privateKey(TestingConstants.PRIVATE_KEY)
                 .build();
 
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
@@ -51,22 +63,22 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
         String externalId = "OrdNo" + TIMESTAMP.substring(0, 10).replace("-","") + TIMESTAMP.substring(11,19).replace(":","") + random;
         config2 =NICEPay.builder()
                 .isProduction(false)
-                .clientSecret(DATA.CLIENT_SECRET)
-                .partnerId(DATA.PARTNER_ID)
+                .clientSecret(TestingConstants.CLOUD_CLIENT_SECRET)
+                .partnerId(TestingConstants.I_MID)
                 .externalID(externalId)
-                .timestamp(DATA.TIMESTAMP)
-                .privateKey(DATA.PRIVATE_KEY)
+                .timestamp(TestingConstants.TIMESTAMP)
+                .privateKey(TestingConstants.PRIVATE_KEY)
                 .build();
 
         int random2 = rand.nextInt(10000);
         String externalId2 = "OrdNo" + TIMESTAMP.substring(0, 10).replace("-","") + TIMESTAMP.substring(11,19).replace(":","") + random2;
         config3 =NICEPay.builder()
                 .isProduction(false)
-                .clientSecret(DATA.CLIENT_SECRET)
-                .partnerId(DATA.PARTNER_ID)
+                .clientSecret(TestingConstants.CLIENT_SECRET)
+                .partnerId(TestingConstants.PARTNER_ID)
                 .externalID(externalId2)
-                .timestamp(DATA.TIMESTAMP)
-                .privateKey(DATA.PRIVATE_KEY)
+                .timestamp(TestingConstants.TIMESTAMP)
+                .privateKey(TestingConstants.PRIVATE_KEY)
                 .build();
 
         timestamp = TestingConstants.TIMESTAMP;
@@ -74,9 +86,9 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
 
     }
 
-    private int retrycount = 0;
+    private final int retrycount = 0;
 
-    public Object getToken() throws IOException {
+    public Object getToken(NICEPay config) throws IOException {
         Map<String, String> additionalInfo = new HashMap<>();
         AccessToken util =  AccessToken.builder()
                 .grantType("client_credentials")
@@ -88,7 +100,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
 
     @Test
     void InquiryStatusVA() throws IOException, InterruptedException {
-        var accessToken = Optional.ofNullable((NICEPayResponse) getToken())
+        var accessToken = Optional.ofNullable((NICEPayResponse) getToken(config))
                 .map(NICEPayResponse::getAccessToken)
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
@@ -102,6 +114,25 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
                 .tXidVA("IONPAYTEST02202408191104334735")
                 .build();
         NICEPayResponse result = SnapInquiryStatusService.callServiceVACheckStatus(requestData,accessToken,config);
+
+    }
+
+    @Test
+    void InquiryStatusVACloud() throws IOException, InterruptedException {
+        var accessToken = Optional.ofNullable((NICEPayResponse) getToken(configCloud))
+                .map(NICEPayResponse::getAccessToken)
+                .orElseThrow(() -> new IllegalArgumentException("Token is null"));
+
+        InquiryStatus requestData = InquiryStatus.builder()
+                .partnerServiceId("")
+                .customerNo("")
+                .virtualAccountNo("7001400002008961")
+                .inquiryRequestId("inquiryId"+V2_TIMESTAMP)
+                .totalAmount("11000.00", "IDR")
+                .trxId("ordNo20250214173822")
+                .tXidVA("NORMALTEST02202502141738234107")
+                .build();
+        NICEPayResponse result = SnapInquiryStatusService.callServiceVACheckStatus(requestData,accessToken,configCloud);
 
     }
 
@@ -126,7 +157,32 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
 
     @Test
     void InquiryStatusEwallet() throws IOException, InterruptedException {
-        NICEPayResponse responseToken = (NICEPayResponse) getToken();
+        config2.setCloudServer(true);
+
+        NICEPayResponse responseToken = (NICEPayResponse) getToken(config2);
+        var accessToken = Optional.ofNullable(responseToken)
+                .map(token -> responseToken.getAccessToken())
+                .orElseThrow(() -> new IllegalArgumentException("Token is null"));
+
+        InquiryStatus requestData = InquiryStatus.builder()
+                .merchantId(TestingConstants.I_MID)
+                .subMerchantId("23489182303312")
+                .originalPartnerReferenceNo("OrdNo-20241129092625")
+                .originalReferenceNo("IONPAYTEST05202411290926256651")
+                .serviceCode("54")
+                .transactionDate(TIMESTAMP)
+                .externalStoreId("239840198240795109")
+                .amount("10000.00", "IDR")
+                .build();
+
+        NICEPayResponse response =
+                SnapInquiryStatusService.callServiceEwalletCheckStatus(requestData,accessToken,config2);
+
+    }
+
+    @Test
+    void InquiryStatusEwalletCloud() throws IOException, InterruptedException {
+        NICEPayResponse responseToken = (NICEPayResponse) getToken(config2);
         var accessToken = Optional.ofNullable(responseToken)
                 .map(token -> responseToken.getAccessToken())
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
@@ -149,7 +205,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
 
     @Test
     void InquiryStatusPayout() throws IOException, InterruptedException {
-        NICEPayResponse responseToken = (NICEPayResponse) getToken();
+        NICEPayResponse responseToken = (NICEPayResponse) getToken(config);
         var accessToken = Optional.ofNullable(responseToken)
                 .map(token -> responseToken.getAccessToken())
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
@@ -166,9 +222,32 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
 
     }
 
+
+    @Test
+    void InquiryStatusPayoutCloud() throws IOException, InterruptedException {
+
+        config.setCloudServer(true);
+
+        NICEPayResponse responseToken = (NICEPayResponse) getToken(config);
+        var accessToken = Optional.ofNullable(responseToken)
+                .map(token -> responseToken.getAccessToken())
+                .orElseThrow(() -> new IllegalArgumentException("Token is null"));
+
+        InquiryStatus requestData = InquiryStatus.builder()
+                .merchantId(TestingConstants.I_MID)
+                .originalPartnerReferenceNo("2020102900000000000001")
+                .originalReferenceNo("IONPAYTEST07202404080947007680")
+                .beneficiaryAccountNo("5345000060")
+                .build();
+
+        NICEPayResponse Result =
+                SnapInquiryStatusService.callServicePayoutStatus(requestData,accessToken,config);
+
+    }
+
     @Test
     void InquiryStatusQris() throws IOException, InterruptedException {
-        NICEPayResponse responseToken = (NICEPayResponse) getToken();
+        NICEPayResponse responseToken = (NICEPayResponse) getToken(config);
         var accessToken = Optional.ofNullable(responseToken)
                 .map(token -> responseToken.getAccessToken())
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
@@ -183,6 +262,28 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
 
         NICEPayResponse Result =
                 SnapInquiryStatusService.callServiceQrisCheckStatus(requestData,accessToken,config3);
+
+    }
+
+    @Test
+    void InquiryStatusQrisCloud() throws IOException, InterruptedException {
+        config.setCloudServer(true);
+
+        NICEPayResponse responseToken = (NICEPayResponse) getToken(config);
+        var accessToken = Optional.ofNullable(responseToken)
+                .map(token -> responseToken.getAccessToken())
+                .orElseThrow(() -> new IllegalArgumentException("Token is null"));
+
+        InquiryStatus requestData = InquiryStatus.builder()
+                .merchantId(TestingConstants.I_MID)
+                .originalPartnerReferenceNo("2020102900000000000001")
+                .originalReferenceNo("IONPAYTEST08202404180954247527")
+                .externalStoreId("NICEPAY")
+                .serviceCode("51")
+                .build();
+
+        NICEPayResponse Result =
+                SnapInquiryStatusService.callServiceQrisCheckStatus(requestData,accessToken,config);
 
     }
 

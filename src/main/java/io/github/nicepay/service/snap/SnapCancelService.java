@@ -42,6 +42,8 @@ public class SnapCancelService {
 
             if (nicePayResponse == null) {
                 resClient = errorResponse.string();
+                print.logInfo(resClient.toString());
+
                 nicePayResponse = gson.fromJson(resClient.toString(), NICEPayResponse.class);
             } else {
                 resClient = gson.toJson(nicePayResponse);

@@ -18,17 +18,28 @@ import java.util.Optional;
 
 class QrisTest <T extends BaseNICEPayResponse> {
     private static NICEPay config;
+    private static NICEPay configCloud;
     private static TestingConstants DATA ;
 
     @BeforeAll
     public  static void setUp() {
         config =NICEPay.builder()
                 .isProduction(false)
-                .clientSecret(DATA.CLIENT_SECRET)
-                .partnerId(DATA.PARTNER_ID)
-                .externalID(DATA.EXTERNAL_ID)
-                .timestamp(DATA.TIMESTAMP)
-                .privateKey(DATA.PRIVATE_KEY)
+                .clientSecret(TestingConstants.CLIENT_SECRET)
+                .partnerId(TestingConstants.I_MID)
+                .externalID(TestingConstants.EXTERNAL_ID)
+                .timestamp(TestingConstants.TIMESTAMP)
+                .privateKey(TestingConstants.PRIVATE_KEY)
+                .build();
+
+        configCloud =NICEPay.builder()
+                .isProduction(false)
+                .isCloudServer(true)
+                .clientSecret(TestingConstants.QRIS_CLIENT_SECRET)
+                .partnerId(TestingConstants.I_MID_QRIS)
+                .externalID(TestingConstants.EXTERNAL_ID)
+                .timestamp(TestingConstants.TIMESTAMP)
+                .privateKey(TestingConstants.PRIVATE_KEY)
                 .build();
     }
 
@@ -38,7 +49,7 @@ class QrisTest <T extends BaseNICEPayResponse> {
                 .grantType("client_credentials")
                 .additionalInfo(additionalInfo)
                 .build();
-        return  SnapTokenService.callGetAccessToken(token,config);
+        return  SnapTokenService.callGetAccessToken(token,configCloud);
     }
 
     @Test
@@ -49,10 +60,10 @@ class QrisTest <T extends BaseNICEPayResponse> {
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
         Qris qris = Qris.builder()
-                .merchantId(TestingConstants.I_MID)
+                .merchantId(TestingConstants.I_MID_QRIS)
                 .storeId("NICEPAY")
-                .amount("11000.00","IDR")
-                .partnerReferenceNo ("2020102900000000000001")
+                .amount("10000.00","IDR")
+                .partnerReferenceNo ("QRISTEST"+TestingConstants.V2_TIMESTAMP)
                 .validityPeriod ("")
                 .additionalInfo("Test SNAP Transaction Nicepay","John Doe","08123456789"
                         ,"email@merchant.com","Jakarta","Jalan Bukit Berbunga 22","DKI Jakarta","12345","Indonesia"
@@ -64,6 +75,31 @@ class QrisTest <T extends BaseNICEPayResponse> {
 
         NICEPayResponse response =
                 SnapQrisService.callServiceQrisRegist(qris,accessToken,config);
+    }
+
+    @Test
+    void qrisRegistCloud() throws IOException
+    {
+        var accessToken = Optional.ofNullable((NICEPayResponse) getToken())
+                .map(NICEPayResponse::getAccessToken)
+                .orElseThrow(() -> new IllegalArgumentException("Token is null"));
+
+        Qris qris = Qris.builder()
+                .merchantId(TestingConstants.I_MID_QRIS)
+                .storeId("NicepayStoreID1")
+                .amount("10000.00","IDR")
+                .partnerReferenceNo ("QRISTEST"+TestingConstants.V2_TIMESTAMP)
+                .validityPeriod ("")
+                .additionalInfo("Test SNAP Transaction Nicepay","John Doe","08123456789"
+                        ,"email@merchant.com","Jakarta","Jalan Bukit Berbunga 22","DKI Jakarta","12345","Indonesia"
+                        ,"https://ptsv2.com/t/jhon/post" , "https://ptsv2.com/t/jhon/post","127.0.0.1",
+                        "{\\\"count\\\":1,\\\"item\\\":[{\\\"img_url\\\":\\\"https://d3nevzfk7ii3be.cloudfront.net/igi/vOrGHXlovukA566A.medium\\\",\\\"goods_name\\\":\\\"Nokia 3360\\\",\\\"goods_detail\\\":\\\"Old Nokia 3360\\\",\\\"goods_amt\\\":\\\"100\\\",\\\"goods_quantity\\\":\\\"1\\\"}]}",
+                        "QSHP","","","",
+                        "","")
+                .build();
+
+        NICEPayResponse response =
+                SnapQrisService.callServiceQrisRegist(qris,accessToken,configCloud);
     }
 
 }

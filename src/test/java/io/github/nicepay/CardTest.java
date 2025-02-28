@@ -1,6 +1,5 @@
 package io.github.nicepay;
 
-import com.google.gson.Gson;
 import io.github.nicepay.data.TestingConstants;
 import io.github.nicepay.data.model.Card;
 import io.github.nicepay.data.response.v1.NICEPayResponseV1;
@@ -165,7 +164,7 @@ class CardTest {
                 .deliveryState("DKI Jakarta")
                 .deliveryPostCd("15119")
                 .deliveryCountry("Indonesia")
-                .callBackUrl(NICEPayConstants.getSandboxBaseUrl() + "/IONPAY_CLIENT/paymentResult.jsp")
+                .callBackUrl(NICEPayConstants.getSandboxBaseUrl(config.isCloudServer()) + "/IONPAY_CLIENT/paymentResult.jsp")
                 .build();
 
         NICEPayResponseV1 cardRegistResponse = V1CardService.callCardRedirectRegistration(requestData,config);

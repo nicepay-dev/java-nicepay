@@ -5,9 +5,11 @@ import io.github.nicepay.data.model.AccessToken;
 import io.github.nicepay.data.model.Cancel;
 import io.github.nicepay.data.response.snap.BaseNICEPayResponse;
 import io.github.nicepay.data.response.snap.NICEPayResponse;
+import io.github.nicepay.data.response.v1.NICEPayResponseV1;
 import io.github.nicepay.data.response.v2.NICEPayResponseV2;
 import io.github.nicepay.service.snap.SnapCancelService;
 import io.github.nicepay.service.snap.SnapTokenService;
+import io.github.nicepay.service.v1.V1CardService;
 import io.github.nicepay.service.v2.V2CancelService;
 import io.github.nicepay.utils.LoggerPrint;
 import io.github.nicepay.utils.NICEPay;
@@ -24,9 +26,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CancelTest<T extends BaseNICEPayResponse> {
 
-    private static LoggerPrint print = new LoggerPrint() ;
+    private static final LoggerPrint print = new LoggerPrint() ;
     private static NICEPay config;
+    private static NICEPay configCloud;
     private static NICEPay configQR;
+
+    private static NICEPay configCc;
 
     private static TestingConstants DATA ;
 
@@ -40,9 +45,19 @@ class CancelTest<T extends BaseNICEPayResponse> {
                 .isProduction(false)
                 .clientSecret(CLIENT_SECRET)
                 .partnerId(I_MID)
-                .externalID(DATA.EXTERNAL_ID)
-                .timestamp(DATA.TIMESTAMP)
+                .externalID(EXTERNAL_ID)
+                .timestamp(TIMESTAMP)
                 .privateKey(PRIVATE_KEY)
+                .build();
+
+        configCloud =NICEPay.builder()
+                .isProduction(false)
+                .isCloudServer(true)
+                .clientSecret(CLOUD_CLIENT_SECRET)
+                .partnerId(I_MID)
+                .externalID(EXTERNAL_ID)
+                .timestamp(TIMESTAMP)
+                .privateKey(CLOUD_PRIVATE_KEY)
                 .build();
 
         configQR =NICEPay.builder()
@@ -54,8 +69,18 @@ class CancelTest<T extends BaseNICEPayResponse> {
                 .privateKey(PRIVATE_KEY)
                 .build();
 
+        configCc =NICEPay.builder()
+                .isProduction(false)
+                .isCloudServer(false)
+                .clientSecret(INSTLMNT_CLIENT_SECRET)
+                .partnerId(I_MID_INSTLMNT)
+                .externalID(EXTERNAL_ID)
+                .timestamp(TIMESTAMP)
+                .privateKey(PRIVATE_KEY)
+                .build();
+
         timestamp = TestingConstants.V2_TIMESTAMP;
-        amount = "1000";
+        amount = "100";
         reffNo = "0rdNo"+timestamp;
     }
 
@@ -65,7 +90,7 @@ class CancelTest<T extends BaseNICEPayResponse> {
                 .grantType("client_credentials")
                 .additionalInfo(additionalInfo)
                 .build();
-        return SnapTokenService.callGetAccessToken(util,config);
+        return SnapTokenService.callGetAccessToken(util,configCloud);
 
     }
 
@@ -99,6 +124,26 @@ class CancelTest<T extends BaseNICEPayResponse> {
 
     }
 
+    @Test
+    void CancelVACloud() throws IOException, InterruptedException {
+        var accessToken = Optional.ofNullable((NICEPayResponse) getToken(configCloud))
+                .map(NICEPayResponse::getAccessToken)
+                .orElseThrow(() -> new IllegalArgumentException("Token is null"));
+//
+        Cancel requestData = Cancel.builder()
+                .partnerServiceId("")
+                .customerNo("")
+                .virtualAccountNo("7001400002010223")
+                .totalAmount("11000.00", "IDR")
+                .trxId("ordNo20250214145422")
+                .tXidVA("NORMALTEST02202502141454222789")
+                .cancelMessage("test cancel")
+                .build();
+
+        NICEPayResponse result = SnapCancelService.callServiceVACancel(requestData,accessToken,configCloud);
+
+    }
+
     // V2 CANCEL VA
     @Test
     void CancelVAV2() throws IOException, InterruptedException {
@@ -121,7 +166,31 @@ class CancelTest<T extends BaseNICEPayResponse> {
     }
 
     @Test
+    void ewalletRefundCloud() throws IOException, InterruptedException {
+        var accessToken = Optional.ofNullable((NICEPayResponse) getToken())
+                .map(NICEPayResponse::getAccessToken)
+                .orElseThrow(() -> new IllegalArgumentException("Token is null"));
+
+        Cancel requestData = Cancel.builder()
+                .merchantId(I_MID)
+                .subMerchantId("23489182303312")
+                .originalPartnerReferenceNo("ordEW20250221135601")
+                .originalReferenceNo("IONPAYTEST05202502211356023411")
+                .partnerRefundNo("cancelRef"+V2_TIMESTAMP)
+                .refundAmount("1.00", "IDR")
+                .externalStoreId("239840198240795109")
+                .reason("test refund")
+                .refundType("1")
+                .build();
+
+        NICEPayResponse Result =
+                SnapCancelService.callServiceEwalletCancel(requestData,accessToken,configCloud);
+
+    }
+
+    @Test
     void ewalletRefund() throws IOException, InterruptedException {
+
         var accessToken = Optional.ofNullable((NICEPayResponse) getToken())
                 .map(NICEPayResponse::getAccessToken)
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
@@ -162,20 +231,21 @@ class CancelTest<T extends BaseNICEPayResponse> {
 
     @Test
     void payoutCancel() throws IOException, InterruptedException {
+        config.setCloudServer(true);
         var accessToken = Optional.ofNullable((NICEPayResponse) getToken())
                 .map(NICEPayResponse::getAccessToken)
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
         Cancel requestData = Cancel.builder()
                 .merchantId(I_MID)
-                .originalPartnerReferenceNo("2020102900000000000001")
-                .originalReferenceNo("IONPAYTEST07202409201254073989")
+                .originalPartnerReferenceNo("Order20240620112143")
+                .originalReferenceNo("IONPAYTEST07202406201122395059")
                 .build();
 
         requestData.setAdditionalInfo(null);
 
         NICEPayResponse Result =
-                SnapCancelService.callServicePayoutCancel(requestData,accessToken,config);
+                SnapCancelService.callServicePayoutCancel(requestData,accessToken,configCloud);
 
     }
 
@@ -201,6 +271,32 @@ class CancelTest<T extends BaseNICEPayResponse> {
 
         NICEPayResponse Result =
                 SnapCancelService.callServiceQrisRefund(requestData,accessToken,config);
+
+    }
+
+    @Test
+    void qrisRefundCloud() throws IOException, InterruptedException {
+        config.setCloudServer(true);
+        var accessToken = Optional.ofNullable((NICEPayResponse) getToken(config))
+                .map(NICEPayResponse::getAccessToken)
+                .orElseThrow(() -> new IllegalArgumentException("Token is null"));
+
+        Map<String, Object> additionalInfo = new HashMap<>();
+        additionalInfo.put("cancelType", "1");
+
+        Cancel requestData = Cancel.builder()
+                .merchantId(I_MID)
+                .originalPartnerReferenceNo("OrdNo-20250102110939")
+                .originalReferenceNo("IONPAYTEST08202501021109412509")
+                .partnerRefundNo("refundQr"+V2_TIMESTAMP)
+                .externalStoreId("NICEPAY")
+                .refundAmount("1000.00","IDR")
+                .reason("Refund Trans")
+                .additionalInfo(additionalInfo)
+                .build();
+
+        NICEPayResponse Result =
+                SnapCancelService.callServiceQrisRefund(requestData,accessToken,configCloud);
 
     }
 
@@ -256,6 +352,33 @@ class CancelTest<T extends BaseNICEPayResponse> {
                 .build();
 
         NICEPayResponseV2 result = V2CancelService.callV2CancelTransaction(requestCancel, config);
+
+    }
+
+
+    @Test
+    void cancelFullCardV1() throws IOException, InterruptedException {
+
+        String txId = "TESTMPGS0400202502100927286243";
+
+        Cancel requestCancel = Cancel.builder()
+                .timeStamp(timestamp)
+                .tXid(txId)
+                .cancelReferenceNo("OrdNo-20250210090280") // different reffNo with registered transaction
+                .merchantTokenV1( TestingConstants.I_MID_INSTLMNT,  txId, amount, TestingConstants.MERCHANT_KEY)
+                .iMid(TestingConstants.I_MID_INSTLMNT)
+                .payMethod("01")
+                .cancelType("1")
+                .amt(amount)
+                .cancelMsg("Cancellation Of Transaction Credit Card")
+                .cancelUserIp("127.0.0.1")
+                .cancelServerIp("127.0.0.1")
+                .cancelUserInfo("")
+                .cancelRetryCnt("")
+                .worker("")
+                .build();
+
+        NICEPayResponseV1 result = V1CardService.callCancelTransaction(requestCancel, configCc);
 
     }
 }
