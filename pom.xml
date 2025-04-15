@@ -6,7 +6,7 @@
 
 	<groupId>io.github.nicepay-dev</groupId>
 	<artifactId>nicepay-java-client</artifactId>
-	<version>1.1.0</version> <!-- Add V1 Card Cancel and Nicepay server config  -->
+	<version>1.2.0</version> <!-- Add V2 Services (CvS, Ewallet, Payloan, Payout, Qris)  -->
 
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>Nicepay Official Java Library</description>

@@ -10,7 +10,6 @@ import io.github.nicepay.service.snap.SnapVaService;
 import io.github.nicepay.service.v2.V2VaService;
 import io.github.nicepay.utils.LoggerPrint;
 import io.github.nicepay.utils.NICEPay;
-import io.github.nicepay.utils.SHA256Util;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

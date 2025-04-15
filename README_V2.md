@@ -18,7 +18,7 @@ Add our library as a dependency on your pom.xml
 		<dependency>
 			<groupId>io.github.nicepay-dev</groupId>
 			<artifactId>nicepay-java-client</artifactId>
-			<version>1.1.0</version>
+			<version>1.2.0</version>
 		</dependency>
 ```
 
@@ -240,7 +240,7 @@ Expected Result :
 Once the user completes the 3DS authentication, they will be redirected to your defined callbackUrl, where you can process the result.
 
 
-#### 2.2.2 Common (e.g Inquiry Status)
+#### 2.2.2.3 Common (e.g Inquiry Status)
 
 ```java
 
@@ -279,6 +279,76 @@ Sample response :
 }
 ```
 
+### 2.3 Payment URL Utilities
+
+This utility provides methods to generate payment URLs for NICEPay V2 Direct and V2 Redirect integrations.
+
+### ✳️ Methods
+
+#### 2.3.1 generateDirectV2PaymentUrl(Payment data, NICEPay config)
+
+Generates a Direct V2 Payment URL used for payment method Payloan and Ewallet using the provided `Payment` data and `NICEPay` configuration.
+
+Parameters:
+- `Payment data` – contains transaction information such as timestamp, token, callback URL, and transaction ID (`tXid`).
+- `NICEPay config` – contains base URL and other NICEPay-specific configuration.
+
+Returns:
+- A fully constructed URL to initiate Direct V2 payments.
+
+Note:
+- `merchantToken` will be encrypted using `SHA256Util.encrypt(...)` before being appended to the URL.
+
+---
+
+#### 2.3.2 generateRedirectV2PaymentUrl(Payment data, NICEPay config)
+
+Generates a Redirect V2 Payment URL using the transaction ID from `Payment`.
+
+Parameters:
+- `Payment data` – should contain the `tXid`.
+- `NICEPay config` – provides the base NICEPay API URL.
+
+Returns:
+- A fully constructed URL for redirect-based payments.
+
+---
+
+####  Example Usage
+
+```java
+
+void ewalletPaymentV2Test() throws IOException, InterruptedException {
+
+
+                NICEPayResponseV2 regist = generateEwalletTrans(config);
+
+                String timeStamp = V2_TIMESTAMP;
+                String iMid = I_MID_EWALLET;
+
+
+                Payment request = Payment.builder()
+                        .tXid("TNICEEW05105202504151406524860")
+                        .timeStamp("20250415140651")
+                        .merchantToken(timeStamp, iMid, regist.getReferenceNo(), regist.getAmt(), MERCHANT_KEY)
+                        .callBackUrl("https://dev.nicepay.co.id/IONPAY_CLIENT/paymentResult.jsp?order_id=TNICEEW05105202504151406524860")
+                        .build();
+
+                String response = ApiUtils.generateDirectV2PaymentUrl(request,config);
+
+        }
+
+```
+Sample response = "https://dev.nicepay.co.id/nicepay/direct/v2/payment?timeStamp=20250415140651&merchantToken=1ccbe4a9ca050f4dbf08b5d14a5ddc3006f2015f24d963b6111f9f4a9db73a2c&callBackUrl=https://dev.nicepay.co.id/IONPAY_CLIENT/paymentResult.jsp?order_id=TNICEEW05105202504151406524860&tXid=TNICEEW05105202504151406524860"
+
+---
+
+#### ⚠️ Additional Information
+
+The generated URLs are intended to be passed to the **front-end** for redirection.  
+Front-end applications should handle the navigation or redirection to the generated payment URL.
+
+
 ## 3. Other Samples
 If you need samples for other payment methods and APIs, 
 please refer to the test units on our [Repository](https://github.com/nicepay-dev/java-nicepay/tree/main/src/test/java/io/github/nicepay)
@@ -293,4 +363,5 @@ This library is meant to be implemented on your backend server using Java.
 - [NICEPAY Dashboard ](https://bo.nicepay.co.id/)
 - [SNAP documentation](https://docs.nicepay.co.id/nicepay-api-snap)
 - Can't find answer you looking for? email to [cs@nicepay.co.id](mailto:cs@nicepay.co.id)
+
 

@@ -1,5 +1,6 @@
 package io.github.nicepay.data.model;
 
+import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,6 +43,23 @@ public class Payout {
     private Map<String, Object> additionalInfo;
     private String accountNo;
 
+//    V2
+    private String timeStamp;
+    private String iMid;
+    private String merchantToken;
+    private String benefNm;
+    private String benefStatus;
+    private String benefType;
+    private String bankCd;
+    private String amt;
+    private String referenceNo;
+    private String benefPhone;
+
+    @SerializedName("tXid")
+    private String tXid;
+
+
+
     public static class PayoutBuilder {
         private Map<String, Object> amount;
         private Map<String, Object> additionalInfo;
@@ -60,9 +78,24 @@ public class Payout {
             this.additionalInfo = additonalInfoMap;
             return this;
         }
+
+        public PayoutBuilder merchantToken(String timeStamp, String imid, String reffNo, String amount, String merchantKey) {
+            this.merchantToken = timeStamp + imid + reffNo + amount + merchantKey;
+            return this;
+        }
+
+        public PayoutBuilder merchantTokenInquiryBalance(String timeStamp, String imid, String merchantKey) {
+            this.merchantToken = timeStamp + imid + merchantKey;
+            return this;
+        }
+
+        public PayoutBuilder merchantTokenApprovePayout(String timeStamp, String imid, String tXid, String merchantKey) {
+            this.merchantToken = timeStamp + imid + tXid + merchantKey;
+            return this;
+        }
     }
 
-    public Payout(String merchantId, String msId, String beneficiaryAccountNo, String beneficiaryName, String beneficiaryPhone, String beneficiaryCustomerResidence, String beneficiaryCustomerType, String beneficiaryPostalCode, String payoutMethod, String beneficiaryBankCode, Map<String, Object> amount, String partnerReferenceNo, String reservedDt, String reservedTm, String description, String deliveryName, String deliveryId, String beneficiaryPOE, String beneficiaryDOE, String beneficiaryCoNo, String beneficiaryAddress, String beneficiaryAuthPhoneNumber, String beneficiaryMerCategory, String beneficiaryCoMgmtName, String beneficiaryCoShName, String originalPartnerReferenceNo, String originalReferenceNo, Map<String, Object> additionalInfo, String accountNo) {
+    public Payout(String merchantId, String msId, String beneficiaryAccountNo, String beneficiaryName, String beneficiaryPhone, String beneficiaryCustomerResidence, String beneficiaryCustomerType, String beneficiaryPostalCode, String payoutMethod, String beneficiaryBankCode, Map<String, Object> amount, String partnerReferenceNo, String reservedDt, String reservedTm, String description, String deliveryName, String deliveryId, String beneficiaryPOE, String beneficiaryDOE, String beneficiaryCoNo, String beneficiaryAddress, String beneficiaryAuthPhoneNumber, String beneficiaryMerCategory, String beneficiaryCoMgmtName, String beneficiaryCoShName, String originalPartnerReferenceNo, String originalReferenceNo, Map<String, Object> additionalInfo, String accountNo, String timeStamp, String iMid, String merchantToken, String benefNm, String benefStatus, String benefType, String bankCd, String amt, String referenceNo, String benefPhone, String tXid) {
         this.merchantId = merchantId;
         this.msId = msId;
         this.beneficiaryAccountNo = beneficiaryAccountNo;
@@ -92,5 +125,16 @@ public class Payout {
         this.originalReferenceNo = originalReferenceNo;
         this.additionalInfo = additionalInfo;
         this.accountNo = accountNo;
+        this.timeStamp = timeStamp;
+        this.iMid = iMid;
+        this.merchantToken = merchantToken;
+        this.benefNm = benefNm;
+        this.benefStatus = benefStatus;
+        this.benefType = benefType;
+        this.bankCd = bankCd;
+        this.amt = amt;
+        this.referenceNo = referenceNo;
+        this.benefPhone = benefPhone;
+        this.tXid = tXid;
     }
 }

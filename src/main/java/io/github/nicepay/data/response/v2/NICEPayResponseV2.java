@@ -6,10 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.checkerframework.checker.units.qual.A;
-import org.checkerframework.common.returnsreceiver.qual.This;
-
-import java.util.Currency;
 
 @Data
 @Builder
@@ -57,4 +53,47 @@ public class NICEPayResponseV2 extends BaseNICEPayResponseV2{
     private String authNo;
     private String recurringToken;
     private String acquStatus;
+
+//    EWALLET
+
+    private String mitraCd;
+    private String payNo;
+    private String payValidDt;
+    private String payValidTm;
+    private String requestURL;
+
+//    Qris
+    private String paymentExpDt;
+    private String paymentExpTm;
+    private String qrContent;
+    private String qrUrl;
+
+
+
+//    PAYMENT
+    private String redirectUrlHttp;
+    private String redirectUrlApp;
+    private String redirectToken;
+
+//    PAYOUT
+
+    private String benefNm;
+    private String accountNo;
+    private String payoutMethod;
+    private String payoutToken;
+
+    private String balance;
+    private String scheduled;
+
+    private String validDate;
+    private String valiDTime;
+    private String cashoutToken;
+    private String mCode;
+
+    private String benefStatus;
+    private String benefType;
+    private String benefId;
+
+
+
 }

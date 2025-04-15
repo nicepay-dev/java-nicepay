@@ -1,13 +1,17 @@
 package io.github.nicepay.utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.GsonBuilder;
+import io.github.nicepay.data.model.Payment;
 import okhttp3.*;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Invocation;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import java.io.UnsupportedEncodingException;
+import java.text.MessageFormat;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,10 +27,9 @@ public class ApiUtils {
 
     private static Retrofit.Builder builder
             = new Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
-            ;
+            .addConverterFactory(GsonConverterFactory.create());
 
-    private static Retrofit api ;
+    private static Retrofit api;
 
     private static OkHttpClient.Builder httpClient
             = new OkHttpClient
@@ -44,63 +47,63 @@ public class ApiUtils {
             = new HttpLoggingInterceptor()
             .setLevel(HttpLoggingInterceptor.Level.BASIC);
 
-    public static <S> S createService(Class<S> serviceClass,final String grandType,final String accessToken,String data,NICEPay config) {
-            httpClient.interceptors().clear();
-            httpClient.addInterceptor(chain -> {
-                    Request original = chain.request();
-                    Request.Builder builder = null;
-                    print.logInfo("generate "+"fullUrl :" +chain.request().url());
-                    String url = chain.request().url().encodedPath().replace("/nicepay","");
-                      Optional.ofNullable(grandType)
-                            .ifPresentOrElse(value -> print.logInfo("getToken "+"pathUrl :" +url),
-                                    () -> print.logInfo("generate "+"pathUrl :" +url)
-                            );
-
-                    try {
-                        String httpMethod = original.method();
-                        builder = original.newBuilder()
-                                .headers(getHeaders(httpMethod,grandType,accessToken, data,url,config));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    Response response = chain.proceed(builder.build());
-                    String bodyString = response.body().string();
-                    MediaType contentType = response.body().contentType();
-                    ResponseBody responseBody  = ResponseBody.create(bodyString, contentType);
-                    print.logInfoBody("Request Data " + new GsonBuilder().setPrettyPrinting().create().toJson(original.tag(Invocation.class).arguments().get(0)));
-
-                    return response.newBuilder().body(responseBody).build();
-                });
-                builder.client(httpClient.build());
-                builder.baseUrl(config.getNICEPayBaseUrl());
-                api = builder.build();
-
-        return api.create(serviceClass);
-    }
-
-    public static <S> S createServiceConfig(Class<S> serviceClass,final String grandType,final String accessToken,String data,NICEPay config) {
+    public static <S> S createService(Class<S> serviceClass, final String grandType, final String accessToken, String data, NICEPay config) {
         httpClient.interceptors().clear();
         httpClient.addInterceptor(chain -> {
             Request original = chain.request();
             Request.Builder builder = null;
-            print.logInfo("generate "+"fullUrl :" +chain.request().url());
-            String url = chain.request().url().encodedPath().replace("/nicepay","");
+            print.logInfo("generate " + "fullUrl :" + chain.request().url());
+            String url = chain.request().url().encodedPath().replace("/nicepay", "");
             Optional.ofNullable(grandType)
-                    .ifPresentOrElse(value -> print.logInfo("getToken "+"pathUrl :" +url),
-                            () -> print.logInfo("generate "+"pathUrl :" +url)
+                    .ifPresentOrElse(value -> print.logInfo("getToken " + "pathUrl :" + url),
+                            () -> print.logInfo("generate " + "pathUrl :" + url)
                     );
 
             try {
                 String httpMethod = original.method();
                 builder = original.newBuilder()
-                        .headers(getHeaders(httpMethod,grandType,accessToken, data,url,config));
+                        .headers(getHeaders(httpMethod, grandType, accessToken, data, url, config));
             } catch (Exception e) {
                 e.printStackTrace();
             }
             Response response = chain.proceed(builder.build());
             String bodyString = response.body().string();
             MediaType contentType = response.body().contentType();
-            ResponseBody responseBody  = ResponseBody.create(bodyString, contentType);
+            ResponseBody responseBody = ResponseBody.create(bodyString, contentType);
+            print.logInfoBody("Request Data " + new GsonBuilder().setPrettyPrinting().create().toJson(original.tag(Invocation.class).arguments().get(0)));
+
+            return response.newBuilder().body(responseBody).build();
+        });
+        builder.client(httpClient.build());
+        builder.baseUrl(config.getNICEPayBaseUrl());
+        api = builder.build();
+
+        return api.create(serviceClass);
+    }
+
+    public static <S> S createServiceConfig(Class<S> serviceClass, final String grandType, final String accessToken, String data, NICEPay config) {
+        httpClient.interceptors().clear();
+        httpClient.addInterceptor(chain -> {
+            Request original = chain.request();
+            Request.Builder builder = null;
+            print.logInfo("generate " + "fullUrl :" + chain.request().url());
+            String url = chain.request().url().encodedPath().replace("/nicepay", "");
+            Optional.ofNullable(grandType)
+                    .ifPresentOrElse(value -> print.logInfo("getToken " + "pathUrl :" + url),
+                            () -> print.logInfo("generate " + "pathUrl :" + url)
+                    );
+
+            try {
+                String httpMethod = original.method();
+                builder = original.newBuilder()
+                        .headers(getHeaders(httpMethod, grandType, accessToken, data, url, config));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Response response = chain.proceed(builder.build());
+            String bodyString = response.body().string();
+            MediaType contentType = response.body().contentType();
+            ResponseBody responseBody = ResponseBody.create(bodyString, contentType);
             print.logInfoBody("Request Data " + new GsonBuilder().setPrettyPrinting().create().toJson(original.tag(Invocation.class).arguments().get(0)));
 
             return response.newBuilder().body(responseBody).build();
@@ -111,29 +114,29 @@ public class ApiUtils {
         return api.create(serviceClass);
     }
 
-    public static <S> S createTimeoutService(Class<S> serviceClass,final String grandType,final String accessToken,String data,NICEPay config) {
+    public static <S> S createTimeoutService(Class<S> serviceClass, final String grandType, final String accessToken, String data, NICEPay config) {
         httpClientTimeout.interceptors().clear();
         httpClientTimeout.addInterceptor(chain -> {
             Request original = chain.request();
             Request.Builder builder = null;
-            print.logInfo("generate "+"fullUrl :" +chain.request().url());
-            String url = chain.request().url().encodedPath().replace("/nicepay","");
+            print.logInfo("generate " + "fullUrl :" + chain.request().url());
+            String url = chain.request().url().encodedPath().replace("/nicepay", "");
             Optional.ofNullable(grandType)
-                    .ifPresentOrElse(value -> print.logInfo("getToken "+"pathUrl :" +url),
-                            () -> print.logInfo("generate "+"pathUrl :" +url)
+                    .ifPresentOrElse(value -> print.logInfo("getToken " + "pathUrl :" + url),
+                            () -> print.logInfo("generate " + "pathUrl :" + url)
                     );
 
             try {
                 String httpMethod = original.method();
                 builder = original.newBuilder()
-                        .headers(getHeaders(httpMethod,grandType,accessToken, data,url,config));
+                        .headers(getHeaders(httpMethod, grandType, accessToken, data, url, config));
             } catch (Exception e) {
                 e.printStackTrace();
             }
             Response response = chain.proceed(builder.build());
             String bodyString = response.body().string();
             MediaType contentType = response.body().contentType();
-            ResponseBody responseBody  = ResponseBody.create(bodyString, contentType);
+            ResponseBody responseBody = ResponseBody.create(bodyString, contentType);
             print.logInfoBody("Request Data Timeout" + new GsonBuilder().setPrettyPrinting().create().toJson(original.tag(Invocation.class).arguments().get(0)));
             return response.newBuilder().body(responseBody).build();
         });
@@ -144,33 +147,33 @@ public class ApiUtils {
     }
 
     //Get Header
-    private static Headers getHeaders(String httpMethod,String grandType,String accessToken,String data,String pathUrl,NICEPay config) throws Exception {
+    private static Headers getHeaders(String httpMethod, String grandType, String accessToken, String data, String pathUrl, NICEPay config) throws Exception {
 
         Map<String, String> headersMap = new HashMap<>();
         String partnerID = config.getPartnerId();
         String privateKey = config.getPrivateKey();
         String secretKey = config.getClientSecret();
         String externalID = config.getExternalID();
-        String timeStamp  = config.getTimestamp();
+        String timeStamp = config.getTimestamp();
 
         headersMap.put("Content-Type", "application/json");
-        if (grandType != null){
+        if (grandType != null) {
             String stringToSign = partnerID + "|" + timeStamp;
-            String signatureAccessToken = SignatureUtils.signSHA256RSA(stringToSign,privateKey);
+            String signatureAccessToken = SignatureUtils.signSHA256RSA(stringToSign, privateKey);
             headersMap.put("X-TIMESTAMP", timeStamp);
             headersMap.put("X-CLIENT-KEY", partnerID);
             headersMap.put("X-SIGNATURE", signatureAccessToken);
-        }else{
+        } else {
             String hashData = SignatureUtils.sha256EncodeHex(data);
-            String signature = SignatureUtils.getSignature(httpMethod,accessToken,hashData,pathUrl,timeStamp,secretKey);
-            headersMap.put("Authorization",  "Bearer "+accessToken);
+            String signature = SignatureUtils.getSignature(httpMethod, accessToken, hashData, pathUrl, timeStamp, secretKey);
+            headersMap.put("Authorization", "Bearer " + accessToken);
             headersMap.put("X-TIMESTAMP", timeStamp);
             headersMap.put("X-SIGNATURE", signature);
             headersMap.put("X-PARTNER-ID", partnerID);
             headersMap.put("X-EXTERNAL-ID", externalID);
-            headersMap.put("CHANNEL-ID", partnerID+"01");
+            headersMap.put("CHANNEL-ID", partnerID + "01");
         }
-        print.logInfoHeader("Request Header " + new GsonBuilder().setPrettyPrinting().create().toJson(headersMap) );
+        print.logInfoHeader("Request Header " + new GsonBuilder().setPrettyPrinting().create().toJson(headersMap));
 
         return Headers.of(headersMap);
 
@@ -182,7 +185,7 @@ public class ApiUtils {
         httpClient.addInterceptor(chain -> {
             Request original = chain.request();
             Request.Builder builder = null;
-            print.logInfoV2("generate "+"fullUrl :" +chain.request().url());
+            print.logInfoV2("generate " + "fullUrl :" + chain.request().url());
 
             try {
                 builder = original.newBuilder();
@@ -193,7 +196,7 @@ public class ApiUtils {
             Response response = chain.proceed(builder.build());
             String bodyString = response.body().string();
             MediaType contentType = response.body().contentType();
-            ResponseBody responseBody  = ResponseBody.create(bodyString, contentType);
+            ResponseBody responseBody = ResponseBody.create(bodyString, contentType);
             print.logInfoBodyV2("Request Data " + new GsonBuilder().setPrettyPrinting().create().toJson(Objects.requireNonNull(original.tag(Invocation.class)).arguments()));
 
             return response.newBuilder().body(responseBody).build();
@@ -211,7 +214,7 @@ public class ApiUtils {
         httpClient.addInterceptor(chain -> {
             Request original = chain.request();
             Request.Builder builder = null;
-            print.logInfoV1("generate "+"fullUrl :" +chain.request().url());
+            print.logInfoV1("generate " + "fullUrl :" + chain.request().url());
 
             try {
                 builder = original.newBuilder();
@@ -222,7 +225,7 @@ public class ApiUtils {
             Response response = chain.proceed(builder.build());
             String bodyString = response.body().string();
             MediaType contentType = response.body().contentType();
-            ResponseBody responseBody  = ResponseBody.create(bodyString, contentType);
+            ResponseBody responseBody = ResponseBody.create(bodyString, contentType);
             print.logInfoBodyV1("Request Data " + new GsonBuilder().setPrettyPrinting().create().toJson(original.tag(Invocation.class).arguments().get(0)));
 
             return response.newBuilder().body(responseBody).build();
@@ -257,4 +260,47 @@ public class ApiUtils {
         }
     }
 
+    public static String generateDirectV2PaymentUrl(Payment data, NICEPay config) throws  JsonProcessingException {
+
+        print.logInfoV2("START CALL V2 GENERATE PAYMENT URL");
+
+        String baseUrl = config.getNICEPayBaseUrl() + "nicepay/direct/v2/payment";
+
+        data.setMerchantToken(SHA256Util.encrypt(data.getMerchantToken()));
+
+        StringBuilder urlBuilder = new StringBuilder(baseUrl)
+                .append("?timeStamp=").append(data.getTimeStamp())
+                .append("&merchantToken=").append(data.getMerchantToken())
+                .append("&callBackUrl=").append(data.getCallBackUrl())
+                .append("&tXid=").append(data.getTXid());
+
+        print.logInfoBodyV2("Request Data " + new ObjectMapper().writeValueAsString(data));
+
+        print.logInfoResponseV2(
+                MessageFormat.format("URL PAYMENT : {0}", urlBuilder.toString()));
+
+        print.logInfoV2("END CALL V2 GENERATE PAYMENT URL");
+
+        return urlBuilder.toString();
+
+    }
+
+
+    public static String generateRedirectV2PaymentUrl(Payment data, NICEPay config) throws UnsupportedEncodingException {
+
+        print.logInfoV2("START CALL REDIRECT V2 GENERATE PAYMENT URL");
+
+        String baseUrl = config.getNICEPayBaseUrl() + "nicepay/redirect/v2/payment";
+
+        StringBuilder urlBuilder = new StringBuilder(baseUrl)
+                .append("?tXid=").append(data.getTXid());
+
+        print.logInfoResponseV2(
+                MessageFormat.format("URL PAYMENT : {0}", urlBuilder.toString()));
+
+        print.logInfoV2("END CALL REDIRECT V2 GENERATE PAYMENT URL");
+
+        return urlBuilder.toString();
+
+    }
 }

@@ -4,31 +4,35 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import io.github.nicepay.api.v2.VaRequestV2;
-import io.github.nicepay.data.model.VirtualAccount;
+import io.github.nicepay.api.v2.EwalletRequestV2;
+import io.github.nicepay.data.model.Ewallet;
 import io.github.nicepay.data.response.v2.NICEPayResponseV2;
-import io.github.nicepay.utils.ApiUtils;
-import io.github.nicepay.utils.LoggerPrint;
-import io.github.nicepay.utils.NICEPay;
-import io.github.nicepay.utils.SHA256Util;
+import io.github.nicepay.utils.*;
 import okhttp3.ResponseBody;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import retrofit2.Call;
 import retrofit2.Response;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 
-public class V2VaService {
+public class V2EwalletService extends V2CommonService {
 
-    private static LoggerPrint print = new LoggerPrint();
+    private static final Logger LOGGER = LoggerFactory.getLogger("[V2 - E-WALLET]");
 
-    public static <S> S callV2GenerateVA(VirtualAccount data, NICEPay config) throws IOException {
+    public static <S> S callEwalletRegistration(Ewallet data, NICEPay config) throws IOException {
+
+        LOGGER.info(LoggerPrint.LOG_DEFAULT, "START CALL V2 E-WALLET REGISTRATION");
+
         Gson gson = new Gson();
-        VaRequestV2 request = ApiUtils.createServiceV2(VaRequestV2.class, config);
+        EwalletRequestV2 request = ApiUtils.createServiceV2(EwalletRequestV2.class, config);
 
+//        Update merchant token
         data.setMerchantToken(SHA256Util.encrypt(data.getMerchantToken()));
-        data.setAdditionalInfo(null);
 
-        Call<NICEPayResponseV2> callSync = request.createVaV2(data);
+        Call<NICEPayResponseV2> callSync = request.registerEwallet(data);
+
         Response<NICEPayResponseV2> response;
         NICEPayResponseV2 nicePayResponse = null;
         ResponseBody errorResponse;
@@ -45,12 +49,16 @@ public class V2VaService {
                 resClient = gson.toJson(nicePayResponse);
             }
 
-
             jsonObject = JsonParser.parseString(resClient.toString()).getAsJsonObject();
-            print.logInfoResponseV2("Response getVA :" + new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject));
+            LOGGER.info(LoggerPrint.LOG_RESPONSE, "Response register E-WALLET transaction :" + new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject));
+            LOGGER.info(LoggerPrint.LOG_DEFAULT, "END CALL V2 E-WALLET REGISTRATION");
+
         } catch (Exception ex) {
+            LOGGER.error(LoggerPrint.LOG_ERROR, "E-WALLET transaction registration failed :");
             ex.printStackTrace();
         }
         return (S) nicePayResponse;
     }
+
+
 }

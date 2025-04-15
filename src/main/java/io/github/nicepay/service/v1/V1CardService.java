@@ -1,6 +1,5 @@
 package io.github.nicepay.service.v1;
 
-import com.google.gson.Gson;
 import io.github.nicepay.api.v1.RequestV1;
 import io.github.nicepay.data.model.Card;
 import io.github.nicepay.data.response.v1.NICEPayResponseV1;
