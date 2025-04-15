@@ -20,6 +20,32 @@ public class Qris {
     private Map<String, Object> amount;
     private Map<String, Object> additionalInfo;
 
+//    v2
+    private String timeStamp;
+    private String iMid;
+    private String payMethod;
+    private String currency;
+    private String amt;
+    private String referenceNo;
+    private String goodsNm;
+    private String billingNm;
+    private String billingPhone;
+    private String billingEmail;
+    private String billingCity;
+    private String billingState;
+    private String billingPostCd;
+    private String billingCountry;
+    private String dbProcessUrl;
+    private String merchantToken;
+    private String paymentExpDt;
+    private String paymentExpTm;
+    private String userIP;
+    private String cartData;
+    private String mitraCd;
+    private String shopId;
+
+
+
     public static class QrisBuilder {
         private Map<String, Object> amount;
         private Map<String, Object> additionalInfo;
@@ -61,14 +87,41 @@ public class Qris {
             this.additionalInfo = additonalInfoMap;
             return this;
         }
+
+        public QrisBuilder merchantToken(String timeStamp, String imid, String reffNo, String amount, String merchantKey) {
+            this.merchantToken = timeStamp + imid + reffNo + amount + merchantKey;
+            return this;
+        }
     }
 
-    public Qris(String partnerReferenceNo, String merchantId, String storeId, String validityPeriod,Map<String, Object> amount, Map<String, Object> additionalInfo) {
+    public Qris(String partnerReferenceNo, String merchantId, String storeId, String validityPeriod, Map<String, Object> amount, Map<String, Object> additionalInfo, String timeStamp, String iMid, String payMethod, String currency, String amt, String referenceNo, String goodsNm, String billingNm, String billingPhone, String billingEmail, String billingCity, String billingState, String billingPostCd, String billingCountry, String dbProcessUrl, String merchantToken, String paymentExpDt, String paymentExpTm, String userIP, String cartData, String mitraCd, String shopId) {
         this.partnerReferenceNo = partnerReferenceNo;
         this.merchantId = merchantId;
         this.storeId = storeId;
         this.validityPeriod = validityPeriod;
         this.amount = amount;
         this.additionalInfo = additionalInfo;
+        this.timeStamp = timeStamp;
+        this.iMid = iMid;
+        this.payMethod = payMethod;
+        this.currency = currency;
+        this.amt = amt;
+        this.referenceNo = referenceNo;
+        this.goodsNm = goodsNm;
+        this.billingNm = billingNm;
+        this.billingPhone = billingPhone;
+        this.billingEmail = billingEmail;
+        this.billingCity = billingCity;
+        this.billingState = billingState;
+        this.billingPostCd = billingPostCd;
+        this.billingCountry = billingCountry;
+        this.dbProcessUrl = dbProcessUrl;
+        this.merchantToken = merchantToken;
+        this.paymentExpDt = paymentExpDt;
+        this.paymentExpTm = paymentExpTm;
+        this.userIP = userIP;
+        this.cartData = cartData;
+        this.mitraCd = mitraCd;
+        this.shopId = shopId;
     }
 }

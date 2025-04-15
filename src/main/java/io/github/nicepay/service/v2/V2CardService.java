@@ -19,11 +19,11 @@ import retrofit2.Response;
 
 import java.io.IOException;
 
-public class V2CardService {
+public class V2CardService extends V2CommonService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger("[V2 - Card]");
 
-    public static  <S> S callV2CardRegistration(Card data, NICEPay config) throws IOException {
+    public static <S> S callV2CardRegistration(Card data, NICEPay config) throws IOException {
 
         LOGGER.info(LoggerPrint.LOG_DEFAULT, "START CALL V2 CARD REGISTRATION");
 
@@ -55,13 +55,13 @@ public class V2CardService {
             LOGGER.info(LoggerPrint.LOG_DEFAULT, "END CALL V2 CARD REGISTRATION");
 
         } catch (Exception ex) {
-            LOGGER.error(LoggerPrint.LOG_ERROR, "Card transaction registration failed :" );
+            LOGGER.error(LoggerPrint.LOG_ERROR, "Card transaction registration failed :");
             ex.printStackTrace();
         }
         return (S) nicePayResponse;
     }
 
-    public static  <S> S callV2CardPaymentRequest(Card data, NICEPay config) throws IOException {
+    public static <S> S callV2CardPaymentRequest(Card data, NICEPay config) throws IOException {
         LOGGER.info(LoggerPrint.LOG_DEFAULT, "START CALL V2 CARD PAYMENT REQUEST");
 
         Gson gson = new Gson();
@@ -103,7 +103,7 @@ public class V2CardService {
             LOGGER.info(LoggerPrint.LOG_DEFAULT, "END CALL V2 CARD PAYMENT REQUEST");
 
         } catch (Exception ex) {
-            LOGGER.error(LoggerPrint.LOG_ERROR, "Card request payment failed :" );
+            LOGGER.error(LoggerPrint.LOG_ERROR, "Card request payment failed :");
             ex.printStackTrace();
         }
         return (S) resClient;

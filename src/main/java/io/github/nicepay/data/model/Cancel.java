@@ -63,6 +63,7 @@ public class Cancel {
     private Map<String, Object> additionalInfo;
 
     public static class CancelBuilder {
+
         private Map<String, Object> totalAmount;
         private Map<String, Object> additionalInfo;
 //        private Map<String, Object> amount;

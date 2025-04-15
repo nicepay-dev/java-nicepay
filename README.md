@@ -18,7 +18,7 @@ Add our library as a dependency on your pom.xml
 		<dependency>
 			<groupId>io.github.nicepay-dev</groupId>
 			<artifactId>nicepay-java-client</artifactId>
-			<version>1.1.0</version>
+			<version>1.2.0</version>
 		</dependency>
 ```
 
@@ -142,5 +142,11 @@ This library is meant to be implemented on your backend server using Java.
 ### [1.1.0] - 2025-03-05
 - **Added:** Configuration support for setting the Nicepay service server on a cloud server.
 - **Added:** V1 Credit Card Cancel feature for processing Credit Card transaction on version 1 Nicepay Api.  
+
+### [1.2.0] - 2025-04-15
+- **Added:** V2 Direct support for payment methods: Convenience Store, Payloan, Payout, QRIS, and E-Wallet.
+- **Added:** V2 Redirect support for all payment methods.
+- **Added:** URL generator for V2 Direct payments in API utilities.
+- **Added:** URL generator for V2 Redirect payments in API utilities.
 
 

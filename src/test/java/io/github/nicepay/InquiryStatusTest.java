@@ -1,8 +1,5 @@
 package io.github.nicepay;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.google.gson.Gson;
 import io.github.nicepay.data.TestingConstants;
 import io.github.nicepay.data.model.AccessToken;
 import io.github.nicepay.data.model.InquiryStatus;
@@ -13,7 +10,10 @@ import io.github.nicepay.data.response.v2.NICEPayResponseV2;
 import io.github.nicepay.service.snap.SnapInquiryStatusService;
 import io.github.nicepay.service.snap.SnapTokenService;
 import io.github.nicepay.service.v1.V1CardService;
+import io.github.nicepay.service.v2.V2CardService;
+import io.github.nicepay.service.v2.V2CvSService;
 import io.github.nicepay.service.v2.V2InquiryStatusService;
+import io.github.nicepay.service.v2.V2QrisService;
 import io.github.nicepay.utils.NICEPay;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -39,11 +39,11 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
         config =NICEPay.builder()
                 .isProduction(false)
                 .isCloudServer(false)
-                .clientSecret(TestingConstants.CLOUD_CLIENT_SECRET)
-                .partnerId(I_MID)
+                .clientSecret(CLIENT_SECRET)
+                .partnerId(PARTNER_ID)
                 .externalID(TestingConstants.EXTERNAL_ID)
                 .timestamp(TIMESTAMP)
-                .privateKey(TestingConstants.PRIVATE_KEY)
+                .privateKey(PRIVATE_KEY_CLOUD)
                 .build();
 
         configCloud =NICEPay.builder()
@@ -63,7 +63,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
         String externalId = "OrdNo" + TIMESTAMP.substring(0, 10).replace("-","") + TIMESTAMP.substring(11,19).replace(":","") + random;
         config2 =NICEPay.builder()
                 .isProduction(false)
-                .clientSecret(TestingConstants.CLOUD_CLIENT_SECRET)
+                .clientSecret(CLIENT_SECRET)
                 .partnerId(TestingConstants.I_MID)
                 .externalID(externalId)
                 .timestamp(TestingConstants.TIMESTAMP)
@@ -157,7 +157,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
 
     @Test
     void InquiryStatusEwallet() throws IOException, InterruptedException {
-        config2.setCloudServer(true);
+//        config2.setCloudServer(true);
 
         NICEPayResponse responseToken = (NICEPayResponse) getToken(config2);
         var accessToken = Optional.ofNullable(responseToken)
@@ -234,7 +234,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
         InquiryStatus requestData = InquiryStatus.builder()
-                .merchantId(TestingConstants.I_MID)
+                .merchantId(PARTNER_ID)
                 .originalPartnerReferenceNo("2020102900000000000001")
                 .originalReferenceNo("IONPAYTEST07202404080947007680")
                 .beneficiaryAccountNo("5345000060")
@@ -294,7 +294,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
     void InquiryStatusCardV2() throws IOException, InterruptedException {
 
         String timestamp = V2_TIMESTAMP;
-        String imid = TestingConstants.I_MID_PAC;
+        String imid = "TESTMPGS05";
         String merchantKey = TestingConstants.MERCHANT_KEY;
         String reffNo = "ordNo20240904130813";
         String amount = "1000";
@@ -309,7 +309,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
                 .amt("1000")
                 .build();
 
-        NICEPayResponseV2 result = V2InquiryStatusService.callV2InquiryStatus(requestData, config);
+        NICEPayResponseV2 result = V2CardService.callV2InquiryStatus(requestData, config);
 
 //        RESPONSE CODE MUST BE 0000
         assertEquals("0000", result.getResultCd());
@@ -336,6 +336,177 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
                 .build();
 
         NICEPayResponseV1 result = V1CardService.callInquiryStatus(requestData, config);
+
+//        RESPONSE CODE MUST BE 0000
+        assertEquals("0000", result.getResultCd());
+
+    }
+
+    @Test
+    void InquiryStatusQrisV2() throws IOException, InterruptedException {
+
+        String timestamp = V2_TIMESTAMP;
+        String imid = I_MID;
+        String merchantKey = TestingConstants.MERCHANT_KEY;
+        String txId = "IONPAYTEST08202504081444019990";
+        String reffNo = "regQr20250408144401";
+        String amount = "500";
+
+
+        InquiryStatus requestData = InquiryStatus.builder()
+                .timeStamp(timestamp)
+                .tXid(txId)
+                .iMid(imid)
+                .referenceNo(reffNo)
+                .merchantToken(timestamp, imid , reffNo , amount , merchantKey)
+                .amt(amount)
+                .build();
+
+        NICEPayResponseV2 result = V2QrisService.callV2InquiryStatus(requestData, config);
+
+//        RESPONSE CODE MUST BE 0000
+        assertEquals("0000", result.getResultCd());
+
+    }
+
+    @Test
+    void InquiryStatusQrisV2Cloud() throws IOException, InterruptedException {
+
+        config.setCloudServer(true);
+
+        String timestamp = V2_TIMESTAMP;
+        String imid = I_MID;
+        String merchantKey = TestingConstants.MERCHANT_KEY;
+        String reffNo = "regQr20250408145331";
+        String amount = "500";
+
+
+        InquiryStatus requestData = InquiryStatus.builder()
+                .timeStamp(timestamp)
+                .tXid("IONPAYTEST08202504081453314756")
+                .iMid(imid)
+                .referenceNo(reffNo)
+                .merchantToken(timestamp, imid , reffNo , amount , merchantKey)
+                .amt(amount)
+                .build();
+
+        NICEPayResponseV2 result = V2QrisService.callV2InquiryStatus(requestData, config);
+
+//        RESPONSE CODE MUST BE 0000
+        assertEquals("0000", result.getResultCd());
+
+    }
+
+//    CVS V2
+@Test
+void InquiryStatusCvsV2() throws IOException, InterruptedException {
+
+    String timestamp = V2_TIMESTAMP;
+    String imid = I_MID;
+    String merchantKey = TestingConstants.MERCHANT_KEY;
+    String txId = "IONPAYTEST03202504081511371401";
+    String reffNo = "regCvs20250408151137";
+    String amount = "1000";
+
+
+    InquiryStatus requestData = InquiryStatus.builder()
+            .timeStamp(timestamp)
+            .tXid(txId)
+            .iMid(imid)
+            .referenceNo(reffNo)
+            .merchantToken(timestamp, imid , reffNo , amount , merchantKey)
+            .amt(amount)
+            .build();
+
+    NICEPayResponseV2 result = V2CvSService.callV2InquiryStatus(requestData, config);
+
+//        RESPONSE CODE MUST BE 0000
+    assertEquals("0000", result.getResultCd());
+
+}
+
+    @Test
+    void InquiryStatusCvsV2Cloud() throws IOException, InterruptedException {
+
+        config.setCloudServer(true);
+
+        String timestamp = V2_TIMESTAMP;
+        String imid = I_MID;
+        String merchantKey = TestingConstants.MERCHANT_KEY;
+        String txId = "IONPAYTEST03202504081512555708";
+        String reffNo = "regCvs20250408151255";
+        String amount = "1000";
+
+
+        InquiryStatus requestData = InquiryStatus.builder()
+                .timeStamp(timestamp)
+                .tXid(txId)
+                .iMid(imid)
+                .referenceNo(reffNo)
+                .merchantToken(timestamp, imid , reffNo , amount , merchantKey)
+                .amt(amount)
+                .build();
+
+        NICEPayResponseV2 result = V2CvSService.callV2InquiryStatus(requestData, config);
+
+//        RESPONSE CODE MUST BE 0000
+        assertEquals("0000", result.getResultCd());
+
+    }
+
+//    payloan
+@Test
+void InquiryStatusPayloanV2() throws IOException, InterruptedException {
+
+    String timestamp = V2_TIMESTAMP;
+    String imid = I_MID;
+    String merchantKey = TestingConstants.MERCHANT_KEY;
+    String txId = "IONPAYTEST06202504081542363004";
+    String reffNo = "regPayloan20250408154236";
+    String amount = "10000";
+
+
+    InquiryStatus requestData = InquiryStatus.builder()
+            .timeStamp(timestamp)
+            .tXid(txId)
+            .iMid(imid)
+            .referenceNo(reffNo)
+            .merchantToken(timestamp, imid , reffNo , amount , merchantKey)
+            .amt(amount)
+            .build();
+
+    NICEPayResponseV2 result = V2QrisService.callV2InquiryStatus(requestData, config);
+
+//        RESPONSE CODE MUST BE 0000
+    assertEquals("0000", result.getResultCd());
+
+}
+
+
+
+    @Test
+    void InquiryStatusPayloanV2Cloud() throws IOException, InterruptedException {
+
+        config.setCloudServer(true);
+
+        String timestamp = V2_TIMESTAMP;
+        String imid = I_MID;
+        String merchantKey = TestingConstants.MERCHANT_KEY;
+        String txId = "IONPAYTEST06202504081550377613";
+        String reffNo = "regPayloan20250408155037";
+        String amount = "10000";
+
+
+        InquiryStatus requestData = InquiryStatus.builder()
+                .timeStamp(timestamp)
+                .tXid(txId)
+                .iMid(imid)
+                .referenceNo(reffNo)
+                .merchantToken(timestamp, imid , reffNo , amount , merchantKey)
+                .amt(amount)
+                .build();
+
+        NICEPayResponseV2 result = V2QrisService.callV2InquiryStatus(requestData, config);
 
 //        RESPONSE CODE MUST BE 0000
         assertEquals("0000", result.getResultCd());
