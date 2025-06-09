@@ -209,6 +209,8 @@ class CardTest {
             .callBackUrl("https://dev.nicepay.co.id/IONPAY_CLIENT/paymentResult.jsp")
             .recurringToken("")
             .preauthToken("")
+            .isEncryptedCard("0")
+            .publicKey("")
             .build();
 
     String responseHtml = V2CardService.callV2CardPaymentRequest(requestData,config);

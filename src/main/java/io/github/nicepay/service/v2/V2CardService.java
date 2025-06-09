@@ -19,6 +19,9 @@ import retrofit2.Response;
 
 import java.io.IOException;
 
+import static io.github.nicepay.utils.SHA256Util.encrypt;
+import static io.github.nicepay.utils.SHA256Util.encryptWithPublicKeyString;
+
 public class V2CardService extends V2CommonService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger("[V2 - Card]");
@@ -61,7 +64,7 @@ public class V2CardService extends V2CommonService {
         return (S) nicePayResponse;
     }
 
-    public static <S> S callV2CardPaymentRequest(Card data, NICEPay config) throws IOException {
+    public static <S> S callV2CardPaymentRequest(Card data, NICEPay config) throws Exception {
         LOGGER.info(LoggerPrint.LOG_DEFAULT, "START CALL V2 CARD PAYMENT REQUEST");
 
         Gson gson = new Gson();
@@ -69,6 +72,15 @@ public class V2CardService extends V2CommonService {
 
         //        Update merchant token
         data.setMerchantToken(SHA256Util.encrypt(data.getMerchantToken()));
+
+        //Check if card detail want to be encrypted or not
+        if(data.getIsEncryptedCard().equals("1")){
+            data.setCardNo(SHA256Util.encryptWithPublicKeyString(data.getCardNo(), data.getPublicKey()));
+            data.setCardCvv(SHA256Util.encryptWithPublicKeyString(data.getCardCvv(), data.getPublicKey()));
+            data.setCardExpYymm(SHA256Util.encryptWithPublicKeyString(data.getCardExpYymm(), data.getPublicKey()));
+            data.setCardHolderNm(SHA256Util.encryptWithPublicKeyString(data.getCardHolderNm(), data.getPublicKey()));
+            data.setPublicKey(SHA256Util.encrypt(data.getPublicKey()));
+        }
 
         Call<ResponseBody> callSync = request.requestPaymentCardV2(
                 data.getTimeStamp(),
@@ -81,7 +93,9 @@ public class V2CardService extends V2CommonService {
                 data.getCardHolderNm(),
                 data.getCallBackUrl(),
                 data.getRecurringToken(),
-                data.getPreauthToken()
+                data.getPreauthToken(),
+                data.getIsEncryptedCard(),
+                data.getPublicKey()
         );
         Response<ResponseBody> response;
         ResponseBody nicePayResponse;
