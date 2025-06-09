@@ -66,6 +66,10 @@ public class Card {
     private String deliveryPostCd;
     private String deliveryCountry;
 
+//    Encrypted Card Detail
+    private String isEncryptedCard;
+    private String publicKey;
+
     public static class CardBuilder {
 
         public CardBuilder merchantToken(String timeStamp, String imid, String reffNo, String amount, String merchantKey) {

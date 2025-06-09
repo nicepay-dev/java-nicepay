@@ -171,6 +171,8 @@ Card requestData = Card.builder()
         .callBackUrl("https://dev.nicepay.co.id/IONPAY_CLIENT/paymentResult.jsp")
         .recurringToken("")
         .preauthToken("")
+        .isEncryptedCard("0")
+        .publicKey("")
         .build();
 
 
@@ -342,7 +344,22 @@ void ewalletPaymentV2Test() throws IOException, InterruptedException {
 Sample response = "https://dev.nicepay.co.id/nicepay/direct/v2/payment?timeStamp=20250415140651&merchantToken=1ccbe4a9ca050f4dbf08b5d14a5ddc3006f2015f24d963b6111f9f4a9db73a2c&callBackUrl=https://dev.nicepay.co.id/IONPAY_CLIENT/paymentResult.jsp?order_id=TNICEEW05105202504151406524860&tXid=TNICEEW05105202504151406524860"
 
 ---
+#### 2.3.2 generateRedirectV2PaymentUrl(Payment data, NICEPay config)
 
+Encrypt Card Detail using Library Java
+
+```java
+import io.github.nicepay.utils.SHA256Util;
+
+String encryptedCardNo = SHA256Util.encryptWithPublicKeyString("5123450000000008","MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCihYcT862uLW7U3xEIZT62CeVYHzE9t0/Q8g+y5S88bzqdM0bAG4C25q6CMC6QI8OliNJ2mgXO+WOMRG+dFK61cgvJPz2XzITqy2ey0cQTPig9ydVBbPphtcg3TJTPchh0lAt7bQZqguqZQdajUebTFI1p/b6lT+XJNC31AxvzlQIDAQAB");
+String encryptedCardCvv = SHA256Util.encryptWithPublicKeyString("100","MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCihYcT862uLW7U3xEIZT62CeVYHzE9t0/Q8g+y5S88bzqdM0bAG4C25q6CMC6QI8OliNJ2mgXO+WOMRG+dFK61cgvJPz2XzITqy2ey0cQTPig9ydVBbPphtcg3TJTPchh0lAt7bQZqguqZQdajUebTFI1p/b6lT+XJNC31AxvzlQIDAQAB");
+String encryptedCardExpYymm = SHA256Util.encryptWithPublicKeyString("2908","MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCihYcT862uLW7U3xEIZT62CeVYHzE9t0/Q8g+y5S88bzqdM0bAG4C25q6CMC6QI8OliNJ2mgXO+WOMRG+dFK61cgvJPz2XzITqy2ey0cQTPig9ydVBbPphtcg3TJTPchh0lAt7bQZqguqZQdajUebTFI1p/b6lT+XJNC31AxvzlQIDAQAB");
+String encryptedCardHolderNm = SHA256Util.encryptWithPublicKeyString("NICEPAY TEST","MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCihYcT862uLW7U3xEIZT62CeVYHzE9t0/Q8g+y5S88bzqdM0bAG4C25q6CMC6QI8OliNJ2mgXO+WOMRG+dFK61cgvJPz2XzITqy2ey0cQTPig9ydVBbPphtcg3TJTPchh0lAt7bQZqguqZQdajUebTFI1p/b6lT+XJNC31AxvzlQIDAQAB");
+String hashPublicKey = SHA256Util.encrypt("MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCihYcT862uLW7U3xEIZT62CeVYHzE9t0/Q8g+y5S88bzqdM0bAG4C25q6CMC6QI8OliNJ2mgXO+WOMRG+dFK61cgvJPz2XzITqy2ey0cQTPig9ydVBbPphtcg3TJTPchh0lAt7bQZqguqZQdajUebTFI1p/b6lT+XJNC31AxvzlQIDAQAB");
+
+```
+
+---
 #### ⚠️ Additional Information
 
 The generated URLs are intended to be passed to the **front-end** for redirection.  

@@ -8,6 +8,7 @@ import io.github.nicepay.service.v1.V1CardService;
 import io.github.nicepay.service.v2.V2CardService;
 import io.github.nicepay.utils.NICEPay;
 import io.github.nicepay.utils.NICEPayConstants;
+import io.github.nicepay.utils.SHA256Util;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -124,7 +125,7 @@ class CardTest {
     }
 
     @Test
-    void cardPaymentRequestTest() throws IOException {
+    void cardPaymentRequestTest() throws Exception {
 
 //        CREATE NEW CARD TRANSACTION
         NICEPayResponseV2 cardRegistResponse = generateCardTransaction(config);
@@ -145,6 +146,8 @@ class CardTest {
                 .callBackUrl("https://dev.nicepay.co.id/IONPAY_CLIENT/paymentResult.jsp")
                 .recurringToken("")
                 .preauthToken("")
+                .isEncryptedCard("1")
+                .publicKey("MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCihYcT862uLW7U3xEIZT62CeVYHzE9t0/Q8g+y5S88bzqdM0bAG4C25q6CMC6QI8OliNJ2mgXO+WOMRG+dFK61cgvJPz2XzITqy2ey0cQTPig9ydVBbPphtcg3TJTPchh0lAt7bQZqguqZQdajUebTFI1p/b6lT+XJNC31AxvzlQIDAQAB")
                 .build();
 
         String responseHtml = V2CardService.callV2CardPaymentRequest(requestData, config);
@@ -160,7 +163,7 @@ class CardTest {
     }
 
     @Test
-    void cardPaymentRequestTestCloud() throws IOException {
+    void cardPaymentRequestTestCloud() throws Exception {
         config.setCloudServer(true);
 //        CREATE NEW CARD TRANSACTION
         NICEPayResponseV2 cardRegistResponse = generateCardTransaction(config);
@@ -181,6 +184,8 @@ class CardTest {
                 .callBackUrl("https://dev.nicepay.co.id/IONPAY_CLIENT/paymentResult.jsp")
                 .recurringToken("")
                 .preauthToken("")
+                .isEncryptedCard("0")
+                .publicKey("")
                 .build();
 
         String responseHtml = V2CardService.callV2CardPaymentRequest(requestData, config);
@@ -313,4 +318,11 @@ class CardTest {
         return V2CardService.callV2CardRegistration(requestData, config);
     }
 
+
+    @Test
+    void testingEncryptCardDetail() throws Exception {
+        String encryptedCard= SHA256Util.encryptWithPublicKeyString("5123450000000008","MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCihYcT862uLW7U3xEIZT62CeVYHzE9t0/Q8g+y5S88bzqdM0bAG4C25q6CMC6QI8OliNJ2mgXO+WOMRG+dFK61cgvJPz2XzITqy2ey0cQTPig9ydVBbPphtcg3TJTPchh0lAt7bQZqguqZQdajUebTFI1p/b6lT+XJNC31AxvzlQIDAQAB");
+        System.out.println(encryptedCard);
+        assertEquals("kv3qDS9l9Vt+HyA3PJWmE3v4Ga9dWxWVOJkBYuarowe4BpW/U9IQjnm0i7DiEFDMbkAYIqP+B4GZzALGeUVfnTuaszjIM+AQEpntw5t0yxCrsWPYtzl0LEu3X/Huv0VWSujlJKCKkMN2P1JiWY8G8DfEhBn5m4lQBHM7KDEB9ZE=", encryptedCard);
+    }
 }

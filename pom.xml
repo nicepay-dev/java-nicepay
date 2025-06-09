@@ -6,7 +6,7 @@
 
 	<groupId>io.github.nicepay-dev</groupId>
 	<artifactId>nicepay-java-client</artifactId>
-	<version>1.2.0</version> <!-- Add V2 Services (CvS, Ewallet, Payloan, Payout, Qris)  -->
+	<version>1.3.0</version> <!-- Add Encrypt Card Detail  -->
 
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>Nicepay Official Java Library</description>

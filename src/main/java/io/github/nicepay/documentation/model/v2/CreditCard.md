@@ -83,18 +83,20 @@
 ## **Request Body Parameter**
 
 
-| Parameter        | Type   | Length | Required | Description                                     | Example / Notes                  |
-|:-----------------|:-------|:-------|:---------|:------------------------------------------------|:---------------------------------|
-| iMid             | String | 10     | ✅        | Merchant ID                                     | IONPAYTEST                       |
-| merchantToken    | String | 255    | ✅        | Merchant Token                                  | 6cfccfc0046773c1b89d8e98c...     |
-| referenceNo      | String | 40     | ✅        | Transaction ID (Reference Number from Merchant) | referenceNo1234                  |
-| callBackUrl      | String | 255    | ✅        | Payment Result Page URL                         | https://merchant.com/callBackUrl |												                                                    
-| tXid             | String | 30     | ✅        | Transaction ID                                  | IONPAYTEST01202212021455054652   |
-| cardNo           | String | 20     | ✅        | Credit Card Number                              | 4434260000000008                 |
-| cardExpYymm      | String | 4      | ✅        | Card Expiry (`YYMM`)                            | 2912                             |
-| cardCvv          | String | 4      | ✅        | Card CVV                                        | 101                              |
-| cardHolderNm     | String | 45     | ✅        | Card Holder Name                                | John Doe                         |
-| cardHolderEmail  | String | 100    | ✅        | Card Holder Email                               | Johndoe@email.com                |
+| Parameter       | Type   | Length | Required | Description                                     | Example / Notes                  |
+|:----------------|:-------|:-------|:---------|:------------------------------------------------|:---------------------------------|
+| iMid            | String | 10     | ✅        | Merchant ID                                     | IONPAYTEST                       |
+| merchantToken   | String | 255    | ✅        | Merchant Token                                  | 6cfccfc0046773c1b89d8e98c...     |
+| referenceNo     | String | 40     | ✅        | Transaction ID (Reference Number from Merchant) | referenceNo1234                  |
+| callBackUrl     | String | 255    | ✅        | Payment Result Page URL                         | https://merchant.com/callBackUrl |												                                                    
+| tXid            | String | 30     | ✅        | Transaction ID                                  | IONPAYTEST01202212021455054652   |
+| cardNo          | String | 20     | ✅        | Credit Card Number                              | 4434260000000008                 |
+| cardExpYymm     | String | 4      | ✅        | Card Expiry (`YYMM`)                            | 2912                             |
+| cardCvv         | String | 4      | ✅        | Card CVV                                        | 101                              |
+| cardHolderNm    | String | 45     | ✅        | Card Holder Name                                | John Doe                         |
+| cardHolderEmail | String | 100    | ✅        | Card Holder Email                               | Johndoe@email.com                |
+| encrypted       | String | 1      | ✅        | Flagging for transaction use encryption or not  | 1                                |
+| publicKey       | String | 100    | ✅        | Hashing of used public key                      | a5f3445e7dd166b8c6cfef685....    |
 
 ## **Response Body Parameter**
 

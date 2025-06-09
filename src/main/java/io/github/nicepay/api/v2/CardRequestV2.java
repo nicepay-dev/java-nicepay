@@ -27,6 +27,8 @@ public interface CardRequestV2 {
             @Field("cardHolderNm") String cardHolderNm,
             @Field("callBackUrl") String callBackUrl,
             @Field("recurringToken") String recurringToken,
-            @Field("preauthToken") String preauthToken
+            @Field("preauthToken") String preauthToken,
+            @Field("encrypted") String encrypted,
+            @Field("publicKey") String publicKey
     );
 }
