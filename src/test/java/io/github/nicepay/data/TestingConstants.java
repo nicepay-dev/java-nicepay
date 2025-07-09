@@ -16,13 +16,14 @@ public final class TestingConstants {
     static int random = rand.nextInt(10000);
     public static final String EXTERNAL_ID = "OrdNo" + TIMESTAMP.substring(0, 10).replace("-", "") + TIMESTAMP.substring(11, 19).replace(":", "") + random;
     public static final String PARTNER_ID = "";
-    public static final String PRIVATE_KEY = "";
+//    public static final String PRIVATE_KEY = "";
+//    public static final String PUBLIC_KEY = "";
     public static final String PUBLIC_KEY = "";
 
 
     static SimpleDateFormat v2_format = new SimpleDateFormat("yyyyMMddHHmmss");
     public static final String V2_TIMESTAMP = v2_format.format(new Date());
-    public static final String MERCHANT_KEY = "";
+//    public static final String MERCHANT_KEY = "";
     public static final String I_MID_NORMALCLOSED = "";
     public static final String I_MID_INSTLMNT = "";
     public static final String INSTLMNT_CLIENT_SECRET = "";
@@ -33,14 +34,35 @@ public final class TestingConstants {
     public static final String QRIS_CLIENT_SECRET = "";
     public static final String QRIS_STORE_ID = "";
 
-    public static final String I_MID_EWALLET = "";
+//    public static final String I_MID_EWALLET = "";
 
-    public static final String I_MID = "";
+//    public static final String I_MID = "";
     public static final String CLOUD_CLIENT_SECRET = "";
     public static final String CLOUD_PRIVATE_KEY = "";
     public static final String NORMALTEST_CLOUD_PRIVATE_KEY = "";
-    public static final String CLIENT_SECRET = "";
+//    public static final String CLIENT_SECRET = "";
+//    public static final String PRIVATE_KEY_CLOUD = "";
+
+
+    public static final String I_MID_NORMALTEST = "";
+    public static final String NORMALTEST_CLIENT_SECRET = "";
+    public static final String PRIVATE_KEY = "";
+    public static final String MERCHANT_KEY = "";
+
+    public static final String PRIVATE_KEY_TEST = "";
+
+    public static final String CLIENT_SECRET  = "";
+    public static final String I_MID = "";
+
+    public static final String CLIENT_SECRET_IONPAYTEST = "";
+    public static final String PRIVATE_KEY_NEW = "";
+
+
+    public static final String I_MID_EWALLET = "";
+    public static final String EWALLET_CLIENT_SECRET = "";
+
     public static final String PRIVATE_KEY_CLOUD = "";
+
 
 }
 

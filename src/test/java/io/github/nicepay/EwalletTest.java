@@ -34,12 +34,11 @@ class EwalletTest {
         public  static void setUp() {
                 config =NICEPay.builder()
                         .isProduction(false)
-                        .isCloudServer(false)
-                        .clientSecret(CLIENT_SECRET)
-                        .partnerId(PARTNER_ID)
+                        .clientSecret(EWALLET_CLIENT_SECRET)
+                        .partnerId(I_MID_EWALLET)
                         .externalID(EXTERNAL_ID)
-                        .timestamp(TestingConstants.TIMESTAMP)
-                        .privateKey(TestingConstants.PRIVATE_KEY)
+                        .timestamp(TIMESTAMP)
+                        .privateKey(PRIVATE_KEY)
                         .build();
 
                 configCloud =NICEPay.builder()
@@ -59,22 +58,21 @@ class EwalletTest {
                         .grantType("client_credentials")
                         .additionalInfo(additionalInfo)
                         .build();
-                return SnapTokenService.callGetAccessToken(util,configCloud);
+                return SnapTokenService.callGetAccessToken(util,config);
 
         }
 
         @Test
         void EwalletPayment() throws IOException, InterruptedException {
-                configCloud.setCloudServer(false);
-//                configCloud.setClientSecret(CLIENT_SECRET);
 
-                var accessToken = Optional.ofNullable((NICEPayResponse) getToken())
+
+                String accessToken = Optional.ofNullable((NICEPayResponse) getToken())
                         .map(NICEPayResponse::getAccessToken)
                         .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
                 Ewallet ewallet = Ewallet.builder()
                         .partnerReferenceNo("ewallet"+V2_TIMESTAMP)
-                        .merchantId(configCloud.getPartnerId())
+                        .merchantId(config.getPartnerId())
                         .subMerchantId("")
                         .externalStoreId("")
                         .validUpTo("")
@@ -88,7 +86,7 @@ class EwalletTest {
                                         put("billingPhone","089665542347");
                                         put("dbProcessUrl","http://ptsv2.com/t/dbProcess/post");
                                         put("callBackUrl","https://www.nicepay.co.id/IONPAY_CLIENT/paymentResult.jsp");
-                                        put("msId","data");
+                                        put("msId","");
                                         put("cartData","{\"count\":\"2\",\"item\":[{\"img_url\":\"http://img.aaa.com/ima1.jpg\",\"goods_name\":\"Item 1 Name\",\"goods_detail\":\"Item 1 Detail\",\"goods_amt\":\"0.00\",\"goods_quantity\":\"1\"},{\"img_url\":\"http://img.aaa.com/ima2.jpg\",\"goods_name\":\"Item 2 Name\",\"goods_detail\":\"Item 2 Detail\",\"goods_amt\":\"1.00\",\"goods_quantity\":\"1\"}]}");
                                 }})
                         .urlParam(new String[][]{
@@ -97,13 +95,13 @@ class EwalletTest {
                                 }
                         )
                         .build();
-                NICEPayResponse response = SnapEwalletService.callServiceEwalletPayment(ewallet,accessToken,configCloud);
+                NICEPayResponse response = SnapEwalletService.callServiceEwalletPayment(ewallet,accessToken,config);
 
         }
 
         @Test
         void EwalletPaymentCloud() throws IOException, InterruptedException {
-                var accessToken = Optional.ofNullable((NICEPayResponse) getToken())
+                String accessToken = Optional.ofNullable((NICEPayResponse) getToken())
                         .map(NICEPayResponse::getAccessToken)
                         .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 

@@ -54,10 +54,12 @@ public class ApiUtils {
             Request.Builder builder = null;
             print.logInfo("generate " + "fullUrl :" + chain.request().url());
             String url = chain.request().url().encodedPath().replace("/nicepay", "");
-            Optional.ofNullable(grandType)
-                    .ifPresentOrElse(value -> print.logInfo("getToken " + "pathUrl :" + url),
-                            () -> print.logInfo("generate " + "pathUrl :" + url)
-                    );
+            if (grandType != null) {
+                print.logInfo("getToken pathUrl :" + url);
+            } else {
+                print.logInfo("generate pathUrl :" + url);
+            }
+
 
             try {
                 String httpMethod = original.method();
@@ -88,10 +90,11 @@ public class ApiUtils {
             Request.Builder builder = null;
             print.logInfo("generate " + "fullUrl :" + chain.request().url());
             String url = chain.request().url().encodedPath().replace("/nicepay", "");
-            Optional.ofNullable(grandType)
-                    .ifPresentOrElse(value -> print.logInfo("getToken " + "pathUrl :" + url),
-                            () -> print.logInfo("generate " + "pathUrl :" + url)
-                    );
+            if (grandType != null) {
+                print.logInfo("getToken pathUrl :" + url);
+            } else {
+                print.logInfo("generate pathUrl :" + url);
+            }
 
             try {
                 String httpMethod = original.method();
@@ -121,10 +124,12 @@ public class ApiUtils {
             Request.Builder builder = null;
             print.logInfo("generate " + "fullUrl :" + chain.request().url());
             String url = chain.request().url().encodedPath().replace("/nicepay", "");
-            Optional.ofNullable(grandType)
-                    .ifPresentOrElse(value -> print.logInfo("getToken " + "pathUrl :" + url),
-                            () -> print.logInfo("generate " + "pathUrl :" + url)
-                    );
+            if (grandType != null) {
+                print.logInfo("getToken pathUrl :" + url);
+            } else {
+                print.logInfo("generate pathUrl :" + url);
+            }
+
 
             try {
                 String httpMethod = original.method();

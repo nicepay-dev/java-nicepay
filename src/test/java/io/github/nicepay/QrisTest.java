@@ -29,7 +29,7 @@ class QrisTest <T extends BaseNICEPayResponse> {
     public  static void setUp() {
         config =NICEPay.builder()
                 .isProduction(false)
-                .clientSecret(TestingConstants.CLIENT_SECRET)
+                .clientSecret(CLIENT_SECRET_IONPAYTEST)
                 .partnerId(TestingConstants.I_MID)
                 .externalID(TestingConstants.EXTERNAL_ID)
                 .timestamp(TestingConstants.TIMESTAMP)
@@ -53,18 +53,18 @@ class QrisTest <T extends BaseNICEPayResponse> {
                 .grantType("client_credentials")
                 .additionalInfo(additionalInfo)
                 .build();
-        return  SnapTokenService.callGetAccessToken(token,configCloud);
+        return  SnapTokenService.callGetAccessToken(token,config);
     }
 
     @Test
     void qrisRegist() throws IOException
     {
-        var accessToken = Optional.ofNullable((NICEPayResponse) getToken())
+        String accessToken = Optional.ofNullable((NICEPayResponse) getToken())
                 .map(NICEPayResponse::getAccessToken)
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
         Qris qris = Qris.builder()
-                .merchantId(TestingConstants.I_MID_QRIS)
+                .merchantId(config.getPartnerId())
                 .storeId("NICEPAY")
                 .amount("10000.00","IDR")
                 .partnerReferenceNo ("QRISTEST"+ V2_TIMESTAMP)
@@ -84,7 +84,7 @@ class QrisTest <T extends BaseNICEPayResponse> {
     @Test
     void qrisRegistCloud() throws IOException
     {
-        var accessToken = Optional.ofNullable((NICEPayResponse) getToken())
+        String accessToken = Optional.ofNullable((NICEPayResponse) getToken())
                 .map(NICEPayResponse::getAccessToken)
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 

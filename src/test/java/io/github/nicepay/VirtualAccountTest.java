@@ -30,11 +30,11 @@ class VirtualAccountTest {
     public  static void setUp() {
         config =NICEPay.builder()
                 .isProduction(false)
-                .clientSecret(DATA.CLIENT_SECRET)
-                .partnerId(PARTNER_ID)
-                .externalID(DATA.EXTERNAL_ID)
-                .timestamp(DATA.TIMESTAMP)
-                .privateKey(DATA.PRIVATE_KEY)
+                .clientSecret(NORMALTEST_CLIENT_SECRET)
+                .partnerId(I_MID_NORMALTEST)
+                .externalID(EXTERNAL_ID)
+                .timestamp(TIMESTAMP)
+                .privateKey(PRIVATE_KEY)
                 .build();
 
         configCloud =NICEPay.builder()
@@ -55,13 +55,13 @@ class VirtualAccountTest {
                 .grantType("client_credentials")
                 .additionalInfo(additionalInfo)
                 .build();
-       return  SnapTokenService.callGetAccessToken(accessToken,configCloud);
+       return  SnapTokenService.callGetAccessToken(accessToken,config);
     }
 
     @Test
     void vaCreate() throws IOException
     {
-        var accessToken = Optional.ofNullable((NICEPayResponse) getToken())
+        String accessToken = Optional.ofNullable((NICEPayResponse) getToken())
                 .map(NICEPayResponse::getAccessToken)
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
@@ -95,7 +95,7 @@ class VirtualAccountTest {
     @Test
     void vaCreateCloud() throws IOException
     {
-        var accessToken = Optional.ofNullable((NICEPayResponse) getToken())
+        String accessToken = Optional.ofNullable((NICEPayResponse) getToken())
                 .map(NICEPayResponse::getAccessToken)
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
@@ -136,8 +136,8 @@ class VirtualAccountTest {
 
         VirtualAccount request = VirtualAccount.builder()
                 .timeStamp(timeStamp)
-                .iMid(TestingConstants.I_MID)
-                .merchantToken(timeStamp, TestingConstants.I_MID, "NICEPAYVA111213", "100", TestingConstants.MERCHANT_KEY )
+                .iMid(config.getPartnerId())
+                .merchantToken(timeStamp, config.getPartnerId(), "NICEPAYVA111213", "100", MERCHANT_KEY )
                 .payMethod("02")
                 .currency("IDR")
                 .bankCd("BMRI")

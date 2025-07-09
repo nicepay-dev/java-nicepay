@@ -46,7 +46,7 @@ class CancelTest<T extends BaseNICEPayResponse> {
     public static void setUp() {
         config = NICEPay.builder()
                 .isProduction(false)
-                .clientSecret(CLIENT_SECRET)
+                .clientSecret(CLIENT_SECRET_IONPAYTEST)
                 .partnerId(I_MID)
                 .externalID(EXTERNAL_ID)
                 .timestamp(TIMESTAMP)
@@ -93,7 +93,7 @@ class CancelTest<T extends BaseNICEPayResponse> {
                 .grantType("client_credentials")
                 .additionalInfo(additionalInfo)
                 .build();
-        return SnapTokenService.callGetAccessToken(util, configCloud);
+        return SnapTokenService.callGetAccessToken(util, config);
 
     }
 
@@ -109,7 +109,7 @@ class CancelTest<T extends BaseNICEPayResponse> {
 
     @Test
     void CancelVA() throws IOException, InterruptedException {
-        var accessToken = Optional.ofNullable((NICEPayResponse) getToken())
+        String accessToken = Optional.ofNullable((NICEPayResponse) getToken())
                 .map(NICEPayResponse::getAccessToken)
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 //
@@ -129,7 +129,7 @@ class CancelTest<T extends BaseNICEPayResponse> {
 
     @Test
     void CancelVACloud() throws IOException, InterruptedException {
-        var accessToken = Optional.ofNullable((NICEPayResponse) getToken(configCloud))
+        String accessToken = Optional.ofNullable((NICEPayResponse) getToken(configCloud))
                 .map(NICEPayResponse::getAccessToken)
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 //
@@ -310,7 +310,7 @@ class CancelTest<T extends BaseNICEPayResponse> {
 
     @Test
     void ewalletRefundCloud() throws IOException, InterruptedException {
-        var accessToken = Optional.ofNullable((NICEPayResponse) getToken())
+        String accessToken = Optional.ofNullable((NICEPayResponse) getToken())
                 .map(NICEPayResponse::getAccessToken)
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
@@ -334,7 +334,7 @@ class CancelTest<T extends BaseNICEPayResponse> {
     @Test
     void ewalletRefund() throws IOException, InterruptedException {
 
-        var accessToken = Optional.ofNullable((NICEPayResponse) getToken())
+        String accessToken = Optional.ofNullable((NICEPayResponse) getToken())
                 .map(NICEPayResponse::getAccessToken)
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
@@ -357,7 +357,7 @@ class CancelTest<T extends BaseNICEPayResponse> {
 
     @Test
     void payoutReject() throws IOException, InterruptedException {
-        var accessToken = Optional.ofNullable((NICEPayResponse) getToken())
+        String accessToken = Optional.ofNullable((NICEPayResponse) getToken())
                 .map(NICEPayResponse::getAccessToken)
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
@@ -375,7 +375,7 @@ class CancelTest<T extends BaseNICEPayResponse> {
     @Test
     void payoutCancel() throws IOException, InterruptedException {
         config.setCloudServer(true);
-        var accessToken = Optional.ofNullable((NICEPayResponse) getToken())
+        String accessToken = Optional.ofNullable((NICEPayResponse) getToken())
                 .map(NICEPayResponse::getAccessToken)
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
@@ -394,7 +394,7 @@ class CancelTest<T extends BaseNICEPayResponse> {
 
     @Test
     void qrisRefund() throws IOException, InterruptedException {
-        var accessToken = Optional.ofNullable((NICEPayResponse) getToken(config))
+        String accessToken = Optional.ofNullable((NICEPayResponse) getToken(config))
                 .map(NICEPayResponse::getAccessToken)
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
@@ -420,7 +420,7 @@ class CancelTest<T extends BaseNICEPayResponse> {
     @Test
     void qrisRefundCloud() throws IOException, InterruptedException {
         config.setCloudServer(true);
-        var accessToken = Optional.ofNullable((NICEPayResponse) getToken(config))
+        String accessToken = Optional.ofNullable((NICEPayResponse) getToken(config))
                 .map(NICEPayResponse::getAccessToken)
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 

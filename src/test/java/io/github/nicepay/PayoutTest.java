@@ -33,7 +33,7 @@ class PayoutTest {
     public static void setUp() {
         config = NICEPay.builder()
                 .isProduction(false)
-                .clientSecret(TestingConstants.CLOUD_CLIENT_SECRET)
+                .clientSecret(CLIENT_SECRET_IONPAYTEST)
                 .partnerId(I_MID)
                 .externalID(TestingConstants.EXTERNAL_ID)
                 .timestamp(TestingConstants.TIMESTAMP)
@@ -95,7 +95,7 @@ class PayoutTest {
 
     @Test
     void payOutregist() throws IOException {
-        var accessToken = Optional.ofNullable((NICEPayResponse) getToken())
+        String accessToken = Optional.ofNullable((NICEPayResponse) getToken())
                 .map(NICEPayResponse::getAccessToken)
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
@@ -128,7 +128,7 @@ class PayoutTest {
     void payOutregistCloud() throws IOException {
         NICEPay config = configCloud;
 
-        var accessToken = Optional.ofNullable((NICEPayResponse) getToken(config))
+        String accessToken = Optional.ofNullable((NICEPayResponse) getToken(config))
                 .map(NICEPayResponse::getAccessToken)
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
@@ -160,7 +160,7 @@ class PayoutTest {
 
     @Test
     void payOutApprove() throws IOException {
-        var accessToken = Optional.ofNullable((NICEPayResponse) getToken())
+        String accessToken = Optional.ofNullable((NICEPayResponse) getToken())
                 .map(NICEPayResponse::getAccessToken)
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
@@ -173,13 +173,13 @@ class PayoutTest {
                 .build();
 
         NICEPayResponse response =
-                SnapPayoutService.callServicePayoutApprove(payout, accessToken, config2);
+                SnapPayoutService.callServicePayoutApprove(payout, accessToken, config);
 
     }
 
     @Test
     void payOutCheckBalance() throws IOException {
-        var accessToken = Optional.ofNullable((NICEPayResponse) getToken())
+        String accessToken = Optional.ofNullable((NICEPayResponse) getToken())
                 .map(NICEPayResponse::getAccessToken)
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
@@ -189,7 +189,7 @@ class PayoutTest {
                 .build();
 
         NICEPayResponse response =
-                SnapPayoutService.callServicePayoutCheckBalance(payout, accessToken, config2);
+                SnapPayoutService.callServicePayoutCheckBalance(payout, accessToken, config);
 
         System.out.println("Response mess :" + response.getResponseMessage());
     }
@@ -197,7 +197,7 @@ class PayoutTest {
     @Test
     void payOutCheckBalanceCloud() throws IOException {
         config = configCloud;
-        var accessToken = Optional.ofNullable((NICEPayResponse) getToken(config))
+        String accessToken = Optional.ofNullable((NICEPayResponse) getToken(config))
                 .map(NICEPayResponse::getAccessToken)
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
@@ -265,7 +265,7 @@ class PayoutTest {
                 .reservedTm("")
                 .benefPhone("082111111111")
                 .description("Test Request Java Lib Payout V2")
-                .payoutMethod("4")
+                .payoutMethod("1")
                 .build();
 
         NICEPayResponseV2 response =

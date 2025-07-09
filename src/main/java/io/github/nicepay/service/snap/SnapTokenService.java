@@ -32,12 +32,24 @@ public class SnapTokenService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (nicePayResponse == null){
-            resClient = errorResponse.string() ;
-            nicePayResponse = new Gson().fromJson(resClient.toString(), NICEPayResponse.class);
-        }else{
-            resClient = (NICEPayResponse)nicePayResponse;
+        if (nicePayResponse == null && errorResponse != null) {
+            try {
+                String errorJson = errorResponse.string();
+                if (errorJson.trim().startsWith("{")) {
+                    nicePayResponse = new Gson().fromJson(errorJson, NICEPayResponse.class);
+                    resClient = nicePayResponse;
+                } else {
+                    resClient = errorJson;
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                resClient = "Error parsing errorBody";
+            }
+        } else {
+            resClient = nicePayResponse;
         }
+
+
 
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()

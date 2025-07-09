@@ -39,17 +39,17 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
         config =NICEPay.builder()
                 .isProduction(false)
                 .isCloudServer(false)
-                .clientSecret(CLIENT_SECRET)
-                .partnerId(PARTNER_ID)
+                .clientSecret(CLIENT_SECRET_IONPAYTEST)
+                .partnerId(I_MID)
                 .externalID(TestingConstants.EXTERNAL_ID)
                 .timestamp(TIMESTAMP)
-                .privateKey(PRIVATE_KEY_CLOUD)
+                .privateKey(PRIVATE_KEY)
                 .build();
 
         configCloud =NICEPay.builder()
                 .isProduction(false)
                 .isCloudServer(true)
-                .clientSecret(TestingConstants.CLIENT_SECRET)
+                .clientSecret(TestingConstants.CLIENT_SECRET_IONPAYTEST)
                 .partnerId(TestingConstants.PARTNER_ID)
                 .externalID(TestingConstants.EXTERNAL_ID)
                 .timestamp(TIMESTAMP)
@@ -67,7 +67,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
                 .partnerId(TestingConstants.I_MID)
                 .externalID(externalId)
                 .timestamp(TestingConstants.TIMESTAMP)
-                .privateKey(TestingConstants.PRIVATE_KEY)
+                .privateKey(TestingConstants.PRIVATE_KEY_NEW)
                 .build();
 
         int random2 = rand.nextInt(10000);
@@ -100,7 +100,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
 
     @Test
     void InquiryStatusVA() throws IOException, InterruptedException {
-        var accessToken = Optional.ofNullable((NICEPayResponse) getToken(config))
+        String accessToken = Optional.ofNullable((NICEPayResponse) getToken(config))
                 .map(NICEPayResponse::getAccessToken)
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
@@ -119,7 +119,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
 
     @Test
     void InquiryStatusVACloud() throws IOException, InterruptedException {
-        var accessToken = Optional.ofNullable((NICEPayResponse) getToken(configCloud))
+        String accessToken = Optional.ofNullable((NICEPayResponse) getToken(configCloud))
                 .map(NICEPayResponse::getAccessToken)
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
@@ -159,13 +159,13 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
     void InquiryStatusEwallet() throws IOException, InterruptedException {
 //        config2.setCloudServer(true);
 
-        NICEPayResponse responseToken = (NICEPayResponse) getToken(config2);
-        var accessToken = Optional.ofNullable(responseToken)
+        NICEPayResponse responseToken = (NICEPayResponse) getToken(config);
+        String accessToken = Optional.ofNullable(responseToken)
                 .map(token -> responseToken.getAccessToken())
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
         InquiryStatus requestData = InquiryStatus.builder()
-                .merchantId(TestingConstants.I_MID)
+                .merchantId(config.getPartnerId())
                 .subMerchantId("23489182303312")
                 .originalPartnerReferenceNo("OrdNo-20241129092625")
                 .originalReferenceNo("IONPAYTEST05202411290926256651")
@@ -176,14 +176,14 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
                 .build();
 
         NICEPayResponse response =
-                SnapInquiryStatusService.callServiceEwalletCheckStatus(requestData,accessToken,config2);
+                SnapInquiryStatusService.callServiceEwalletCheckStatus(requestData,accessToken,config);
 
     }
 
     @Test
     void InquiryStatusEwalletCloud() throws IOException, InterruptedException {
         NICEPayResponse responseToken = (NICEPayResponse) getToken(config2);
-        var accessToken = Optional.ofNullable(responseToken)
+        String accessToken = Optional.ofNullable(responseToken)
                 .map(token -> responseToken.getAccessToken())
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
@@ -206,7 +206,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
     @Test
     void InquiryStatusPayout() throws IOException, InterruptedException {
         NICEPayResponse responseToken = (NICEPayResponse) getToken(config);
-        var accessToken = Optional.ofNullable(responseToken)
+        String accessToken = Optional.ofNullable(responseToken)
                 .map(token -> responseToken.getAccessToken())
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
@@ -218,7 +218,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
                 .build();
 
         NICEPayResponse Result =
-                SnapInquiryStatusService.callServicePayoutStatus(requestData,accessToken,config3);
+                SnapInquiryStatusService.callServicePayoutStatus(requestData,accessToken,config);
 
     }
 
@@ -229,7 +229,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
         config.setCloudServer(true);
 
         NICEPayResponse responseToken = (NICEPayResponse) getToken(config);
-        var accessToken = Optional.ofNullable(responseToken)
+        String accessToken = Optional.ofNullable(responseToken)
                 .map(token -> responseToken.getAccessToken())
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
@@ -248,7 +248,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
     @Test
     void InquiryStatusQris() throws IOException, InterruptedException {
         NICEPayResponse responseToken = (NICEPayResponse) getToken(config);
-        var accessToken = Optional.ofNullable(responseToken)
+        String accessToken = Optional.ofNullable(responseToken)
                 .map(token -> responseToken.getAccessToken())
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
@@ -261,7 +261,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
                 .build();
 
         NICEPayResponse Result =
-                SnapInquiryStatusService.callServiceQrisCheckStatus(requestData,accessToken,config3);
+                SnapInquiryStatusService.callServiceQrisCheckStatus(requestData,accessToken,config);
 
     }
 
@@ -270,7 +270,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
         config.setCloudServer(true);
 
         NICEPayResponse responseToken = (NICEPayResponse) getToken(config);
-        var accessToken = Optional.ofNullable(responseToken)
+        String accessToken = Optional.ofNullable(responseToken)
                 .map(token -> responseToken.getAccessToken())
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 
@@ -321,7 +321,7 @@ class InquiryStatusTest<T extends BaseNICEPayResponse> {
     void InquiryStatusCardV1() throws IOException, InterruptedException {
 
         String timestamp = V2_TIMESTAMP;
-        String imid = TestingConstants.I_MID_PAC;
+        String imid = "TESTMPGS05";
         String merchantKey = TestingConstants.MERCHANT_KEY;
         String reffNo = "ordNo20240904130813";
         String amount = "1000";
