@@ -79,8 +79,13 @@ public class Redirect {
 
     public static class RedirectBuilder {
 
-        public RedirectBuilder merchantToken(String timeStamp, String imid, String reffNo, String amount, String merchantKey) {
-            this.merchantToken = timeStamp + imid + reffNo + amount + merchantKey;
+        public RedirectBuilder merchantToken(String timeStamp, String imid, String referenceNo, String amount, String merchantKey) {
+            this.merchantToken = timeStamp + imid + referenceNo + amount + merchantKey;
+            return this;
+        }
+
+        public RedirectBuilder merchantTokenV1(String imid, String referenceNo, String amount, String merchantKey) {
+            this.merchantToken = imid + referenceNo + amount + merchantKey;
             return this;
         }
 

@@ -46,8 +46,8 @@ class CancelTest<T extends BaseNICEPayResponse> {
     public static void setUp() {
         config = NICEPay.builder()
                 .isProduction(false)
-                .clientSecret(CLIENT_SECRET)
-                .partnerId(I_MID)
+                .clientSecret(NORMALTEST_CLIENT_SECRET)
+                .partnerId(I_MID_NORMALTEST)
                 .externalID(EXTERNAL_ID)
                 .timestamp(TIMESTAMP)
                 .privateKey(PRIVATE_KEY)
@@ -109,7 +109,7 @@ class CancelTest<T extends BaseNICEPayResponse> {
 
     @Test
     void CancelVA() throws IOException, InterruptedException {
-        var accessToken = Optional.ofNullable((NICEPayResponse) getToken())
+        var accessToken = Optional.ofNullable((NICEPayResponse) getToken(config))
                 .map(NICEPayResponse::getAccessToken)
                 .orElseThrow(() -> new IllegalArgumentException("Token is null"));
 //
@@ -156,9 +156,9 @@ class CancelTest<T extends BaseNICEPayResponse> {
         Cancel requestCancel = Cancel.builder()
                 .timeStamp(timestamp)
                 .tXid(txId)
-                .iMid(TestingConstants.I_MID_NORMALCLOSED)
+                .iMid(I_MID_NORMALTEST)
                 .referenceNo(reffNo)
-                .merchantToken(timestamp, TestingConstants.I_MID_NORMALCLOSED, txId, amount, TestingConstants.MERCHANT_KEY)
+                .merchantToken(timestamp, I_MID_NORMALTEST, txId, amount, TestingConstants.MERCHANT_KEY)
                 .payMethod("02")
                 .cancelType("1")
                 .amt(amount)
@@ -400,6 +400,7 @@ class CancelTest<T extends BaseNICEPayResponse> {
 
         Map<String, Object> additionalInfo = new HashMap<>();
         additionalInfo.put("cancelType", "1");
+
 
         Cancel requestData = Cancel.builder()
                 .merchantId(I_MID)

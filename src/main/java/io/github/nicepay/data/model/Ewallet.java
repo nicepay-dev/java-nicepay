@@ -79,6 +79,11 @@ public class Ewallet {
             this.merchantToken = timeStamp + imid + reffNo + amount + merchantKey;
             return this;
         }
+
+        public EwalletBuilder merchantToken( String imid, String reffNo, String amount, String merchantKey) {
+            this.merchantToken = imid + reffNo + amount + merchantKey;
+            return this;
+        }
         public EwalletBuilder amount(String value, String currency) {
             Map<String, Object> amountMap = new HashMap<>();
             amountMap.put("value", value);

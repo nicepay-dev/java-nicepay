@@ -48,6 +48,7 @@ public class Card {
     private String cardExpYymm;
     private String cardCvv;
     private String cardHolderNm;
+    private String cardHolderEmail;
 
     private String callBackUrl;
 
@@ -70,10 +71,24 @@ public class Card {
     private String isEncryptedCard;
     private String publicKey;
 
+//    Request 3DS
+    private String onePassToken;
+    private String country;
+
     public static class CardBuilder {
 
         public CardBuilder merchantToken(String timeStamp, String imid, String reffNo, String amount, String merchantKey) {
             this.merchantToken = timeStamp + imid + reffNo + amount + merchantKey;
+            return this;
+        }
+
+        public CardBuilder merchantToken(String iMid, String recurringToken, String merchantKey) {
+            this.merchantToken = iMid + recurringToken + merchantKey;
+            return this;
+        }
+
+        public CardBuilder merchantToken( String imid, String reffNo, String amount, String merchantKey) {
+            this.merchantToken =  imid + reffNo + amount + merchantKey;
             return this;
         }
 

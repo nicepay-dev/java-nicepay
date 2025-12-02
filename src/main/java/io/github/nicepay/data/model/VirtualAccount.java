@@ -53,6 +53,11 @@ public class VirtualAccount {
             return this;
         }
 
+        public VirtualAccountBuilder merchantToken( String imid, String reffNo, String amount, String merchantKey) {
+            this.merchantToken =  imid + reffNo + amount + merchantKey;
+            return this;
+        }
+
         public VirtualAccountBuilder totalAmount(String value, String currency) {
             Map<String, Object> amountMap = new HashMap<>();
             amountMap.put("value", value);

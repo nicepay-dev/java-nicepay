@@ -71,6 +71,11 @@ public class ConvenienceStore {
             return this;
         }
 
+        public ConvenienceStoreBuilder merchantToken( String imid, String reffNo, String amount, String merchantKey) {
+            this.merchantToken =  imid + reffNo + amount + merchantKey;
+            return this;
+        }
+
 
     }
 

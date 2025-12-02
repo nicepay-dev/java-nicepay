@@ -11,9 +11,18 @@ import java.util.Map;
 
 public interface RequestV1 {
 
+//    Redirect
     @FormUrlEncoded
     @POST("/nicepay/api/orderRegist.do")
     Call<ResponseBody> orderRegist(@FieldMap Map<String, String> fields);
+
+//    Direct
+
+    @FormUrlEncoded
+    @POST("/nicepay/api/onePass.do")
+    Call<NICEPayResponseV1> onePass(@FieldMap Map<String, String> fields);
+
+//    Common
 
     @FormUrlEncoded
     @POST("/nicepay/api/onePassStatus.do")
@@ -22,6 +31,5 @@ public interface RequestV1 {
     @FormUrlEncoded
     @POST("/nicepay/api/onePassAllCancel.do")
     Call<NICEPayResponseV1> cancelTransaction(@FieldMap Map<String, String> fields);
-
 
 }

@@ -12,7 +12,6 @@ public interface PostQrisRequest {
     @POST("nicepay/api/v1.0/qr/qr-mpm-generate")
     Call<NICEPayResponse> registQris(@Body Qris request);
 
-
     @POST("nicepay/api/v1.0/qr/qr-mpm-query")
     Call<NICEPayResponse>checkStatusQris(@Body InquiryStatus request);
 

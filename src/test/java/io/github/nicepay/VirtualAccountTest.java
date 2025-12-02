@@ -164,5 +164,42 @@ class VirtualAccountTest {
         print.logInfoV2("VA : " + response.getVacctNo());
 
     }
+
+
+    @Test
+    void vaCreateV1() throws IOException
+    {
+        String timeStamp = TestingConstants.V2_TIMESTAMP;
+        String referenceNo = "Refno" + timeStamp;
+
+        VirtualAccount request = VirtualAccount.builder()
+                .iMid(TestingConstants.I_MID)
+                .merchantToken(TestingConstants.I_MID, referenceNo, "100", TestingConstants.MERCHANT_KEY )
+                .payMethod("02")
+                .currency("IDR")
+                .bankCd("BMRI")
+                .amt("100")
+                .referenceNo(referenceNo)
+                .vacctValidDt("")
+                .vacctValidTm("")
+                .goodsNm("Goods")
+                .billingNm("NICEPAY Testing")
+                .billingPhone("081363681274")
+                .billingEmail("nicepay@example.com")
+                .billingAddr("Jln. Raya Kasablanka Kav.88")
+                .billingCity("South Jakarta")
+                .billingState("DKI Jakarta")
+                .billingPostCd("15119")
+                .billingCountry("Indonesia")
+                .merFixAcctId("")
+                .dbProcessUrl("https://webhook.site/912cbdd8-eb28-4e98-be6a-181b806b8110")
+                .build();
+
+
+        NICEPayResponseV2 response = V2VaService.callV2GenerateVA(request, config);
+        print.logInfoV2("TXID : " + response.getTXid());
+        print.logInfoV2("VA : " + response.getVacctNo());
+
+    }
 }
 
