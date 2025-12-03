@@ -241,27 +241,7 @@ public class ApiUtils {
         return api.create(serviceClass);
     }
 
-//    public static <T> T getApiMessageObject(String message, T object) throws Exception {
-//        try {
-//            // Determine where the JSON payload starts
-//            int jsonStartIndex = message.indexOf("{");
-//            if (jsonStartIndex == -1) {
-//                throw new IllegalArgumentException("Invalid message format: JSON payload not found.");
-//            }
-//
-//            int messageLen = Integer.parseInt(message.substring(0, jsonStartIndex));
-//            if (messageLen <= 0) {
-//                throw new IllegalArgumentException("Invalid message length.");
-//            }
-//
-//            String jsonPayload = message.substring(jsonStartIndex);
-//            Map<String, Object> parsedMap = mapper.readValue(jsonPayload, Map.class);
-//
-//            return mapper.convertValue(parsedMap, (Class<T>) object.getClass());
-//        } catch (Exception e) {
-//            throw new Exception("Failed to parse API message: " + e.getMessage(), e);
-//        }
-//    }
+
 
     public static <T> T getApiMessageObject(String message, T object) throws Exception {
         try {
@@ -282,8 +262,6 @@ public class ApiUtils {
                 // Parse the length indicator
                 int messageLen = Integer.parseInt(message.substring(0, jsonStartIndex));
                 if (messageLen <= 0) {
-                    // You might want to remove this or adjust the check
-                    // as the length is now redundant if you rely on substring(jsonStartIndex)
                     throw new IllegalArgumentException("Invalid message length.");
                 }
 

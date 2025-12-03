@@ -7,7 +7,10 @@ import com.google.gson.JsonParser;
 import io.github.nicepay.api.v2.EwalletRequestV2;
 import io.github.nicepay.data.model.Ewallet;
 import io.github.nicepay.data.response.v2.NICEPayResponseV2;
-import io.github.nicepay.utils.*;
+import io.github.nicepay.utils.ApiUtils;
+import io.github.nicepay.utils.LoggerPrint;
+import io.github.nicepay.utils.NICEPay;
+import io.github.nicepay.utils.SHA256Util;
 import okhttp3.ResponseBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +18,6 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 import java.io.IOException;
-import java.text.MessageFormat;
 
 public class V2EwalletService extends V2CommonService {
 

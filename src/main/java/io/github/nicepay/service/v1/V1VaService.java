@@ -5,8 +5,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.nicepay.api.v1.RequestV1;
-import io.github.nicepay.data.model.InquiryStatus;
-import io.github.nicepay.data.model.Redirect;
 import io.github.nicepay.data.model.VirtualAccount;
 import io.github.nicepay.data.response.v1.NICEPayResponseV1;
 import io.github.nicepay.utils.*;

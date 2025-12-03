@@ -19,9 +19,6 @@ import retrofit2.Response;
 
 import java.io.IOException;
 
-import static io.github.nicepay.utils.SHA256Util.encrypt;
-import static io.github.nicepay.utils.SHA256Util.encryptWithPublicKeyString;
-
 public class V2CardService extends V2CommonService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger("[V2 - Card]");
