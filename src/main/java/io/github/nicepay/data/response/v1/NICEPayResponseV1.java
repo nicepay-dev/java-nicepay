@@ -63,4 +63,28 @@ public class NICEPayResponseV1 implements Serializable {
     private String status;
     private ObjectAquirerData acquirerData;
 
+    //    EWALLET
+    private String mitraCd;
+    private String paymentExpDt;
+    private String paymentExpTm;
+    private String redirectUrlHttp;
+    private String redirectUrlApp;
+    private String redirectToken;
+
+    //    QRIS
+    private String description;
+    private String callbackUrl;
+    private String qrContent;
+    private String qrUrl;
+
+    private String payNo;
+    private String payValidTm;
+    private String payValidDt;
+
+    //    CC
+    private String cardToken;
+    private String paymentType;
+    private String recurringToken;
+    private String resultCode;
+
 }

@@ -92,6 +92,11 @@ public class Qris {
             this.merchantToken = timeStamp + imid + reffNo + amount + merchantKey;
             return this;
         }
+
+        public QrisBuilder merchantToken( String imid, String reffNo, String amount, String merchantKey) {
+            this.merchantToken =  imid + reffNo + amount + merchantKey;
+            return this;
+        }
     }
 
     public Qris(String partnerReferenceNo, String merchantId, String storeId, String validityPeriod, Map<String, Object> amount, Map<String, Object> additionalInfo, String timeStamp, String iMid, String payMethod, String currency, String amt, String referenceNo, String goodsNm, String billingNm, String billingPhone, String billingEmail, String billingCity, String billingState, String billingPostCd, String billingCountry, String dbProcessUrl, String merchantToken, String paymentExpDt, String paymentExpTm, String userIP, String cartData, String mitraCd, String shopId) {

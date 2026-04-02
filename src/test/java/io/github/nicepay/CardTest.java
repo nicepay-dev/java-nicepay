@@ -15,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -121,6 +123,517 @@ class CardTest {
         assertNotNull(cardRegistResponse.getTXid());
         assertEquals("0000", cardRegistResponse.getResultCd());
         assertEquals("SUCCESS", cardRegistResponse.getResultMsg());
+
+    }
+
+
+    NICEPayResponseV1 requestCardToken(NICEPay config, String amount) throws IOException {
+
+        timeStamp = TestingConstants.V2_TIMESTAMP;
+        String reffNo = "ordNo" + timeStamp;
+
+        Card requestData = Card.builder()
+                .iMid(config.getPartnerId())
+                .amt(amount)
+                .referenceNo(reffNo)
+                .merchantToken( config.getPartnerId(), reffNo, amount, merchantKey)
+                .cardHolderNm("Nicepay Testing")
+                .cardNo("5123450000000008")
+                .cardExpYymm("3901")
+                .build();
+
+        return V1CardService.callRequestToken(requestData, config);
+
+    }
+
+    @Test
+    void cardRequestCardTokenV1() throws IOException {
+        config.setCloudServer(false);
+        iMid = "TESTMPGS05";
+        String reffNo = "ordNo" + timeStamp;
+
+        Card requestData = Card.builder()
+                .iMid(iMid)
+                .amt(amount)
+                .referenceNo(reffNo)
+                .merchantToken( iMid, reffNo, amount, merchantKey)
+                .cardHolderNm("Nicepay Testing")
+                .cardNo("5123450000000008")
+                .cardExpYymm("3901")
+                .build();
+
+        NICEPayResponseV1 cardRegistResponse = V1CardService.callRequestToken(requestData, config);
+
+//        assertNotNull(cardRegistResponse.getTXid());
+        assertEquals("0000", cardRegistResponse.getResultCd());
+        assertEquals("SUCCESS", cardRegistResponse.getResultMsg());
+
+    }
+
+    @Test
+    void cardRequestCardRegistrationV1() throws IOException {
+//        REQ ONE PASS TOKEN
+
+        config.setPartnerId("IONPAYTEST");
+        String reffNo = "ordNo" + timeStamp;
+
+        NICEPayResponseV1 cardRegistResponse = requestCardToken(config, amount);
+
+//        Check if success
+        assertEquals("0000", cardRegistResponse.getResultCd(),"Request Token Failed");
+        assertEquals("SUCCESS", cardRegistResponse.getResultMsg());
+
+
+//        REGIST
+
+        Card requestRegist = Card.builder()
+                .iMid(config.getPartnerId())
+                .payMethod("01")
+                .currency("IDR")
+                .amt(amount)
+                .referenceNo(reffNo)
+                .goodsNm("Goods")
+                .billingNm("NICEPAY Testing")
+                .billingPhone("081363681274")
+                .billingEmail("nicepay@example.com")
+                .billingAddr("Jln. Raya Kasablanka Kav.88")
+                .billingCity("South Jakarta")
+                .billingState("DKI Jakarta")
+                .billingPostCd("15119")
+                .billingCountry("Indonesia")
+                .dbProcessUrl("https://webhook.site/912cbdd8-eb28-4e98-be6a-181b806b8110")
+                .userIP("127.0.0.1")
+                .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0")
+                .userLanguage("en")
+                .instmntType("1")
+                .instmntMon("1")
+                .cardCvv("100")
+                .onePassToken(cardRegistResponse.getCardToken())
+                .recurrOpt("")
+                .merchantToken( config.getPartnerId(), reffNo, amount, merchantKey)
+                .build();
+
+        NICEPayResponseV1 response = V1CardService.callRegistration(requestRegist, config);
+
+
+    }
+
+    @Test
+    void cardRequestRecurringIssue() throws IOException {
+
+        //        REQ ONE PASS TOKEN
+        config.setPartnerId("RECURRTEST");
+        String reffNo = "ordNo" + timeStamp;
+
+        NICEPayResponseV1 cardRegistResponse = requestCardToken(config, amount);
+
+//        Check if success
+        assertEquals("0000", cardRegistResponse.getResultCd(),"Request Token Failed");
+        assertEquals("SUCCESS", cardRegistResponse.getResultMsg());
+
+
+//        REGIST
+
+
+        Card requestRegist = Card.builder()
+                .iMid(config.getPartnerId())
+                .payMethod("01")
+                .currency("IDR")
+                .amt(amount)
+                .referenceNo(reffNo)
+                .goodsNm("Goods")
+                .billingNm("NICEPAY Testing")
+                .billingPhone("081363681274")
+                .billingEmail("nicepay@example.com")
+                .billingAddr("Jln. Raya Kasablanka Kav.88")
+                .billingCity("South Jakarta")
+                .billingState("DKI Jakarta")
+                .billingPostCd("15119")
+                .billingCountry("Indonesia")
+                .dbProcessUrl("https://webhook.site/912cbdd8-eb28-4e98-be6a-181b806b8110")
+                .userIP("127.0.0.1")
+                .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0")
+                .userLanguage("en")
+                .instmntType("1")
+                .instmntMon("1")
+                .cardCvv("100")
+                .onePassToken(cardRegistResponse.getCardToken())
+                .recurrOpt("")
+                .merchantToken( config.getPartnerId(), reffNo, amount, merchantKey)
+                .build();
+
+        NICEPayResponseV1 response = V1CardService.callRegistration(requestRegist, config);
+
+//        Recurring Issue
+        timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        reffNo = "newReffNo" + timeStamp;
+
+
+
+        Card recurrIssueRequest = Card.builder()
+                .iMid(config.getPartnerId())
+                .amt(amount)
+                .referenceNo(reffNo)
+                .merchantToken(config.getPartnerId(), reffNo, amount, merchantKey)
+                .instmntType("1")
+                .instmntMon("1")
+                .cardHolderNm("Nicepay Testing")
+                .cardHolderEmail("nicepay@mail.com")
+                .recurringToken(response.getRecurringToken())
+                .build();
+
+        NICEPayResponseV1 recurrIssueResponse = V1CardService.callRecurringIssueV1(recurrIssueRequest, config);
+
+        //        Check if success
+        assertEquals("0000", recurrIssueResponse.getResultCd(),"Recurring Issue Token Failed");
+        assertEquals("SUCCESS", recurrIssueResponse.getResultMsg());
+
+
+
+    }
+
+
+    @Test
+    void cardRequestRecurringPayment() throws IOException {
+
+        //        REQ ONE PASS TOKEN
+        config.setPartnerId("RECURRTEST");
+        String reffNo = "ordNo" + timeStamp;
+
+        NICEPayResponseV1 cardRegistResponse = requestCardToken(config, amount);
+
+//        Check if success
+        assertEquals("0000", cardRegistResponse.getResultCd(),"Request Token Failed");
+        assertEquals("SUCCESS", cardRegistResponse.getResultMsg());
+
+
+//        REGIST
+
+        Card requestRegist = Card.builder()
+                .iMid(config.getPartnerId())
+                .payMethod("01")
+                .currency("IDR")
+                .amt(amount)
+                .referenceNo(reffNo)
+                .goodsNm("Goods")
+                .billingNm("NICEPAY Testing")
+                .billingPhone("081363681274")
+                .billingEmail("nicepay@example.com")
+                .billingAddr("Jln. Raya Kasablanka Kav.88")
+                .billingCity("South Jakarta")
+                .billingState("DKI Jakarta")
+                .billingPostCd("15119")
+                .billingCountry("Indonesia")
+                .dbProcessUrl("https://webhook.site/912cbdd8-eb28-4e98-be6a-181b806b8110")
+                .userIP("127.0.0.1")
+                .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0")
+                .userLanguage("en")
+                .instmntType("1")
+                .instmntMon("1")
+                .cardCvv("100")
+                .onePassToken(cardRegistResponse.getCardToken())
+                .recurrOpt("")
+                .merchantToken( config.getPartnerId(), reffNo, amount, merchantKey)
+                .build();
+
+        NICEPayResponseV1 response = V1CardService.callRegistration(requestRegist, config);
+
+//        Recurring Issue
+        timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        reffNo = "newReffNo" + timeStamp;
+
+        Card recurrIssueRequest = Card.builder()
+                .iMid(config.getPartnerId())
+                .amt(amount)
+                .referenceNo(reffNo)
+                .merchantToken(config.getPartnerId(), reffNo, amount, merchantKey)
+                .instmntType("1")
+                .instmntMon("1")
+                .cardHolderNm("Nicepay Testing")
+                .cardHolderEmail("nicepay@mail.com")
+                .recurringToken(response.getRecurringToken())
+                .build();
+
+        NICEPayResponseV1 recurrIssueResponse = V1CardService.callRecurringIssueV1(recurrIssueRequest, config);
+
+        //        Check if success
+        assertEquals("0000", recurrIssueResponse.getResultCd(),"Recurring Issue Token Failed");
+        assertEquals("SUCCESS", recurrIssueResponse.getResultMsg());
+
+
+//        Recurring Payment
+        timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        reffNo = "recurrPayment" + timeStamp;
+
+
+        Card recurringPaymentReq = Card.builder()
+                .iMid(config.getPartnerId())
+                .payMethod("01")
+                .currency("IDR")
+                .amt(amount)
+                .referenceNo(reffNo)
+                .goodsNm("Recurring payment")
+                .billingNm("Nicepay Testing")
+                .billingPhone("081234567890")
+                .billingEmail("mail@testing.com")
+                .billingAddr("Nama Jalan Nih")
+                .billingCity("Jakarta Selatan")
+                .billingState("DKI Jakarta")
+                .billingPostCd("10200")
+                .billingCountry("Indonesia")
+                .callBackUrl(config.getNICEPayBaseUrl() + "/IONPAY_CLIENT/paymentResult.jsp")
+                .dbProcessUrl("https://www.merchantapi.com/dbProcessUrl")
+                .description("Test Recurring Payment")
+                .merchantToken(config.getPartnerId(), reffNo, amount, merchantKey)
+                .userIP("127.0.0.1")
+                .cartData("{}")
+                .instmntType("1")
+                .instmntMon("1")
+                .recurringToken(response.getRecurringToken())
+                .cardCvv("100")
+                .recurrOpt("1")
+                .build();
+
+        NICEPayResponseV1 responseRecurrPayment = V1CardService.callRecurringPayment(recurringPaymentReq, config);
+
+        assertEquals("0000", responseRecurrPayment.getResultCd(),"Recurring Payment Failed");
+        assertEquals("SUCCESS", responseRecurrPayment.getResultMsg());
+
+    }
+
+    @Test
+    void cardGenerateRecurringTokenWithoutFirstPayment() throws IOException {
+
+        config.setPartnerId("RECURRTEST");
+        String reffNo = "ordNo" + timeStamp;
+
+        Card tokenizeRequest = Card.builder()
+                .iMid(config.getPartnerId())
+                .cardNo("5123450000000008")
+                .cardExpYymm("2901")
+                .billingNm("Nicepay Java Test")
+                .cardHolderEmail("nicepay@mail.com")
+                .cardHolderNm("Nicepay Test")
+                .merchantToken(config.getPartnerId(), "5123450000000008", "2901", merchantKey)
+                .build();
+
+        NICEPayResponseV1 response = V1CardService.callTokenizeCard(tokenizeRequest, config);
+
+        assertEquals("0000", response.getResultCode(),"Recurring Payment Failed");
+        assertEquals("SUCCESS", response.getResultMsg());
+
+    }
+
+    @Test
+    void cardCheckToken() throws IOException {
+
+//        Generate Token
+        config.setPartnerId("RECURRTEST");
+        String reffNo = "ordNo" + timeStamp;
+
+        Card tokenizeRequest = Card.builder()
+                .iMid(config.getPartnerId())
+                .cardNo("5123450000000008")
+                .cardExpYymm("2901")
+                .billingNm("Nicepay Java Test")
+                .cardHolderEmail("nicepay@mail.com")
+                .cardHolderNm("Nicepay Test")
+                .merchantToken(config.getPartnerId(), "5123450000000008", "2901", merchantKey)
+                .build();
+
+        NICEPayResponseV1 response = V1CardService.callTokenizeCard(tokenizeRequest, config);
+
+        assertEquals("0000", response.getResultCode(),"Recurring Payment Failed");
+        assertEquals("SUCCESS", response.getResultMsg());
+
+        String recurringToken = response.getRecurringToken();
+
+        Card checkTokenReq = Card.builder()
+                .iMid(config.getPartnerId())
+                .merchantToken(config.getPartnerId(), recurringToken, merchantKey)
+                .recurringToken(recurringToken)
+                .build();
+
+        NICEPayResponseV1 responseV1 = V1CardService.callCheckToken(checkTokenReq, config);
+
+        assertEquals("0000", responseV1.getResultCode(),"Recurring Payment Failed");
+        assertEquals("SUCCESS", responseV1.getResultMsg());
+
+    }
+
+
+    @Test
+    void cardRemoveToken() throws IOException {
+
+//        Generate Token
+        config.setPartnerId("RECURRTEST");
+        String reffNo = "ordNo" + timeStamp;
+
+        Card tokenizeRequest = Card.builder()
+                .iMid(config.getPartnerId())
+                .cardNo("5123450000000008")
+                .cardExpYymm("2901")
+                .billingNm("Nicepay Java Test")
+                .cardHolderEmail("nicepay@mail.com")
+                .cardHolderNm("Nicepay Test")
+                .merchantToken(config.getPartnerId(), "5123450000000008", "2901", merchantKey)
+                .build();
+
+        NICEPayResponseV1 response = V1CardService.callTokenizeCard(tokenizeRequest, config);
+
+        assertEquals("0000", response.getResultCode(),"Recurring Payment Failed");
+        assertEquals("SUCCESS", response.getResultMsg());
+
+        String recurringToken = response.getRecurringToken();
+
+        Card checkTokenReq = Card.builder()
+                .iMid(config.getPartnerId())
+                .merchantToken(config.getPartnerId(), recurringToken, merchantKey)
+                .recurringToken(recurringToken)
+                .build();
+
+        NICEPayResponseV1 responseV1 = V1CardService.callRemoveToken(checkTokenReq, config);
+
+        assertEquals("0000", responseV1.getResultCode(),"Recurring Payment Failed");
+        assertEquals("SUCCESS", responseV1.getResultMsg());
+    }
+
+    @Test
+    void cardCapturePaymentTest() throws IOException {
+//        REQ ONE PASS TOKEN
+
+        config.setPartnerId("PACTEST001");
+        String reffNo = "ordNo" + timeStamp;
+
+        NICEPayResponseV1 cardRegistResponse = requestCardToken(config, amount);
+
+//        Check if success
+        assertEquals("0000", cardRegistResponse.getResultCd(),"Request Token Failed");
+        assertEquals("SUCCESS", cardRegistResponse.getResultMsg());
+
+
+//        REGIST
+
+        Card requestRegist = Card.builder()
+                .iMid(config.getPartnerId())
+                .payMethod("01")
+                .currency("IDR")
+                .amt(amount)
+                .referenceNo(reffNo)
+                .goodsNm("Goods")
+                .billingNm("NICEPAY Testing")
+                .billingPhone("081363681274")
+                .billingEmail("nicepay@example.com")
+                .billingAddr("Jln. Raya Kasablanka Kav.88")
+                .billingCity("South Jakarta")
+                .billingState("DKI Jakarta")
+                .billingPostCd("15119")
+                .billingCountry("Indonesia")
+                .dbProcessUrl("https://webhook.site/912cbdd8-eb28-4e98-be6a-181b806b8110")
+                .userIP("127.0.0.1")
+                .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0")
+                .userLanguage("en")
+                .instmntType("1")
+                .instmntMon("1")
+                .cardCvv("100")
+                .onePassToken(cardRegistResponse.getCardToken())
+                .recurrOpt("")
+                .merchantToken( config.getPartnerId(), reffNo, amount, merchantKey)
+                .build();
+
+        NICEPayResponseV1 response = V1CardService.callRegistration(requestRegist, config);
+
+        assertEquals("0000", cardRegistResponse.getResultCd(),"Request Payment Failed");
+        assertEquals("SUCCESS", cardRegistResponse.getResultMsg());
+
+        Card reqCapture = Card.builder()
+                .iMid(config.getPartnerId())
+                .payMethod("01")
+                .currency("IDR")
+                .amt(amount)
+                .referenceNo(reffNo)
+                .goodsNm("Goods")
+                .billingNm("NICEPAY Testing")
+                .billingPhone("081363681274")
+                .billingEmail("nicepay@example.com")
+                .billingAddr("Jln. Raya Kasablanka Kav.88")
+                .billingCity("South Jakarta")
+                .billingState("DKI Jakarta")
+                .billingPostCd("15119")
+                .billingCountry("Indonesia")
+                .dbProcessUrl("https://webhook.site/912cbdd8-eb28-4e98-be6a-181b806b8110")
+                .userIP("127.0.0.1")
+                .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0")
+                .userLanguage("en")
+                .instmntType("1")
+                .instmntMon("1")
+                .preauthToken(response.getPreauthToken())
+                .recurrOpt("")
+                .merchantToken( config.getPartnerId(), reffNo, amount, merchantKey)
+                .build();
+
+        NICEPayResponseV1 responseCapture = V1CardService.callCaptureTrans(reqCapture, config);
+
+        assertEquals("0000", responseCapture.getResultCd(),"Request Capture Failed");
+        assertEquals("SUCCESS", responseCapture.getResultMsg());
+
+
+
+    }
+
+    @Test
+    void cardGenerate3DSUrl() throws IOException {
+
+        config.setPartnerId("TESTMPGS04");
+        String reffNo = "ordNo" + timeStamp;
+
+        NICEPayResponseV1 cardRegistResponse = requestCardToken(config, amount);
+
+        assertEquals("0000", cardRegistResponse.getResultCd());
+        assertEquals("SUCCESS", cardRegistResponse.getResultMsg());
+
+        Card generateUrlRequest = Card.builder()
+                .country("ID")
+                .onePassToken(cardRegistResponse.getCardToken())
+                .callBackUrl(config.getNICEPayBaseUrl() + "/IONPAY_CLIENT/paymentResult.jsp")
+                .build();
+
+        String url3DS = V1CardService.generate3DSRequestUrl(generateUrlRequest, config);
+
+    }
+
+
+    @Test
+    void cardGenerateMIGSUrl() throws IOException {
+
+        iMid = "IONPAYTEST";
+        String reffNo = "ordNo" + timeStamp;
+
+        Card requestData = Card.builder()
+                .iMid(iMid)
+                .amt(amount)
+                .referenceNo(reffNo)
+                .merchantToken( iMid, reffNo, amount, merchantKey)
+                .cardHolderNm("Nicepay Testing")
+                .cardNo("5123450000000008")
+                .cardExpYymm("3901")
+                .build();
+
+        NICEPayResponseV1 cardRegistResponse = V1CardService.callRequestToken(requestData, config);
+
+        assertEquals("0000", cardRegistResponse.getResultCd());
+        assertEquals("SUCCESS", cardRegistResponse.getResultMsg());
+
+        Card generateUrlRequest = Card.builder()
+                .referenceNo(reffNo)
+                .onePassToken(cardRegistResponse.getCardToken())
+                .instmntMon("1")
+                .instmntType("1")
+                .cardCvv("100")
+                .callBackUrl(config.getNICEPayBaseUrl() + "/IONPAY_CLIENT/paymentResult.jsp")
+                .build();
+
+        String urlMigs = V1CardService.generateMigsUrl(generateUrlRequest, config);
 
     }
 

@@ -4,7 +4,9 @@ import io.github.nicepay.data.TestingConstants;
 import io.github.nicepay.data.model.Payment;
 import io.github.nicepay.data.model.Redirect;
 import io.github.nicepay.data.response.snap.BaseNICEPayResponse;
+import io.github.nicepay.data.response.v1.NICEPayResponseV1;
 import io.github.nicepay.data.response.v2.NICEPayResponseV2;
+import io.github.nicepay.service.v1.V1ProfessionalService;
 import io.github.nicepay.service.v2.V2RedirectService;
 import io.github.nicepay.utils.ApiUtils;
 import io.github.nicepay.utils.NICEPay;
@@ -19,10 +21,12 @@ class RedirectTest<T extends BaseNICEPayResponse> {
     private static NICEPay config;
     private static NICEPay configCloud;
     private static TestingConstants DATA ;
+    private static String amount;
 
     @BeforeAll
     public  static void setUp() {
         config =NICEPay.builder()
+                .partnerId(I_MID)
                 .isProduction(false)
                 .isCloudServer(false)
                 .build();
@@ -32,6 +36,9 @@ class RedirectTest<T extends BaseNICEPayResponse> {
                 .isProduction(false)
                 .isCloudServer(true)
                 .build();
+
+        amount = "10000";
+
     }
 
     @Test
@@ -191,6 +198,59 @@ class RedirectTest<T extends BaseNICEPayResponse> {
     }
 
     @Test
+    void redirectV1Test() throws IOException {
+
+        String iMid = config.getPartnerId();
+        String reffNo = "REDCARDTEST"+V2_TIMESTAMP;
+
+        Redirect request = Redirect.builder()
+                .iMid(iMid)
+                .payMethod("01") // mandatory, default is "05" / e-wallet
+                .currency("IDR")
+                .amt(amount)
+                .instmntMon("1")
+                .instmntType("1")
+                .referenceNo(reffNo)
+                .goodsNm("Testing Redirect V1 Card")
+                .billingNm("Java Client")
+                .billingEmail("mail@test.com")
+                .billingPhone("081234567890")
+                .billingAddr("Jl. Kesana Kesini no 1")
+                .billingCity("Jakarta Selatan")
+                .billingState("DKI Jakarta")
+                .billingPostCd("12170")
+                .billingCountry("Indonesia")
+                .deliveryNm("Test redirect")
+                .deliveryPhone("081234567890")
+                .deliveryAddr("Jl. Kesana Kesini no 1")
+                .deliveryCity("Jakarta Selatan")
+                .deliveryState("DKI Jakarta")
+                .deliveryPostCd("12170")
+                .deliveryCountry("Indonesia")
+                .callBackUrl(config.getNICEPayBaseUrl() + "IONPAY_CLIENT/paymentResult.jsp")
+                .dbProcessUrl("https://webhook.site/7000e1a5-3df5-41d8-979c-2a4ae6f3efb3")
+                .vat("0")
+                .fee("0")
+                .notaxAmt("0")
+                .description("Testing V1 Redirect Card with Java client")
+                .userIP("127.0.0.1")
+                .shopId("NICEPAY")
+                .merchantTokenV1(iMid, reffNo, amount, MERCHANT_KEY)
+                .cartData("{}")
+                .recurrOpt("2")
+                .build();
+
+        NICEPayResponseV1 responseV1 = V1ProfessionalService.callRegistration(request, config);
+
+        if (responseV1.getData().getResultCd().equalsIgnoreCase("0000")){
+
+//            set displayChangeButton true if you want to display change payment method button
+//            set displayBackLink true if you want to provide back to merchant site link
+            String paymentUrlWithChangeButton = ApiUtils.generateRedirectV1PaymentUrl(responseV1, true, true);
+        }
+
+    }
+    @Test
     void paymentRedirectV2TestAws() throws IOException {
         config = configCloud;
 
@@ -203,6 +263,7 @@ class RedirectTest<T extends BaseNICEPayResponse> {
 
         String paymentTrans = ApiUtils.generateRedirectV2PaymentUrl(request, config);
     }
+
 
 
     NICEPayResponseV2 generateRedirectV2Trans(NICEPay config) throws IOException

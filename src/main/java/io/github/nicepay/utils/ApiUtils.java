@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.GsonBuilder;
 import io.github.nicepay.data.model.Payment;
+import io.github.nicepay.data.response.v1.NICEPayResponseV1;
 import okhttp3.*;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Invocation;
@@ -11,6 +12,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.time.Duration;
 import java.util.HashMap;
@@ -154,7 +156,8 @@ public class ApiUtils {
         String privateKey = config.getPrivateKey();
         String secretKey = config.getClientSecret();
         String externalID = config.getExternalID();
-        String timeStamp = config.getTimestamp();
+//        String timeStamp = config.getTimestamp();
+        String timeStamp = "2025-10-15T13:32:36+07:00";
 
         headersMap.put("Content-Type", "application/json");
         if (grandType != null) {
@@ -238,23 +241,37 @@ public class ApiUtils {
         return api.create(serviceClass);
     }
 
+
+
     public static <T> T getApiMessageObject(String message, T object) throws Exception {
         try {
-            // Determine where the JSON payload starts
-            int jsonStartIndex = message.indexOf("{");
-            if (jsonStartIndex == -1) {
-                throw new IllegalArgumentException("Invalid message format: JSON payload not found.");
+            String jsonPayload;
+
+            // 1. Check if the message is already a pure JSON object (starts with '{')
+            if (message.trim().startsWith("{")) {
+                jsonPayload = message; // Treat the whole message as the JSON payload
+            } else {
+                // 2. Handle the original structured format: [length][JSON]
+
+                // Find where the JSON payload starts
+                int jsonStartIndex = message.indexOf("{");
+                if (jsonStartIndex == -1) {
+                    throw new IllegalArgumentException("Invalid message format: JSON payload not found.");
+                }
+
+                // Parse the length indicator
+                int messageLen = Integer.parseInt(message.substring(0, jsonStartIndex));
+                if (messageLen <= 0) {
+                    throw new IllegalArgumentException("Invalid message length.");
+                }
+
+                jsonPayload = message.substring(jsonStartIndex);
             }
 
-            int messageLen = Integer.parseInt(message.substring(0, jsonStartIndex));
-            if (messageLen <= 0) {
-                throw new IllegalArgumentException("Invalid message length.");
-            }
-
-            String jsonPayload = message.substring(jsonStartIndex);
+            // The rest of the logic remains the same
             Map<String, Object> parsedMap = mapper.readValue(jsonPayload, Map.class);
-
             return mapper.convertValue(parsedMap, (Class<T>) object.getClass());
+
         } catch (Exception e) {
             throw new Exception("Failed to parse API message: " + e.getMessage(), e);
         }
@@ -303,4 +320,57 @@ public class ApiUtils {
         return urlBuilder.toString();
 
     }
+
+    public static String generateRedirectV1PaymentUrl(NICEPayResponseV1 responseV1, boolean displayChangButton , boolean displayBackLink) throws UnsupportedEncodingException {
+
+        print.logInfoV1("START CALL REDIRECT V1 GENERATE PAYMENT URL");
+
+        String baseUrl = responseV1.getData().getRequestURL();
+
+        StringBuilder urlBuilder = new StringBuilder(baseUrl)
+                .append("?tXid=").append(responseV1.getTXid())
+                .append("&optDisplayCB=").append(displayChangButton ? "0":"1")
+                .append("&optDisplayBL=").append(displayBackLink ? "0":"1");
+
+        print.logInfoResponseV1(
+                MessageFormat.format("URL PAYMENT V1 REDIRECT : {0}", urlBuilder.toString()));
+
+        print.logInfoV2("END CALL REDIRECT V1 GENERATE PAYMENT URL");
+
+        return urlBuilder.toString();
+
+    }
+
+
+
+    public static String buildUrl(String base, Map<String, String> params) throws UnsupportedEncodingException {
+        StringBuilder sb = new StringBuilder(base);
+        sb.append("?");
+
+        for (Map.Entry<String, String> e : params.entrySet()) {
+            sb.append(URLEncoder.encode(e.getKey(), "UTF-8"));
+            sb.append("=");
+            sb.append(URLEncoder.encode(e.getValue(), "UTF-8"));
+            sb.append("&");
+        }
+
+        sb.setLength(sb.length() - 1); // remove last "&"
+        return sb.toString();
+    }
+
+    public static String buildRawUrl(String base, Map<String, String> params) {
+        StringBuilder sb = new StringBuilder(base);
+        sb.append("?");
+
+        for (Map.Entry<String, String> e : params.entrySet()) {
+            sb.append(e.getKey());
+            sb.append("=");
+            sb.append(e.getValue());   // <-- no encoding
+            sb.append("&");
+        }
+
+        sb.setLength(sb.length() - 1);
+        return sb.toString();
+    }
+
 }

@@ -149,4 +149,11 @@ This library is meant to be implemented on your backend server using Java.
 - **Added:** URL generator for V2 Direct payments in API utilities.
 - **Added:** URL generator for V2 Redirect payments in API utilities.
 
+### [1.3.0] - 2025-06-09
+- **Added:** Encrypted parameters for V2 Card Service. 
+
+
+### [1.2.0] - 2025-04-15
+- **Added:** V1 Direct support for payment methods: Card, Convenience Store, QRIS, Virtual Account, and E-Wallet.
+- **Added:** V1 Redirect support for all payment methods.
 
