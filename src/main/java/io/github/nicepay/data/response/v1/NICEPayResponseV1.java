@@ -87,4 +87,10 @@ public class NICEPayResponseV1 implements Serializable {
     private String recurringToken;
     private String resultCode;
 
+
+//    cancel
+    private String canceltXid;
+    private String amount;
+    private String cancelTrxSn;
+
 }

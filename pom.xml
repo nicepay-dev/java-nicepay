@@ -6,7 +6,7 @@
 
 	<groupId>io.github.nicepay-dev</groupId>
 	<artifactId>nicepay-java-client</artifactId>
-	<version>1.4.0</version> <!-- Add V1 Services  -->
+	<version>1.4.1</version> <!-- Add V1 Services  -->
 
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>Nicepay Official Java Library</description>
@@ -215,7 +215,7 @@
 		<dependency>
 			<groupId>org.sonatype.central</groupId>
 			<artifactId>central-publishing-maven-plugin</artifactId>
-			<version>0.4.0</version>
+			<version>0.6.0</version>
 		</dependency>
 
 
@@ -226,7 +226,7 @@
 			<plugin>
 				<groupId>org.sonatype.central</groupId>
 				<artifactId>central-publishing-maven-plugin</artifactId>
-				<version>0.4.0</version>
+				<version>0.6.0</version>
 				<extensions>true</extensions>
 				<configuration>
 					<publishingServerId>central</publishingServerId>
