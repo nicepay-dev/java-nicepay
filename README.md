@@ -156,7 +156,5 @@ This library is meant to be implemented on your backend server using Java.
 ### [1.4.0] - 2025-04-15
 - **Added:** V1 Direct support for payment methods: Card, Convenience Store, QRIS, Virtual Account, and E-Wallet.
 - **Added:** V1 Redirect support for all payment methods.
-
-### [1.4.1] - 2025-04-15
 - **Updated:** Add latest version Snap Ewallet parameters urlParams.
 
