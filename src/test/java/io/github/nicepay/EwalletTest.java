@@ -94,7 +94,7 @@ class EwalletTest {
                         put("cartData", "{\"count\":\"2\",\"item\":[{\"img_url\":\"http://img.aaa.com/ima1.jpg\",\"goods_name\":\"Item 1 Name\",\"goods_detail\":\"Item 1 Detail\",\"goods_amt\":\"0.00\",\"goods_quantity\":\"1\"},{\"img_url\":\"http://img.aaa.com/ima2.jpg\",\"goods_name\":\"Item 2 Name\",\"goods_detail\":\"Item 2 Detail\",\"goods_amt\":\"1.00\",\"goods_quantity\":\"1\"}]}");
                     }
                 })
-                .urlParam(new String[][]{
+                .urlParams(new String[][]{
                                 {"https://test2.bi.go.id/v1/test", "PAY_NOTIFY", "Y"},
                                 {"https://test2.bi.go.id/v1/test", "PAY_RETURN", "Y"}
                         }
