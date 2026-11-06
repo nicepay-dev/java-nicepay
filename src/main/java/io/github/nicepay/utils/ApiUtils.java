@@ -156,8 +156,7 @@ public class ApiUtils {
         String privateKey = config.getPrivateKey();
         String secretKey = config.getClientSecret();
         String externalID = config.getExternalID();
-//        String timeStamp = config.getTimestamp();
-        String timeStamp = "2025-10-15T13:32:36+07:00";
+        String timeStamp = config.getTimestamp();
 
         headersMap.put("Content-Type", "application/json");
         if (grandType != null) {

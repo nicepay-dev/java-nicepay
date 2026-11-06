@@ -24,6 +24,8 @@ public class Ewallet {
     private Map<String, Object> amount;
     private Map<String, Object> additionalInfo;
     private List<Map<String, String>> urlParam ;
+    private List<Map<String, String>> urlParams ;
+
 
 //    V2
     private String timeStamp;
@@ -106,10 +108,25 @@ public class Ewallet {
             this.urlParam = urlParamList;
             return this;
         }
+
+        public EwalletBuilder urlParams(String[][] urlParams) {
+            List<Map<String, String>> urlParamList = new ArrayList<>();
+            for (String[] params : urlParams) {
+                if (params.length == 3) {
+                    Map<String, String> paramListMap = new HashMap<>();
+                    paramListMap.put("url", params[0]);
+                    paramListMap.put("type", params[1]);
+                    paramListMap.put("isDeeplink", params[2]);
+                    urlParamList.add(paramListMap);
+                }
+            }
+            this.urlParams = urlParamList;
+            return this;
+        }
     }
 
 
-    public Ewallet(String partnerReferenceNo, String merchantId, String subMerchantId, String externalStoreId, String validUpTo, String pointOfInitiation, Map<String, Object> amount, Map<String, Object> additionalInfo, List<Map<String, String>> urlParam, String timeStamp, String iMid, String payMethod, String currency, String amt, String referenceNo, String goodsNm, String billingNm, String billingPhone, String billingEmail, String billingAddr, String billingCity, String billingState, String billingPostCd, String billingCountry, String deliveryNm, String deliveryPhone, String deliveryAddr, String deliveryCity, String deliveryState, String deliveryPostCd, String deliveryCountry, String dbProcessUrl, String vat, String fee, String notaxAmt, String description, String merchantToken, String reqDt, String reqTm, String reqDomain, String reqServerIP, String reqClientVer, String userIP, String userSessionID, String userAgent, String userLanguage, String cartData, String mitraCd, String tXid, String returnJsonFormat, String callBackUrl) {
+    public Ewallet(String partnerReferenceNo, String merchantId, String subMerchantId, String externalStoreId, String validUpTo, String pointOfInitiation, Map<String, Object> amount, Map<String, Object> additionalInfo, List<Map<String, String>> urlParam,List<Map<String, String>> urlParams, String timeStamp, String iMid, String payMethod, String currency, String amt, String referenceNo, String goodsNm, String billingNm, String billingPhone, String billingEmail, String billingAddr, String billingCity, String billingState, String billingPostCd, String billingCountry, String deliveryNm, String deliveryPhone, String deliveryAddr, String deliveryCity, String deliveryState, String deliveryPostCd, String deliveryCountry, String dbProcessUrl, String vat, String fee, String notaxAmt, String description, String merchantToken, String reqDt, String reqTm, String reqDomain, String reqServerIP, String reqClientVer, String userIP, String userSessionID, String userAgent, String userLanguage, String cartData, String mitraCd, String tXid, String returnJsonFormat, String callBackUrl) {
         this.partnerReferenceNo = partnerReferenceNo;
         this.merchantId = merchantId;
         this.subMerchantId = subMerchantId;
@@ -119,6 +136,7 @@ public class Ewallet {
         this.amount = amount;
         this.additionalInfo = additionalInfo;
         this.urlParam = urlParam;
+        this.urlParams = urlParams;
         this.timeStamp = timeStamp;
         this.iMid = iMid;
         this.payMethod = payMethod;
